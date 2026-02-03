@@ -1,0 +1,156 @@
+{
+  "design_name": "asyn_fifo",
+  "trial_num": 1,
+  "created_at": "2026-02-03T17:16:51.867325",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module asyn_fifo #(parameter DEPTH = 16, parameter WIDTH = 8)\n(\n    input wire wclk,\n    input wire rclk,\n    input wire wrstn,\n    input wire rrstn,\n    input wire winc,\n    input wire rinc,\n    input wire [WIDTH-1:0] wdata,\n    output wire wfull,\n    output wire rempty,\n    output reg [WIDTH-1:0] rdata\n);\n\n    localparam ADDR_WIDTH = $clog2(DEPTH);\n    \n    reg [$clog2(DEPTH)-1:0] waddr, raddr;\n    reg [$clog2(DEPTH)-1:0] waddr_bin, raddr_bin;\n    reg [$clog2(DEPTH)-1:0] wptr, rptr, wptr_syn, rptr_syn;\n    reg [WIDTH-1:0] RAM_MEM [0:DEPTH-1];\n\n    wire [$clog2(DEPTH)-1:0] wptr_gray, rptr_gray;\n\n    // Convert binary to Gray code\n    assign wptr_gray = wptr ^ (wptr >> 1);\n    assign rptr_gray = rptr ^ (rptr >> 1);\n\n    // Write pointer buffer\n    always @(posedge wclk or negedge wrstn) begin\n        if (!wrstn)\n            waddr_bin <= 0;\n        else if (winc)\n            waddr_bin <= (waddr_bin + 1) % DEPTH;\n    end\n\n    // Read pointer buffer\n    always @(posedge rclk or negedge rrstn) begin\n        if (!rrstn)\n            raddr_bin <= 0;\n        else if (rinc)\n            raddr_bin <= (raddr_bin + 1) % DEPTH;\n    end\n\n    // Write Pointer Synchronizer\n    always @(posedge wclk or negedge wrstn) begin\n        if (!wrstn)\n            wptr_buff <= 0;\n        else\n            wptr_buff <= wptr_gray;\n    end\n\n    // Read Pointer Synchronizer\n    always @(posedge rclk or negedge rrstn) begin\n        if (!rrstn)\n            rptr_syn <= 0;\n        else\n            rptr_syn <= rptr_gray;\n    end\n\n    // Write and Read Controller Logic\n    assign wen = winc && wrstn;\n    assign ren = rinc && rrstn;\n\n    // Dual-port RAM\n    always @(posedge wclk) begin\n        if (wen)\n            RAM_MEM[waddr] <= wdata;\n    end\n\n    always @(posedge rclk) begin\n        if (ren)\n            rdata <= RAM_MEM[raddr];\n    end\n\n    // Full and Empty Signals\n    assign wfull = ((wptr_gray == {~rptr_gray[ADDR_WIDTH-1], rptr_gray[ADDR_WIDTH-2:0]}) && wen);\n    assign rempty = (wptr_gray == rptr_gray) && ren;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:17:42.913152",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial_retry",
+          "generation_time": "2026-02-03T17:17:11.831908"
+        }
+      },
+      {
+        "code": "module dual_port_RAM #(\n    parameter DEPTH = 16,\n    parameter WIDTH = 8\n)(\n    input wclk,\n    input rclk,\n    input [$clog2(DEPTH)-1:0] waddr,\n    input [WIDTH-1:0] wdata,\n    input renc,\n    input [$clog2(DEPTH)-1:0] raddr,\n    output reg [WIDTH-1:0] rdata\n);\n\n    reg [WIDTH-1:0] RAM_MEM [0:DEPTH-1];\n\n    always @(posedge wclk) begin\n        if (renc) begin\n            RAM_MEM[waddr] <= wdata;\n        end\n    end\n\n    always @(posedge rclk) begin\n        rdata <= RAM_MEM[raddr];\n    end\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:17:42.913155",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:17:25.428763"
+        }
+      },
+      {
+        "code": "module asyn_fifo #(parameter DEPTH = 16, parameter WIDTH = 8)\n(\n    input [WIDTH-1:0] wdata,\n    input wrstn,\n    input rrstn,\n    input winc,\n    input rinc,\n    input wclk,\n    input rclk,\n    output reg [WIDTH-1:0] rdata,\n    output reg wfull,\n    output reg rempty\n);\n\n// Dual-port RAM\nreg [WIDTH-1:0] RAM_MEM [0:DEPTH-1];\nwire [WIDTH-1:0] ram_rdata;\n\nassign ram_rdata = RAM_MEM[raddr_bin];\n\n// Write and Read Pointers\nreg [$clog2(DEPTH)-1:0] waddr_bin, raddr_bin;\nreg [$clog2(DEPTH):0] wp_gray, rp_gray;\nreg [$clog2(DEPTH):0] wp_gray_buff, rp_gray_buff;\n\n// Gray Code Conversion\nalways @(posedge wclk or negedge wrstn) begin\n    if (!wrstn) begin\n        wp_gray <= 0;\n        wp_gray_buff <= 0;\n    end else begin\n        wp_gray <= {~wp_gray[2], wp_gray[1:0]};\n        wp_gray_buff <= wp_gray;\n    end\nend\n\nalways @(posedge rclk or negedge rrstn) begin\n    if (!rrstn) begin\n        rp_gray <= 0;\n        rp_gray_buff <= 0;\n    end else begin\n        rp_gray <= {~rp_gray[2], rp_gray[1:0]};\n        rp_gray_buff <= rp_gray;\n    end\nend\n\n// Pointer Buffers\nalways @(posedge wclk) begin\n    if (!wrstn)\n        waddr_bin <= 0;\n    else if (winc && !wfull)\n        waddr_bin <= (waddr_bin + 1) % DEPTH;\nend\n\nalways @(posedge rclk) begin\n    if (!rrstn)\n        raddr_bin <= 0;\n    else if (rinc && !rempty)\n        raddr_bin <= (raddr_bin + 1) % DEPTH;\nend\n\n// Full and Empty Signals\nassign wfull = (wp_gray_buff == {~rp_gray[2], rp_gray[1:0]});\nassign rempty = (rp_gray == wp_gray);\n\n// RAM Control Signals\nreg wen, ren;\n\nalways @(posedge wclk or negedge wrstn) begin\n    if (!wrstn)\n        wen <= 0;\n    else\n        wen <= winc && !wfull;\nend\n\nalways @(posedge rclk or negedge rrstn) begin\n    if (!rrstn)\n        ren <= 0;\n    else\n        ren <= rinc && !rempty;\nend\n\n// RAM Instantiation\ndual_port_RAM #(.WIDTH(WIDTH), .DEPTH(DEPTH)) dual_port_RAM_inst (\n    .wclk(wclk),\n    .renc(ren),\n    .rclk(rclk),\n    .wenc(wen),\n    .waddr(waddr_bin),\n    .wdata(wdata),\n    .raddr(raddr_bin),\n    .rdata(ram_rdata)\n);\n\n// Read Data Output\nalways @(posedge rclk) begin\n    if (!rrstn)\n        rdata <= 0;\n    else\n        rdata <= ram_rdata;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:17:42.913156",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:17:42.913129"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module asyn_fifo #(parameter DEPTH = 16, parameter WIDTH = 8)\n(\n    input wire wclk,\n    input wire rclk,\n    input wire wrstn,\n    input wire rrstn,\n    input wire winc,\n    input wire rinc,\n    input wire [WIDTH-1:0] wdata,\n    output wire wfull,\n    output wire rempty,\n    output reg [WIDTH-1:0] rdata\n);\n\nlocalparam ADDR_WIDTH = $clog2(DEPTH);\nreg [$clog2(DEPTH)-1:0] waddr, raddr;\nreg [$clog2(DEPTH)-1:0] wptr_gray, rptr_gray;\nreg [$clog2(DEPTH)-1:0] wp_gray_buff, rp_gray_buff;\nreg [WIDTH-1:0] RAM_MEM [0:DEPTH-1];\nwire [$clog2(DEPTH)-1:0] waddr_bin, raddr_bin;\n\n// Convert binary to Gray code\nassign wptr_gray = waddr ^ (waddr >> 1);\nassign rptr_gray = raddr ^ (raddr >> 1);\n\n// Pointer Buffers\nalways @(posedge wclk or negedge wrstn) begin\n    if (!wrstn)\n        waddr_bin <= 0;\n    else if (winc)\n        waddr_bin <= (waddr_bin + 1) % DEPTH;\nend\n\nalways @(posedge rclk or negedge rrstn) begin\n    if (!rrstn)\n        raddr_bin <= 0;\n    else if (rinc)\n        raddr_bin <= (raddr_bin + 1) % DEPTH;\nend\n\n// Write Pointer Synchronizer\nalways @(posedge wclk or negedge wrstn) begin\n    if (!wrstn)\n        wp_gray_buff <= 0;\n    else\n        wp_gray_buff <= wptr_gray;\nend\n\n// Read Pointer Synchronizer\nalways @(posedge rclk or negedge rrstn) begin\n    if (!rrstn)\n        rp_gray_buff <= 0;\n    else\n        rp_gray_buff <= rptr_gray;\nend\n\n// Full and Empty Signals\nassign wfull = ((wp_gray_buff == {~rp_gray[ADDR_WIDTH-1], rp_gray[ADDR_WIDTH-2:0]}) && wp_gray_buff != 0);\nassign rempty = (wptr_gray == rp_gray) && rp_gray != 0;\n\n// RAM Instantiation\ndual_port_RAM #(.WIDTH(WIDTH), .DEPTH(DEPTH)) dual_port_RAM_inst (\n    .wclk(wclk),\n    .renc(1'b1),\n    .rclk(rclk),\n    .wenc(winc && wrstn),\n    .waddr(waddr_bin),\n    .wdata(wdata),\n    .raddr(raddr_bin),\n    .rdata(rdata)\n);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:18:21.792071",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:17:57.810841"
+        }
+      },
+      {
+        "code": "module asyn_fifo #(parameter DEPTH = 16, parameter WIDTH = 8)\n(\n    input wire wclk,\n    input wire rclk,\n    input wire wrstn,\n    input wire rrstn,\n    input wire winc,\n    input wire rinc,\n    input wire [WIDTH-1:0] wdata,\n    output wire wfull,\n    output wire rempty,\n    output reg [WIDTH-1:0] rdata\n);\n\nlocalparam ADDR_WIDTH = $clog2(DEPTH);\n    \nreg [$clog2(DEPTH)-1:0] waddr, raddr;\nreg [$clog2(DEPTH)-1:0] waddr_bin, raddr_bin;\nreg [$clog2(DEPTH)-1:0] wptr_gray, rptr_gray;\nreg [WIDTH-1:0] RAM_MEM [0:DEPTH-1];\n\n// Gray Code Conversion\nassign wptr_gray = wptr ^ (wptr >> 1);\nassign rptr_gray = rptr ^ (rptr >> 1);\n\n// Write Pointer Buffer\nalways @(posedge wclk or negedge wrstn) begin\n    if (!wrstn)\n        waddr_bin <= 0;\n    else if (winc && !wfull)\n        waddr_bin <= (waddr_bin + 1) % DEPTH;\nend\n\n// Read Pointer Buffer\nalways @(posedge rclk or negedge rrstn) begin\n    if (!rrstn)\n        raddr_bin <= 0;\n    else if (rinc && !rempty)\n        raddr_bin <= (raddr_bin + 1) % DEPTH;\nend\n\n// Dual-port RAM\nalways @(posedge wclk) begin\n    if (winc && wrstn)\n        RAM_MEM[waddr] <= wdata;\nend\n\nalways @(posedge rclk) begin\n    if (rinc && rrstn)\n        rdata <= RAM_MEM[raddr];\nend\n\n// Full and Empty Signals\nassign wfull = ((wptr_gray == {~rptr_gray[ADDR_WIDTH-1], rptr_gray[ADDR_WIDTH-2:0]}) && wrstn);\nassign rempty = (rptr_gray == wptr_gray) && rrstn;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:18:21.792074",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:18:08.824989"
+        }
+      },
+      {
+        "code": "module asyn_fifo #(parameter DEPTH = 16, parameter WIDTH = 8)\n(\n    input wire wclk,\n    input wire rclk,\n    input wire wrstn,\n    input wire rrstn,\n    input wire winc,\n    input wire rinc,\n    input wire [WIDTH-1:0] wdata,\n    output wire wfull,\n    output wire rempty,\n    output reg [WIDTH-1:0] rdata\n);\n\nlocalparam ADDR_WIDTH = $clog2(DEPTH);\nreg [$clog2(DEPTH)-1:0] waddr, raddr;\nreg [$clog2(DEPTH)-1:0] wptr_gray, rptr_gray;\nreg [$clog2(DEPTH)-1:0] wp_gray_syn, rp_gray_syn;\nwire [$clog2(DEPTH)-1:0] wp_gray_buff, rp_gray_buff;\n\n// Gray Code Conversion\nassign wp_gray = waddr ^ (waddr >> 1);\nassign rp_gray = raddr ^ (raddr >> 1);\n\n// Pointer Buffers\nalways @(posedge wclk or negedge wrstn) begin\n    if (!wrstn)\n        wp_gray_buff <= 0;\n    else\n        wp_gray_buff <= wp_gray;\nend\n\nalways @(posedge rclk or negedge rrstn) begin\n    if (!rrstn)\n        rp_gray_buff <= 0;\n    else\n        rp_gray_buff <= rp_gray;\nend\n\n// Write Pointer Synchronizer\nalways @(posedge wclk or negedge wrstn) begin\n    if (!wrstn)\n        wp_gray_syn <= 0;\n    else\n        wp_gray_syn <= wp_gray_buff;\nend\n\n// Read Pointer Synchronizer\nalways @(posedge rclk or negedge rrstn) begin\n    if (!rrstn)\n        rp_gray_syn <= 0;\n    else\n        rp_gray_syn <= rp_gray_buff;\nend\n\n// Full and Empty Signals\nassign wfull = ((wp_gray_syn == {~rp_gray_syn[ADDR_WIDTH-1], rp_gray_syn[ADDR_WIDTH-2:0]}) && winc);\nassign rempty = (rp_gray_syn == wp_gray_syn) && rinc;\n\n// Dual-port RAM Instantiation\ndual_port_RAM #(.WIDTH(WIDTH), .DEPTH(DEPTH)) dual_port_RAM_inst (\n    .wclk(wclk),\n    .renc(rinc),\n    .rclk(rclk),\n    .wenc(winc),\n    .waddr(wp_gray_syn),\n    .wdata(wdata),\n    .raddr(rp_gray_syn),\n    .rdata(rdata)\n);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:18:21.792075",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:18:21.792056"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module dual_port_RAM #(parameter WIDTH = 8, parameter DEPTH = 16)\n(\n    input wire wclk,\n    input wire rclk,\n    input wire wenc,\n    input wire [WIDTH-1:0] wdata,\n    input wire renc,\n    input wire [$clog2(DEPTH)-1:0] waddr,\n    input wire [$clog2(DEPTH)-1:0] raddr,\n    output reg [WIDTH-1:0] rdata\n);\n\nreg [WIDTH-1:0] RAM_MEM [0:DEPTH-1];\n\nalways @(posedge wclk) begin\n    if (wenc)\n        RAM_MEM[waddr] <= wdata;\nend\n\nalways @(*) begin\n    rdata = RAM_MEM[raddr];\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.74,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:18:59.043937",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:18:33.771960"
+        }
+      },
+      {
+        "code": "module dual_port_RAM #(parameter WIDTH = 8, parameter DEPTH = 16)\n(\n    input wire wclk,\n    input wire rclk,\n    input wire wenc,\n    input wire [WIDTH-1:0] wdata,\n    input wire renc,\n    input wire [$clog2(DEPTH)-1:0] waddr,\n    input wire [$clog2(DEPTH)-1:0] raddr,\n    output reg [WIDTH-1:0] rdata\n);\n\nreg [WIDTH-1:0] RAM_MEM [0:DEPTH-1];\n\nalways @(posedge wclk) begin\n    if (wenc)\n        RAM_MEM[waddr] <= wdata;\nend\n\nalways @(posedge rclk) begin\n    rdata <= RAM_MEM[raddr];\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:18:59.043940",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:18:45.168222"
+        }
+      },
+      {
+        "code": "module asyn_fifo #(parameter DEPTH = 16, parameter WIDTH = 8)\n(\n    input wire wclk,\n    input wire rclk,\n    input wire wrstn,\n    input wire rrstn,\n    input wire winc,\n    input wire rinc,\n    input wire [WIDTH-1:0] wdata,\n    output wire wfull,\n    output wire rempty,\n    output reg [WIDTH-1:0] rdata\n);\n\nlocalparam ADDR_WIDTH = $clog2(DEPTH);\nreg [$clog2(DEPTH)-1:0] waddr_bin, raddr_bin;\nreg [$clog2(DEPTH)-1:0] wptr_gray, rptr_gray, wptr_syn, rptr_syn;\nreg [WIDTH-1:0] RAM_MEM [0:DEPTH-1];\n\n// Gray Code Conversion\nassign wptr_gray = wptr ^ (wptr >> 1);\nassign rptr_gray = rptr ^ (rptr >> 1);\n\n// Write pointer buffer\nalways @(posedge wclk or negedge wrstn) begin\n    if (!wrstn)\n        waddr_bin <= 0;\n    else if (winc)\n        waddr_bin <= (waddr_bin + 1) % DEPTH;\nend\n\n// Read pointer buffer\nalways @(posedge rclk or negedge rrstn) begin\n    if (!rrstn)\n        raddr_bin <= 0;\n    else if (rinc)\n        raddr_bin <= (raddr_bin + 1) % DEPTH;\nend\n\n// Write Pointer Synchronizer\nalways @(posedge wclk or negedge wrstn) begin\n    if (!wrstn)\n        wptr_syn <= 0;\n    else\n        wptr_syn <= wptr_gray;\nend\n\n// Read Pointer Synchronizer\nalways @(posedge rclk or negedge rrstn) begin\n    if (!rrstn)\n        rptr_syn <= 0;\n    else\n        rptr_syn <= rptr_gray;\nend\n\n// Full and Empty Signals\nassign wfull = ((wptr_gray == {~rptr_gray[ADDR_WIDTH-1], rptr_gray[ADDR_WIDTH-2:0]}) && winc);\nassign rempty = (wptr_gray == rptr_gray) && rinc;\n\n// RAM Control Signals\nreg wen, ren;\n\nalways @(posedge wclk or negedge wrstn) begin\n    if (!wrstn)\n        wen <= 0;\n    else\n        wen <= winc && !wfull;\nend\n\nalways @(posedge rclk or negedge rrstn) begin\n    if (!rrstn)\n        ren <= 0;\n    else\n        ren <= rinc && !rempty;\nend\n\n// Dual-port RAM\nalways @(posedge wclk) begin\n    if (wen)\n        RAM_MEM[waddr] <= wdata;\nend\n\nalways @(posedge rclk) begin\n    if (ren)\n        rdata <= RAM_MEM[raddr];\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:18:59.043941",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:18:59.043921"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T17:18:59.043947",
+    "total_hdl_codes": 9
+  }
+}

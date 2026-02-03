@@ -1,0 +1,156 @@
+{
+  "design_name": "comparator_4bit",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:35:22.121283",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module comparator_4bit (\n    input [3:0] A,\n    input [3:0] B,\n    output reg A_greater,\n    output reg A_equal,\n    output reg A_less\n);\n\nalways @(*) begin\n    if (A > B) begin\n        A_greater = 1;\n        A_equal = 0;\n        A_less = 0;\n    end else if (A < B) begin\n        A_greater = 0;\n        A_equal = 0;\n        A_less = 1;\n    end else begin\n        A_greater = 0;\n        A_equal = 1;\n        A_less = 0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:35:30.991531",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:35:26.018071"
+        }
+      },
+      {
+        "code": "module comparator_4bit (\n    input [3:0] A,\n    input [3:0] B,\n    output reg A_greater,\n    output reg A_equal,\n    output reg A_less\n);\n\nalways @(*) begin\n    if (A > B) begin\n        A_greater = 1;\n        A_equal = 0;\n        A_less = 0;\n    end else if (A < B) begin\n        A_greater = 0;\n        A_equal = 0;\n        A_less = 1;\n    end else begin\n        A_greater = 0;\n        A_equal = 1;\n        A_less = 0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:35:30.991534",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:35:30.254665"
+        }
+      },
+      {
+        "code": "module comparator_4bit (\n    input [3:0] A,\n    input [3:0] B,\n    output wire A_greater,\n    output wire A_equal,\n    output wire A_less\n);\n\nreg [3:0] diff;\nreg borrow;\n\nassign {borrow, diff} = A - B;\n\nassign A_greater = !borrow && (diff != 4'b0000);\nassign A_equal = (diff == 4'b0000);\nassign A_less = borrow && (diff != 4'b0000);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:35:30.991535",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:35:30.991520"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module comparator_4bit (\n    input [3:0] A,\n    input [3:0] B,\n    output wire A_greater,\n    output wire A_equal,\n    output wire A_less\n);\n\nreg [3:0] diff;\nreg borrow;\n\nassign {borrow, diff} = A - B;\n\nassign A_greater = !borrow && (diff != 4'b0000);\nassign A_equal = (diff == 4'b0000);\nassign A_less = borrow && (diff != 4'b0000);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:35:33.141805",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:31.777876"
+        }
+      },
+      {
+        "code": "module comparator_4bit (\n    input [3:0] A,\n    input [3:0] B,\n    output wire A_greater,\n    output wire A_equal,\n    output wire A_less\n);\n\nreg [3:0] diff;\nreg borrow;\n\nassign {borrow, diff} = A - B;\n\nassign A_greater = !borrow && (diff != 4'b0000);\nassign A_equal = (diff == 4'b0000);\nassign A_less = borrow && (diff != 4'b0000);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:35:33.141808",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:32.474613"
+        }
+      },
+      {
+        "code": "module comparator_4bit (\n    input [3:0] A,\n    input [3:0] B,\n    output wire A_greater,\n    output wire A_equal,\n    output wire A_less\n);\n\nreg [3:0] diff;\nreg borrow;\n\nassign {borrow, diff} = A - B;\n\nassign A_greater = !borrow && (diff != 4'b0000);\nassign A_equal = (diff == 4'b0000);\nassign A_less = borrow && (diff != 4'b0000);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:35:33.141809",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:33.141793"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module comparator_4bit (\n    input [3:0] A,\n    input [3:0] B,\n    output wire A_greater,\n    output wire A_equal,\n    output wire A_less\n);\n\nreg [3:0] diff;\nreg borrow;\n\nassign {borrow, diff} = A - B;\n\nassign A_greater = !borrow && (diff != 4'b0000);\nassign A_equal = (diff == 4'b0000);\nassign A_less = borrow && (diff != 4'b0000);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:35:35.229705",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:33.839495"
+        }
+      },
+      {
+        "code": "module comparator_4bit (\n    input [3:0] A,\n    input [3:0] B,\n    output wire A_greater,\n    output wire A_equal,\n    output wire A_less\n);\n\nreg [3:0] diff;\nreg borrow;\n\nassign {borrow, diff} = A - B;\n\nassign A_greater = !borrow && (diff != 4'b0000);\nassign A_equal = (diff == 4'b0000);\nassign A_less = borrow && (diff != 4'b0000);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:35:35.229707",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:34.535352"
+        }
+      },
+      {
+        "code": "module comparator_4bit (\n    input [3:0] A,\n    input [3:0] B,\n    output wire A_greater,\n    output wire A_equal,\n    output wire A_less\n);\n\nreg [3:0] diff;\nreg borrow;\n\nassign {borrow, diff} = A - B;\n\nassign A_greater = !borrow && (diff != 4'b0000);\nassign A_equal = (diff == 4'b0000);\nassign A_less = borrow && (diff != 4'b0000);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:35:35.229708",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:35.229693"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:35:35.229714",
+    "total_hdl_codes": 9
+  }
+}

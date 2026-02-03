@@ -1,0 +1,156 @@
+{
+  "design_name": "adder_bcd",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:45:09.454326",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module adder_bcd (\n    input [3:0] A,\n    input [3:0] B,\n    input Cin,\n    output reg [3:0] Sum,\n    output reg Cout\n);\n\nreg [4:0] sum_bin;\n\nalways @(*) begin\n    sum_bin = A + B + Cin;\n    if (sum_bin > 9) begin\n        Sum = sum_bin - 6;\n        Cout = 1;\n    end else begin\n        Sum = sum_bin;\n        Cout = 0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.84,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:45:19.954236",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:45:12.859970"
+        }
+      },
+      {
+        "code": "module adder_bcd (\n    input [3:0] A,\n    input [3:0] B,\n    input Cin,\n    output reg [3:0] Sum,\n    output reg Cout\n);\n\nalways @(*) begin\n    integer temp_sum;\n    temp_sum = A + B + Cin;\n    if (temp_sum > 9) begin\n        Sum = (temp_sum + 6) % 10;\n        Cout = 1;\n    end else begin\n        Sum = temp_sum;\n        Cout = 0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:45:19.954239",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:45:16.305165"
+        }
+      },
+      {
+        "code": "module adder_bcd (\n    input [3:0] A,\n    input [3:0] B,\n    input Cin,\n    output reg [3:0] Sum,\n    output reg Cout\n);\n\nalways @(*) begin\n    reg [4:0] sum_bin;\n    sum_bin = A + B + Cin;\n    if (sum_bin > 9) begin\n        Sum = sum_bin + 6;\n        if (Sum > 15)\n            Sum = Sum - 6;\n        Cout = 1'b1;\n    end else begin\n        Sum = sum_bin;\n        Cout = 1'b0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:45:19.954240",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:45:19.954221"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module adder_bcd (\n    input [3:0] A,\n    input [3:0] B,\n    input Cin,\n    output reg [3:0] Sum,\n    output reg Cout\n);\n\nalways @(*) begin\n    reg [4:0] sum_bin;\n    sum_bin = A + B + Cin;\n    if (sum_bin > 9) begin\n        Sum = sum_bin + 6;\n        if (Sum > 15)\n            Sum = Sum - 6;\n        Cout = 1'b1;\n    end else begin\n        Sum = sum_bin;\n        Cout = 1'b0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:45:25.164314",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.85,
+            0.84
+          ],
+          "generation_time": "2026-02-03T16:45:20.842279"
+        }
+      },
+      {
+        "code": "module adder_bcd (\n    input [3:0] A,\n    input [3:0] B,\n    input Cin,\n    output reg [3:0] Sum,\n    output reg Cout\n);\n\nalways @(*) begin\n    reg [4:0] sum_bin;\n    sum_bin = A + B + Cin;\n    if (sum_bin > 9) begin\n        Sum = sum_bin - 6;\n        Cout = 1'b1;\n    end else begin\n        Sum = sum_bin;\n        Cout = 1'b0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.84,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:45:25.164316",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.85,
+            0.84
+          ],
+          "generation_time": "2026-02-03T16:45:24.274215"
+        }
+      },
+      {
+        "code": "module adder_bcd (\n    input [3:0] A,\n    input [3:0] B,\n    input Cin,\n    output reg [3:0] Sum,\n    output reg Cout\n);\n\nalways @(*) begin\n    reg [4:0] sum_bin;\n    sum_bin = A + B + Cin;\n    if (sum_bin > 9) begin\n        Sum = sum_bin + 6;\n        if (Sum > 15)\n            Sum = Sum - 6;\n        Cout = 1'b1;\n    end else begin\n        Sum = sum_bin;\n        Cout = 1'b0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:45:25.164318",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.85,
+            0.84
+          ],
+          "generation_time": "2026-02-03T16:45:25.164301"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module adder_bcd (\n    input [3:0] A,\n    input [3:0] B,\n    input Cin,\n    output reg [3:0] Sum,\n    output reg Cout\n);\n\nalways @(*) begin\n    reg [4:0] sum_bin;\n    sum_bin = A + B + Cin;\n    if (sum_bin > 9) begin\n        Sum = sum_bin + 6;\n        if (Sum > 15)\n            Sum = Sum - 6;\n        Cout = 1'b1;\n    end else begin\n        Sum = sum_bin;\n        Cout = 1'b0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:45:30.381066",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:45:26.009663"
+        }
+      },
+      {
+        "code": "module adder_bcd (\n    input [3:0] A,\n    input [3:0] B,\n    input Cin,\n    output reg [3:0] Sum,\n    output reg Cout\n);\n\nalways @(*) begin\n    reg [4:0] sum_bin;\n    sum_bin = A + B + Cin;\n    if (sum_bin > 9) begin\n        Sum = sum_bin - 6;\n        Cout = 1'b1;\n    end else begin\n        Sum = sum_bin;\n        Cout = 1'b0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.84,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:45:30.381069",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:45:29.486252"
+        }
+      },
+      {
+        "code": "module adder_bcd (\n    input [3:0] A,\n    input [3:0] B,\n    input Cin,\n    output reg [3:0] Sum,\n    output reg Cout\n);\n\nalways @(*) begin\n    reg [4:0] sum_bin;\n    sum_bin = A + B + Cin;\n    if (sum_bin > 9) begin\n        Sum = sum_bin + 6;\n        if (Sum > 15)\n            Sum = Sum - 6;\n        Cout = 1'b1;\n    end else begin\n        Sum = sum_bin;\n        Cout = 1'b0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:45:30.381070",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:45:30.381053"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:45:30.381077",
+    "total_hdl_codes": 9
+  }
+}

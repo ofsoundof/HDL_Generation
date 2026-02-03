@@ -1,0 +1,156 @@
+{
+  "design_name": "div_16bit",
+  "trial_num": 3,
+  "created_at": "2026-02-03T16:06:38.865278",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [23:0] a_reg;\nreg [7:0] b_reg;\nreg [4:0] shift_count;\n\nalways @(A or B) begin\n    a_reg = A;\n    b_reg = B;\nend\n\nalways @(A or B) begin\n    if (a_reg >= b_reg) begin\n        result[shift_count] = 1;\n        a_reg = a_reg - b_reg;\n    end else begin\n        result[shift_count] = 0;\n    end\n    shift_count = shift_count + 1;\nend\n\nalways @(A or B) begin\n    odd = a_reg;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.84,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:06:52.483818",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:06:44.510390"
+        }
+      },
+      {
+        "code": "module div_16bit(\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\nreg [15:0] a_reg, b_reg;\ninteger i;\n\nalways @(*) begin\n    a_reg = A;\n    b_reg = B;\n    for (i = 0; i < 8; i = i + 1) begin\n        if ((a_reg >> (7 - i)) >= b_reg) begin\n            result[i] = 1'b1;\n            a_reg = (a_reg >> (7 - i)) - b_reg;\n        end else begin\n            result[i] = 1'b0;\n        end\n    end\nend\n\nalways @(*) begin\n    odd = a_reg << 8;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:06:52.483821",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:06:48.793875"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [15:0] a_reg;\nreg [7:0] b_reg;\nwire [16:0] q;\n\nalways @(*) begin\n    a_reg = A;\n    b_reg = B;\nend\n\nassign q = (a_reg >> 8) >= b_reg ? 1 : 0;\n\nassign odd = (q == 1) ? (a_reg << 1) - (b_reg << 1) : a_reg << 1;\nassign result = (q == 1) ? (a_reg >> 9) | (1 << 7) : a_reg >> 8;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:06:52.483822",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:06:52.483803"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module div_16bit(\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [23:0] a_reg;\nreg [4:0] shift_count;\n\nalways @(A or B) begin\n    a_reg = {B, 8'b0};\n    result = 16'b0;\n    shift_count = 4'b0;\nend\n\nalways @(A or B or shift_count) begin\n    if (shift_count < 16) begin\n        if ((a_reg >> (15 - shift_count)) >= B) begin\n            result[shift_count] = 1;\n            a_reg = (a_reg >> (15 - shift_count)) - B << (15 - shift_count);\n        end else begin\n            a_reg = a_reg << 1;\n        end\n        shift_count = shift_count + 1;\n    end else begin\n        odd = a_reg;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:07:06.695228",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.84
+          ],
+          "generation_time": "2026-02-03T16:06:57.780014"
+        }
+      },
+      {
+        "code": "module div_16bit(\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\nreg [23:0] a_reg;\nreg [7:0] b_reg;\ninteger i;\n\nalways @(*) begin\n    a_reg = {A, 8'b0};\n    b_reg = B;\n    for (i = 0; i < 8; i = i + 1) begin\n        if ((a_reg >> (23 - i)) >= b_reg) begin\n            result[i] = 1'b1;\n            a_reg = (a_reg >> (23 - i)) - b_reg;\n        end else begin\n            result[i] = 1'b0;\n        end\n    end\nend\n\nalways @(*) begin\n    odd = a_reg >> 8;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:07:06.695230",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.84
+          ],
+          "generation_time": "2026-02-03T16:07:02.276846"
+        }
+      },
+      {
+        "code": "module div_16bit(\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\nreg [15:0] a_reg;\nreg [7:0] b_reg;\ninteger i;\n\nalways @(*) begin\n    a_reg = A;\n    b_reg = B;\n    for (i = 0; i < 8; i = i + 1) begin\n        if ((a_reg >> (7 - i)) >= b_reg) begin\n            result[i] = 1'b1;\n            a_reg = (a_reg >> (7 - i)) - b_reg;\n        end else begin\n            result[i] = 1'b0;\n        end\n    end\nend\n\nalways @(*) begin\n    odd = a_reg << 8;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:07:06.695231",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.84
+          ],
+          "generation_time": "2026-02-03T16:07:06.695215"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module div_16bit(\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [23:0] a_reg;\nreg [4:0] shift_count;\n\nalways @(A or B) begin\n    a_reg = {B, 8'b0};\n    result = 16'b0;\n    shift_count = 4'b0;\nend\n\nalways @(A or B or shift_count) begin\n    if (shift_count < 16) begin\n        if ((a_reg >> (15 - shift_count)) >= B) begin\n            result[shift_count] = 1;\n            a_reg = (a_reg >> (15 - shift_count)) - B << (15 - shift_count);\n        end else begin\n            a_reg = a_reg << 1;\n        end\n        shift_count = shift_count + 1;\n    end else begin\n        odd = a_reg;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:07:23.091728",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:07:12.003558"
+        }
+      },
+      {
+        "code": "module div_16bit(\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\nreg [23:0] a_reg;\nreg [4:0] shift_count;\n\nalways @(A or B) begin\n    a_reg = {B, A};\n    result = 16'b0;\n    shift_count = 4'b0;\nend\n\nalways @(A or B or shift_count) begin\n    if (shift_count < 16) begin\n        if ((a_reg >> (23 - shift_count)) >= B) begin\n            result[15 - shift_count] = 1;\n            a_reg = (a_reg >> (23 - shift_count)) - B << (23 - shift_count);\n        end else begin\n            a_reg = a_reg << 1;\n        end\n        shift_count = shift_count + 1;\n    end else begin\n        odd = a_reg;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:07:23.091730",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:07:17.591812"
+        }
+      },
+      {
+        "code": "module div_16bit(\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\nreg [23:0] a_reg;\nreg [4:0] shift_count;\n\nalways @(A or B) begin\n    a_reg = {B, 8'b0};\n    result = 16'b0;\n    shift_count = 4'b0;\nend\n\nalways @(A or B or shift_count) begin\n    if (shift_count < 16) begin\n        if ((a_reg >> (15 - shift_count)) >= B) begin\n            result[shift_count] = 1;\n            a_reg = (a_reg >> (15 - shift_count)) - B << (15 - shift_count);\n        end else begin\n            a_reg = a_reg << 1;\n        end\n        shift_count = shift_count + 1;\n    end else begin\n        odd = a_reg;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:07:23.091732",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:07:23.091714"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:07:23.091737",
+    "total_hdl_codes": 9
+  }
+}

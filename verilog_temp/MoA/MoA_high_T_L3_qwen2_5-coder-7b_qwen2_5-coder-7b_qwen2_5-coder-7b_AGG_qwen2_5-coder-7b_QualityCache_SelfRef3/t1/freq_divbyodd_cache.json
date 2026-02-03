@@ -1,0 +1,156 @@
+{
+  "design_name": "freq_divbyodd",
+  "trial_num": 1,
+  "created_at": "2026-02-03T17:11:48.549340",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module freq_divbyodd #(\n    parameter NUM_DIV = 5\n) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [NUM_DIV-1:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 0;\n        clk_div <= 0;\n    end else begin\n        if (cnt == NUM_DIV - 2)\n            begin\n                clk_div <= ~clk_div;\n                cnt <= 0;\n            end\n        else\n            cnt <= cnt + 1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:12:01.570821",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:11:52.671229"
+        }
+      },
+      {
+        "code": "module freq_divbyodd #(\n    parameter NUM_DIV = 5\n) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [NUM_DIV-2:0] cnt1, cnt2;\nwire clk_div1, clk_div2;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt1 <= 0;\n        cnt2 <= 0;\n        clk_div1 <= 0;\n        clk_div2 <= 0;\n    end else begin\n        if (cnt1 == NUM_DIV/2 - 1)\n            clk_div1 <= ~clk_div1;\n        if (cnt2 == NUM_DIV/2 - 1)\n            clk_div2 <= ~clk_div2;\n\n        cnt1 <= cnt1 + 1;\n        cnt2 <= cnt2 + 1;\n    end\nend\n\nassign clk_div = clk_div1 | clk_div2;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:12:01.570824",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:11:57.141156"
+        }
+      },
+      {
+        "code": "module freq_divbyodd #(parameter NUM_DIV = 5) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [NUM_DIV-1:0] cnt;\nwire [NUM_DIV-2:0] half_num_div;\nassign half_num_div = (NUM_DIV / 2) - 1;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 0;\n        clk_div <= 0;\n    end else begin\n        if (cnt < NUM_DIV - 1) begin\n            cnt <= cnt + 1;\n        end else begin\n            cnt <= 0;\n            clk_div <= ~clk_div;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:12:01.570825",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:12:01.570807"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module freq_divbyodd #(\n    parameter NUM_DIV = 5\n) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [NUM_DIV-2:0] cnt;\nreg clk_div1, clk_div2;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 0;\n        clk_div1 <= 0;\n        clk_div2 <= 0;\n    end else begin\n        if (cnt == NUM_DIV / 2 - 1)\n            clk_div1 <= ~clk_div1;\n        if (cnt == NUM_DIV - 2)\n            clk_div2 <= ~clk_div2;\n\n        cnt <= cnt + 1;\n    end\nend\n\nassign clk_div = clk_div1 | clk_div2;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6499999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:12:15.449349",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:12:06.135582"
+        }
+      },
+      {
+        "code": "module freq_divbyodd #(\n    parameter NUM_DIV = 5\n) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [NUM_DIV-2:0] cnt1, cnt2;\nwire clk_div1, clk_div2;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt1 <= 0;\n        cnt2 <= 0;\n        clk_div1 <= 0;\n        clk_div2 <= 0;\n    end else begin\n        if (cnt1 == NUM_DIV/2 - 1)\n            clk_div1 <= ~clk_div1;\n        if (cnt2 == NUM_DIV/2 - 1)\n            clk_div2 <= ~clk_div2;\n\n        cnt1 <= cnt1 + 1;\n        cnt2 <= cnt2 + 1;\n    end\nend\n\nassign clk_div = clk_div1 | clk_div2;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:12:15.449351",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:12:10.863834"
+        }
+      },
+      {
+        "code": "module freq_divbyodd #(\n    parameter NUM_DIV = 5\n) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [NUM_DIV-2:0] cnt1, cnt2;\nwire clk_div1, clk_div2;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt1 <= 0;\n        cnt2 <= 0;\n        clk_div1 <= 0;\n        clk_div2 <= 0;\n    end else begin\n        if (cnt1 == NUM_DIV/2 - 1)\n            clk_div1 <= ~clk_div1;\n        if (cnt2 == NUM_DIV/2 - 1)\n            clk_div2 <= ~clk_div2;\n\n        cnt1 <= cnt1 + 1;\n        cnt2 <= cnt2 + 1;\n    end\nend\n\nassign clk_div = clk_div1 | clk_div2;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:12:15.449352",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:12:15.449335"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module freq_divbyodd #(\n    parameter NUM_DIV = 5\n) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [NUM_DIV-1:0] cnt;\nreg clk_div1, clk_div2;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 0;\n        clk_div1 <= 0;\n        clk_div2 <= 0;\n    end else begin\n        if (cnt == NUM_DIV / 2 - 1)\n            clk_div1 <= ~clk_div1;\n        if (cnt == NUM_DIV - 2)\n            clk_div2 <= ~clk_div2;\n\n        cnt <= cnt + 1;\n    end\nend\n\nassign clk_div = clk_div1 | clk_div2;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6499999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:12:27.669938",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.6499999999999999
+          ],
+          "generation_time": "2026-02-03T17:12:19.597030"
+        }
+      },
+      {
+        "code": "module freq_divbyodd #(\n    parameter NUM_DIV = 5\n) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [NUM_DIV-2:0] cnt;\nwire half_num_div;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 0;\n        clk_div <= 0;\n    end else begin\n        if (cnt == half_num_div - 1)\n            cnt <= 0;\n        else\n            cnt <= cnt + 1;\n\n        if (cnt == half_num_div / 2)\n            clk_div <= ~clk_div;\n        else\n            clk_div <= clk_div;\n    end\nend\n\nassign half_num_div = NUM_DIV / 2;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:12:27.669940",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.6499999999999999
+          ],
+          "generation_time": "2026-02-03T17:12:23.766530"
+        }
+      },
+      {
+        "code": "module freq_divbyodd #(\n    parameter NUM_DIV = 5\n) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [NUM_DIV-1:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 0;\n        clk_div <= 0;\n    end else begin\n        if (cnt == NUM_DIV / 2 - 1)\n            clk_div <= ~clk_div;\n        cnt <= cnt + 1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:12:27.669941",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.6499999999999999
+          ],
+          "generation_time": "2026-02-03T17:12:27.669924"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T17:12:27.669947",
+    "total_hdl_codes": 9
+  }
+}

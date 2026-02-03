@@ -1,0 +1,156 @@
+{
+  "design_name": "multi_pipe_8bit",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:42:23.494344",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module multi_pipe_8bit (\n    input wire clk,\n    input wire rst_n,\n    input wire mul_en_in,\n    input wire [7:0] mul_a,\n    input wire [7:0] mul_b,\n    output reg mul_en_out,\n    output reg [15:0] mul_out\n);\n\nreg mul_en_out_reg;\nreg [7:0] mul_a_reg;\nreg [7:0] mul_b_reg;\nwire [7:0] temp [0:7];\nreg [15:0] sum [0:3];\nreg [15:0] mul_out_reg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_en_out_reg <= 0;\n        mul_a_reg <= 0;\n        mul_b_reg <= 0;\n        sum <= 32'b0;\n        mul_out_reg <= 0;\n    end else begin\n        mul_en_out_reg <= mul_en_in;\n        if (mul_en_in) begin\n            mul_a_reg <= mul_a;\n            mul_b_reg <= mul_b;\n        end\n    end\nend\n\nalways @(*) begin\n    for (int i = 0; i < 8; i = i + 1) begin\n        temp[i] = mul_a_reg & (mul_b_reg >> i);\n    end\nend\n\nassign sum[0] = temp[0];\nassign sum[1] = temp[1] + (temp[2] << 1);\nassign sum[2] = sum[1] + (temp[3] << 2);\nassign sum[3] = sum[2] + (temp[4] << 3) + (temp[5] << 4) + (temp[6] << 5) + (temp[7] << 6);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_out_reg <= 0;\n    end else begin\n        mul_out_reg <= sum[3];\n    end\nend\n\nassign mul_en_out = mul_en_out_reg[7];\nassign mul_out = mul_en_out ? mul_out_reg : 16'b0;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:42:53.579993",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:42:32.606213"
+        }
+      },
+      {
+        "code": "module multi_pipe_8bit (\n    input wire clk,\n    input wire rst_n,\n    input wire mul_en_in,\n    input wire [7:0] mul_a,\n    input wire [7:0] mul_b,\n    output reg mul_en_out,\n    output reg [15:0] mul_out\n);\n\nreg [7:0] mul_a_reg;\nreg [7:0] mul_b_reg;\nwire [15:0] temp [7:0];\nreg [15:0] sum [3:0];\nreg [15:0] mul_out_reg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_en_out_reg <= 0;\n        mul_a_reg <= 0;\n        mul_b_reg <= 0;\n        mul_out_reg <= 0;\n        mul_en_out <= 0;\n        mul_out <= 0;\n    end else begin\n        if (mul_en_in) begin\n            mul_en_out_reg <= mul_en_in;\n            mul_a_reg <= mul_a;\n            mul_b_reg <= mul_b;\n        end\n\n        temp[0] <= mul_a_reg * mul_b_reg[7:0];\n        temp[1] <= mul_a_reg * mul_b_reg[6:0];\n        temp[2] <= mul_a_reg * mul_b_reg[5:0];\n        temp[3] <= mul_a_reg * mul_b_reg[4:0];\n        temp[4] <= mul_a_reg * mul_b_reg[3:0];\n        temp[5] <= mul_a_reg * mul_b_reg[2:0];\n        temp[6] <= mul_a_reg * mul_b_reg[1:0];\n        temp[7] <= 0;\n\n        sum[0] <= temp[0];\n        sum[1] <= sum[0] + {temp[1], 8'b0};\n        sum[2] <= sum[1] + {temp[2], 8'b0};\n        sum[3] <= sum[2] + {temp[3], 8'b0};\n\n        mul_out_reg <= sum[3];\n    end\nend\n\nassign mul_en_out = mul_en_out_reg;\nassign mul_out = mul_en_out ? mul_out_reg : 16'b0;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:42:53.579996",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:42:42.884126"
+        }
+      },
+      {
+        "code": "module multi_pipe_8bit (\n    input wire clk,\n    input wire rst_n,\n    input wire mul_en_in,\n    input wire [7:0] mul_a,\n    input wire [7:0] mul_b,\n    output reg mul_en_out,\n    output reg [15:0] mul_out\n);\n\nreg mul_en_out_reg;\nreg [7:0] mul_a_reg;\nreg [7:0] mul_b_reg;\nwire [8:0] temp [0:7];\nreg [15:0] sum;\nreg [15:0] mul_out_reg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_en_out_reg <= 1'b0;\n        mul_a_reg <= 8'b0;\n        mul_b_reg <= 8'b0;\n        sum <= 16'b0;\n        mul_out_reg <= 16'b0;\n    end else begin\n        if (mul_en_in) begin\n            mul_en_out_reg <= mul_en_in;\n            mul_a_reg <= mul_a;\n            mul_b_reg <= mul_b;\n        end\n        temp[0] = mul_a_reg & mul_b_reg[7:0];\n        temp[1] = mul_a_reg & (mul_b_reg[6:0] << 1);\n        temp[2] = mul_a_reg & (mul_b_reg[5:0] << 2);\n        temp[3] = mul_a_reg & (mul_b_reg[4:0] << 3);\n        temp[4] = mul_a_reg & (mul_b_reg[3:0] << 4);\n        temp[5] = mul_a_reg & (mul_b_reg[2:0] << 5);\n        temp[6] = mul_a_reg & (mul_b_reg[1:0] << 6);\n        temp[7] = mul_a_reg & (mul_b_reg[0] << 7);\n        \n        sum <= temp[0];\n        for (integer i = 1; i < 8; i = i + 1) begin\n            sum <= sum + temp[i];\n        end\n        \n        if (mul_en_out_reg) begin\n            mul_out_reg <= sum;\n        end else begin\n            mul_out_reg <= 16'b0;\n        end\n    end\nend\n\nassign mul_en_out = mul_en_out_reg[7];\n\nassign mul_out = mul_out_reg;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:42:53.579997",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:42:53.579980"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module multi_pipe_8bit (\n    input wire clk,\n    input wire rst_n,\n    input wire mul_en_in,\n    input wire [7:0] mul_a,\n    input wire [7:0] mul_b,\n    output reg mul_en_out,\n    output reg [15:0] mul_out\n);\n\nreg mul_en_out_reg;\nreg [7:0] mul_a_reg;\nreg [7:0] mul_b_reg;\nwire [15:0] temp [0:7];\nreg [15:0] sum [3:0];\nreg [15:0] mul_out_reg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_en_out_reg <= 0;\n        mul_a_reg <= 0;\n        mul_b_reg <= 0;\n        sum <= 32'b0;\n        mul_out_reg <= 0;\n    end else begin\n        mul_en_out_reg <= mul_en_in;\n        if (mul_en_in) begin\n            mul_a_reg <= mul_a;\n            mul_b_reg <= mul_b;\n        end\n    end\nend\n\nalways @(*) begin\n    for (int i = 0; i < 8; i = i + 1) begin\n        temp[i] = mul_a_reg & (mul_b_reg << i);\n    end\nend\n\nassign sum[0] = temp[0];\nsum[1] <= sum[0] + {temp[1], 8'b0};\nsum[2] <= sum[1] + {temp[2], 8'b0};\nsum[3] <= sum[2] + {temp[3], 8'b0};\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_out_reg <= 0;\n    end else begin\n        mul_out_reg <= sum[3];\n    end\nend\n\nassign mul_en_out = mul_en_out_reg;\nassign mul_out = mul_en_out ? mul_out_reg : 16'b0;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:43:23.456649",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:43:03.058409"
+        }
+      },
+      {
+        "code": "module multi_pipe_8bit (\n    input wire clk,\n    input wire rst_n,\n    input wire mul_en_in,\n    input wire [7:0] mul_a,\n    input wire [7:0] mul_b,\n    output reg mul_en_out,\n    output reg [15:0] mul_out\n);\n\nreg mul_en_out_reg;\nreg [7:0] mul_a_reg;\nreg [7:0] mul_b_reg;\nwire [8:0] temp [0:7];\nreg [15:0] sum;\nreg [15:0] mul_out_reg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_en_out_reg <= 1'b0;\n        mul_a_reg <= 8'b0;\n        mul_b_reg <= 8'b0;\n        sum <= 16'b0;\n        mul_out_reg <= 16'b0;\n    end else begin\n        mul_en_out_reg <= mul_en_in;\n        if (mul_en_in) begin\n            mul_a_reg <= mul_a;\n            mul_b_reg <= mul_b;\n        end\n\n        temp[0] = mul_a_reg & mul_b_reg[7:0];\n        temp[1] = mul_a_reg & (mul_b_reg[6:0] << 1);\n        temp[2] = mul_a_reg & (mul_b_reg[5:0] << 2);\n        temp[3] = mul_a_reg & (mul_b_reg[4:0] << 3);\n        temp[4] = mul_a_reg & (mul_b_reg[3:0] << 4);\n        temp[5] = mul_a_reg & (mul_b_reg[2:0] << 5);\n        temp[6] = mul_a_reg & (mul_b_reg[1:0] << 6);\n        temp[7] = mul_a_reg & (mul_b_reg[0] << 7);\n\n        sum <= temp[0];\n        for (integer i = 1; i < 8; i = i + 1) begin\n            sum <= sum + temp[i];\n        end\n\n        if (mul_en_out_reg) begin\n            mul_out_reg <= sum;\n        end else begin\n            mul_out_reg <= 16'b0;\n        end\n    end\nend\n\nassign mul_en_out = mul_en_out_reg;\n\nassign mul_out = mul_out_reg;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:43:23.456651",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:43:14.002293"
+        }
+      },
+      {
+        "code": "module multi_pipe_8bit (\n    input wire clk,\n    input wire rst_n,\n    input wire mul_en_in,\n    input wire [7:0] mul_a,\n    input wire [7:0] mul_b,\n    output reg mul_en_out,\n    output reg [15:0] mul_out\n);\n\nreg mul_en_out_reg;\nreg [7:0] mul_a_reg;\nreg [7:0] mul_b_reg;\nwire [8:0] temp [0:7];\nreg [15:0] sum [3:0];\nreg [15:0] mul_out_reg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_en_out_reg <= 0;\n        mul_a_reg <= 0;\n        mul_b_reg <= 0;\n        sum <= 32'b0;\n        mul_out_reg <= 0;\n    end else begin\n        mul_en_out_reg <= mul_en_in;\n        if (mul_en_in) begin\n            mul_a_reg <= mul_a;\n            mul_b_reg <= mul_b;\n        end\n    end\nend\n\nalways @(*) begin\n    for (int i = 0; i < 8; i = i + 1) begin\n        temp[i] = mul_a_reg & (mul_b_reg >> i);\n    end\nend\n\nassign sum[0] = temp[0];\nassign sum[1] = sum[0] + {temp[1], 8'b0};\nassign sum[2] = sum[1] + {temp[2], 8'b0};\nassign sum[3] = sum[2] + {temp[3], 8'b0} + {temp[4], 8'b0} + {temp[5], 8'b0} + {temp[6], 8'b0} + {temp[7], 8'b0};\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_out_reg <= 0;\n    end else begin\n        mul_out_reg <= sum[3];\n    end\nend\n\nassign mul_en_out = mul_en_out_reg[7];\nassign mul_out = mul_en_out ? mul_out_reg : 16'b0;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:43:23.456652",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:43:23.456633"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module multi_pipe_8bit (\n    input wire clk,\n    input wire rst_n,\n    input wire mul_en_in,\n    input wire [7:0] mul_a,\n    input wire [7:0] mul_b,\n    output reg mul_en_out,\n    output reg [15:0] mul_out\n);\n\nreg mul_en_out_reg;\nreg [7:0] mul_a_reg;\nreg [7:0] mul_b_reg;\nwire [15:0] temp [0:7];\nreg [15:0] sum;\nreg [15:0] mul_out_reg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_en_out_reg <= 1'b0;\n        mul_a_reg <= 8'b0;\n        mul_b_reg <= 8'b0;\n        sum <= 16'b0;\n        mul_out_reg <= 16'b0;\n    end else begin\n        if (mul_en_in) begin\n            mul_en_out_reg <= mul_en_in;\n            mul_a_reg <= mul_a;\n            mul_b_reg <= mul_b;\n        end\n\n        temp[0] = mul_a_reg & mul_b_reg[7:0];\n        temp[1] = mul_a_reg & (mul_b_reg[6:0] << 1);\n        temp[2] = mul_a_reg & (mul_b_reg[5:0] << 2);\n        temp[3] = mul_a_reg & (mul_b_reg[4:0] << 3);\n        temp[4] = mul_a_reg & (mul_b_reg[3:0] << 4);\n        temp[5] = mul_a_reg & (mul_b_reg[2:0] << 5);\n        temp[6] = mul_a_reg & (mul_b_reg[1:0] << 6);\n        temp[7] = mul_a_reg & (mul_b_reg[0] << 7);\n\n        sum <= temp[0];\n        for (integer i = 1; i < 8; i = i + 1) begin\n            sum <= sum + temp[i];\n        end\n\n        if (mul_en_out_reg) begin\n            mul_out_reg <= sum;\n        end else begin\n            mul_out_reg <= 16'b0;\n        end\n    end\nend\n\nassign mul_en_out = mul_en_out_reg[7];\n\nassign mul_out = mul_out_reg;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:43:54.940701",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:43:34.498805"
+        }
+      },
+      {
+        "code": "module multi_pipe_8bit (\n    input wire clk,\n    input wire rst_n,\n    input wire mul_en_in,\n    input wire [7:0] mul_a,\n    input wire [7:0] mul_b,\n    output reg mul_en_out,\n    output reg [15:0] mul_out\n);\n\nreg mul_en_out_reg;\nreg [7:0] mul_a_reg;\nreg [7:0] mul_b_reg;\nwire [7:0] temp [0:7];\nreg [15:0] sum [3:0];\nreg [15:0] mul_out_reg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_en_out_reg <= 0;\n        mul_a_reg <= 0;\n        mul_b_reg <= 0;\n        sum <= 32'b0;\n        mul_out_reg <= 0;\n        mul_en_out <= 0;\n        mul_out <= 0;\n    end else begin\n        if (mul_en_in) begin\n            mul_en_out_reg <= mul_en_in;\n            mul_a_reg <= mul_a;\n            mul_b_reg <= mul_b;\n        end\n\n        temp[0] <= mul_a_reg * mul_b_reg[7:0];\n        temp[1] <= mul_a_reg * mul_b_reg[6:0];\n        temp[2] <= mul_a_reg * mul_b_reg[5:0];\n        temp[3] <= mul_a_reg * mul_b_reg[4:0];\n        temp[4] <= mul_a_reg * mul_b_reg[3:0];\n        temp[5] <= mul_a_reg * mul_b_reg[2:0];\n        temp[6] <= mul_a_reg * mul_b_reg[1:0];\n        temp[7] <= 0;\n\n        sum[0] <= temp[0];\n        sum[1] <= sum[0] + {temp[1], 8'b0};\n        sum[2] <= sum[1] + {temp[2], 8'b0};\n        sum[3] <= sum[2] + {temp[3], 8'b0};\n\n        mul_out_reg <= sum[3];\n    end\nend\n\nassign mul_en_out = mul_en_out_reg;\nassign mul_out = mul_en_out ? mul_out_reg : 16'b0;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:43:54.940704",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:43:44.259636"
+        }
+      },
+      {
+        "code": "module multi_pipe_8bit (\n    input wire clk,\n    input wire rst_n,\n    input wire mul_en_in,\n    input wire [7:0] mul_a,\n    input wire [7:0] mul_b,\n    output reg mul_en_out,\n    output reg [15:0] mul_out\n);\n\nreg mul_en_out_reg;\nreg [7:0] mul_a_reg;\nreg [7:0] mul_b_reg;\nwire [15:0] temp [7:0];\nreg [15:0] sum [3:0];\nreg [15:0] mul_out_reg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_en_out_reg <= 0;\n        mul_a_reg <= 0;\n        mul_b_reg <= 0;\n        sum <= 32'b0;\n        mul_out_reg <= 0;\n    end else begin\n        mul_en_out_reg <= mul_en_in;\n        if (mul_en_in) begin\n            mul_a_reg <= mul_a;\n            mul_b_reg <= mul_b;\n        end\n    end\nend\n\nalways @(*) begin\n    for (int i = 0; i < 8; i = i + 1) begin\n        temp[i] = mul_a_reg * mul_b_reg[7-i];\n    end\nend\n\nassign sum[0] = temp[0];\nassign sum[1] = sum[0] + {temp[1], 8'b0};\nassign sum[2] = sum[1] + {temp[2], 8'b0};\nassign sum[3] = sum[2] + {temp[3], 8'b0} + {temp[4], 9'b0} + {temp[5], 10'b0} + {temp[6], 11'b0} + {temp[7], 12'b0};\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_out_reg <= 0;\n    end else begin\n        mul_out_reg <= sum[3];\n    end\nend\n\nassign mul_en_out = mul_en_out_reg[7];\nassign mul_out = mul_en_out ? mul_out_reg : 16'b0;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:43:54.940705",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:43:54.940688"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:43:54.940711",
+    "total_hdl_codes": 9
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "design_name": "accu",
+  "trial_num": 10,
+  "created_at": "2026-02-03T15:54:52.626244",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module accu (\n    input wire clk,\n    input wire rst_n,\n    input wire [7:0] data_in,\n    input wire valid_in,\n    output reg [9:0] data_out,\n    output reg valid_out\n);\n\nreg [3:0] count;\nreg [9:0] sum;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        count <= 4'b0000;\n        sum <= 10'b0000000000;\n        valid_out <= 1'b0;\n    end else begin\n        if (valid_in) begin\n            sum <= sum + data_in;\n            count <= count + 1;\n        end\n        if (count == 4'b1000) begin\n            data_out <= sum;\n            valid_out <= 1'b1;\n            count <= 4'b0000;\n        end else begin\n            valid_out <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T15:55:07.055288",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T15:54:57.626848"
+        }
+      },
+      {
+        "code": "module accu (\n    input wire clk,\n    input wire rst_n,\n    input wire [7:0] data_in,\n    input wire valid_in,\n    output reg [9:0] data_out,\n    output reg valid_out\n);\n\nreg [31:0] sum;\nreg [2:0] count;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        sum <= 0;\n        count <= 0;\n        valid_out <= 0;\n    end else begin\n        if (valid_in && count < 4) begin\n            sum <= sum + data_in;\n            count <= count + 1;\n        end\n        if (count == 4) begin\n            data_out <= {2'b0, sum[9:0]};\n            valid_out <= 1;\n        end else begin\n            valid_out <= 0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.59,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T15:55:07.055290",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T15:55:02.135700"
+        }
+      },
+      {
+        "code": "module accu (\n    input wire clk,\n    input wire rst_n,\n    input wire [7:0] data_in,\n    input wire valid_in,\n    output reg [9:0] data_out,\n    output reg valid_out\n);\n\nreg [31:0] accumulator;\nreg [2:0] count;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        accumulator <= 32'b0;\n        count <= 3'b0;\n        data_out <= 10'b0;\n        valid_out <= 1'b0;\n    end else begin\n        if (valid_in) begin\n            accumulator <= accumulator + data_in;\n            count <= count + 1;\n        end\n\n        if (count == 3'b100) begin\n            data_out <= accumulator[9:0];\n            valid_out <= 1'b1;\n            count <= 3'b0;\n        end else begin\n            valid_out <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.5399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T15:55:07.055291",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T15:55:07.055273"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module accu (\n    input wire clk,\n    input wire rst_n,\n    input wire [7:0] data_in,\n    input wire valid_in,\n    output reg [9:0] data_out,\n    output reg valid_out\n);\n\nreg [3:0] count;\nreg [9:0] sum;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        count <= 4'b0000;\n        sum <= 10'b0000000000;\n        valid_out <= 1'b0;\n    end else begin\n        if (valid_in && count < 4) begin\n            sum <= sum + data_in;\n            count <= count + 1;\n        end\n        if (count == 4'd4) begin\n            data_out <= sum;\n            valid_out <= 1'b1;\n            count <= 4'b0000;\n        end else begin\n            valid_out <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T15:55:22.021635",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.59,
+            0.5399999999999999
+          ],
+          "generation_time": "2026-02-03T15:55:12.119209"
+        }
+      },
+      {
+        "code": "module accu (\n    input wire clk,\n    input wire rst_n,\n    input wire [7:0] data_in,\n    input wire valid_in,\n    output reg [9:0] data_out,\n    output reg valid_out\n);\n\nreg [3:0] count;\nreg [9:0] sum;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        count <= 4'b0000;\n        sum <= 10'b0000000000;\n        valid_out <= 1'b0;\n    end else begin\n        if (valid_in && count < 4) begin\n            sum <= sum + data_in;\n            count <= count + 1;\n        end\n        if (count == 4) begin\n            data_out <= sum;\n            valid_out <= 1'b1;\n            count <= 4'b0000;\n        end else begin\n            valid_out <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T15:55:22.021638",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.59,
+            0.5399999999999999
+          ],
+          "generation_time": "2026-02-03T15:55:17.158776"
+        }
+      },
+      {
+        "code": "module accu (\n    input wire clk,\n    input wire rst_n,\n    input wire [7:0] data_in,\n    input wire valid_in,\n    output reg [9:0] data_out,\n    output reg valid_out\n);\n\nreg [31:0] sum;\nreg [2:0] count;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        sum <= 0;\n        count <= 0;\n        data_out <= 0;\n        valid_out <= 0;\n    end else begin\n        if (valid_in && count < 4) begin\n            sum <= sum + data_in;\n            count <= count + 1;\n        end\n        if (count == 4) begin\n            data_out <= {2'b0, sum[9:0]};\n            valid_out <= 1;\n        end else begin\n            valid_out <= 0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.48999999999999994,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T15:55:22.021639",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.59,
+            0.5399999999999999
+          ],
+          "generation_time": "2026-02-03T15:55:22.021621"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module accu (\n    input wire clk,\n    input wire rst_n,\n    input wire [7:0] data_in,\n    input wire valid_in,\n    output reg [9:0] data_out,\n    output reg valid_out\n);\n\nreg [3:0] count;\nreg [9:0] sum;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        count <= 4'b0000;\n        sum <= 10'b0000000000;\n        valid_out <= 1'b0;\n    end else begin\n        if (valid_in && count < 4) begin\n            sum <= sum + data_in;\n            count <= count + 1;\n        end\n        if (count == 4'd4) begin\n            data_out <= sum;\n            valid_out <= 1'b1;\n            count <= 4'b0000;\n        end else begin\n            valid_out <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T15:55:36.947466",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6399999999999999,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T15:55:26.907478"
+        }
+      },
+      {
+        "code": "module accu (\n    input wire clk,\n    input wire rst_n,\n    input wire [7:0] data_in,\n    input wire valid_in,\n    output reg [9:0] data_out,\n    output reg valid_out\n);\n\nreg [3:0] count;\nreg [9:0] sum;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        count <= 4'b0000;\n        sum <= 10'b0000000000;\n        valid_out <= 1'b0;\n    end else begin\n        if (valid_in && count < 4) begin\n            sum <= sum + data_in;\n            count <= count + 1;\n        end\n        if (count == 4'd4) begin\n            data_out <= sum;\n            valid_out <= 1'b1;\n            count <= 4'b0000;\n        end else begin\n            valid_out <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T15:55:36.947469",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6399999999999999,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T15:55:31.927985"
+        }
+      },
+      {
+        "code": "module accu (\n    input wire clk,\n    input wire rst_n,\n    input wire [7:0] data_in,\n    input wire valid_in,\n    output reg [9:0] data_out,\n    output reg valid_out\n);\n\nreg [3:0] count;\nreg [9:0] sum;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        count <= 4'b0000;\n        sum <= 10'b0000000000;\n        valid_out <= 1'b0;\n    end else begin\n        if (valid_in && count < 4) begin\n            sum <= sum + data_in;\n            count <= count + 1;\n        end\n        if (count == 4'd4) begin\n            data_out <= sum;\n            valid_out <= 1'b1;\n            count <= 4'b0000;\n        end else begin\n            valid_out <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T15:55:36.947470",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6399999999999999,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T15:55:36.947453"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T15:55:36.947475",
+    "total_hdl_codes": 9
+  }
+}

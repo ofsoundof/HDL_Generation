@@ -1,0 +1,195 @@
+{
+  "total_designs": 50,
+  "total_trials": 77,
+  "cache_summary": {
+    "radix2_div": [
+      8,
+      5,
+      1,
+      10,
+      9,
+      6,
+      2,
+      7,
+      3,
+      4
+    ],
+    "accu": [
+      8,
+      5,
+      1,
+      10,
+      9,
+      6,
+      2,
+      7,
+      3,
+      4
+    ],
+    "div_16bit": [
+      8,
+      5,
+      1,
+      10,
+      9,
+      6,
+      2,
+      7,
+      3,
+      4
+    ],
+    "LIFObuffer": [
+      1
+    ],
+    "adder_32bit": [
+      1
+    ],
+    "barrel_shifter": [
+      1
+    ],
+    "multi_pipe_4bit": [
+      1
+    ],
+    "clkgenerator": [
+      1
+    ],
+    "fixed_point_substractor": [
+      1
+    ],
+    "multi_pipe_8bit": [
+      1
+    ],
+    "freq_div": [
+      1
+    ],
+    "sequence_detector": [
+      1
+    ],
+    "fixed_point_adder": [
+      1
+    ],
+    "traffic_light": [
+      1
+    ],
+    "edge_detect": [
+      1
+    ],
+    "multi_8bit": [
+      1
+    ],
+    "adder_bcd": [
+      1
+    ],
+    "adder_16bit": [
+      1
+    ],
+    "counter_12": [
+      1
+    ],
+    "adder_8bit": [
+      1
+    ],
+    "fsm": [
+      1
+    ],
+    "freq_divbyfrac": [
+      1
+    ],
+    "up_down_counter": [
+      1
+    ],
+    "adder_pipe_64bit": [
+      1
+    ],
+    "float_multi": [
+      1
+    ],
+    "pulse_detect": [
+      1
+    ],
+    "ROM": [
+      1
+    ],
+    "freq_divbyeven": [
+      1
+    ],
+    "right_shifter": [
+      1
+    ],
+    "comparator_3bit": [
+      1
+    ],
+    "asyn_fifo": [
+      1
+    ],
+    "freq_divbyodd": [
+      1
+    ],
+    "width_8to16": [
+      1
+    ],
+    "LFSR": [
+      1
+    ],
+    "parallel2serial": [
+      1
+    ],
+    "signal_generator": [
+      1
+    ],
+    "calendar": [
+      1
+    ],
+    "ring_counter": [
+      1
+    ],
+    "instr_reg": [
+      1
+    ],
+    "comparator_4bit": [
+      1
+    ],
+    "multi_booth_8bit": [
+      1
+    ],
+    "RAM": [
+      1
+    ],
+    "serial2parallel": [
+      1
+    ],
+    "alu": [
+      1
+    ],
+    "square_wave": [
+      1
+    ],
+    "sub_64bit": [
+      1
+    ],
+    "JC_counter": [
+      1
+    ],
+    "synchronizer": [
+      1
+    ],
+    "pe": [
+      1
+    ],
+    "multi_16bit": [
+      1
+    ]
+  },
+  "quality_distribution": {
+    "high": 273,
+    "medium": 370,
+    "low": 41
+  },
+  "model_performance": {
+    "qwen2.5-coder:7b": {
+      "count": 684,
+      "total_quality": 513.950000000002,
+      "avg_quality": 0.7513888888888918
+    }
+  }
+}

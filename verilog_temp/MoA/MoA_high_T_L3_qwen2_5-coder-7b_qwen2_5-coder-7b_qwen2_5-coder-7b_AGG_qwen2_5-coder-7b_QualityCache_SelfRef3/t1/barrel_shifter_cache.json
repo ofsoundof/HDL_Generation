@@ -1,0 +1,156 @@
+{
+  "design_name": "barrel_shifter",
+  "trial_num": 1,
+  "created_at": "2026-02-03T17:15:18.574346",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module barrel_shifter (\n    input [7:0] in,\n    input [2:0] ctrl,\n    output reg [7:0] out\n);\n\n    wire [7:0] shifted4, shifted2, shifted1;\n\n    // Shift by 4 positions\n    assign shifted4 = {in[3:0], 4'b0000};\n\n    // Shift by 2 positions\n    assign shifted2 = {in[5:0], 2'b00};\n\n    // Shift by 1 position\n    assign shifted1 = {in[6:0], 1'b0};\n\n    // Mux to select between shifted inputs based on ctrl signals\n    assign out = (ctrl[2]) ? shifted4 :\n                (ctrl[1]) ? shifted2 :\n                             shifted1;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:15:32.556001",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:15:23.102787"
+        }
+      },
+      {
+        "code": "module barrel_shifter (\n    input [7:0] in,\n    input [2:0] ctrl,\n    output reg [7:0] out\n);\n\n    wire [7:0] shift4, shift2, shift1;\n\n    // Shift by 4 positions\n    assign shift4 = {in[3:0], in[7:4]};\n\n    // Shift by 2 positions\n    assign shift2 = {in[5:0], in[7:6]};\n\n    // Shift by 1 position\n    assign shift1 = {in[6:0], in[7]};\n\n    // Mux to select the final output based on ctrl signals\n    always @(*) begin\n        if (ctrl == 3'b100)\n            out = shift4;\n        else if (ctrl == 3'b010)\n            out = shift2;\n        else if (ctrl == 3'b001)\n            out = shift1;\n        else\n            out = in;\n    end\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:15:32.556004",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:15:27.890315"
+        }
+      },
+      {
+        "code": "module barrel_shifter (\n    input [7:0] in,\n    input [2:0] ctrl,\n    output reg [7:0] out\n);\n\nwire [7:0] shifted4, shifted2, shifted1;\n\n// Shift by 4 positions\nassign shifted4 = {in[3:0], in[7:4]};\n\n// Shift by 2 positions\nassign shifted2 = {in[5:0], in[7:6]};\n\n// Shift by 1 position\nassign shifted1 = {in[6:0], in[7]};\n\n// Muxes to select the intermediate results based on ctrl signal\nalways @(*) begin\n    case (ctrl)\n        3'b100: out = shifted4;\n        3'b010: out = shifted2;\n        3'b001: out = shifted1;\n        default: out = in;\n    endcase\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:15:32.556005",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:15:32.555987"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module barrel_shifter (\n    input [7:0] in,\n    input [2:0] ctrl,\n    output reg [7:0] out\n);\n\nwire [7:0] shifted4, shifted2, shifted1;\n\n// Shift by 4 positions\nassign shifted4 = {in[3:0], in[7:4]};\n\n// Shift by 2 positions\nassign shifted2 = {in[5:0], in[7:6]};\n\n// Shift by 1 position\nassign shifted1 = {in[6:0], in[7]};\n\n// Mux to select the intermediate results based on ctrl signal\nalways @(*) begin\n    case (ctrl)\n        3'b100: out = shifted4;\n        3'b010: out = shifted2;\n        3'b001: out = shifted1;\n        default: out = in;\n    endcase\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:15:46.215846",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T17:15:37.160942"
+        }
+      },
+      {
+        "code": "module barrel_shifter (\n    input [7:0] in,\n    input [2:0] ctrl,\n    output reg [7:0] out\n);\n\nwire [7:0] shifted4, shifted2, shifted1;\n\n// Shift by 4 positions\nassign shifted4 = {in[3:0], in[7:4]};\n\n// Shift by 2 positions\nassign shifted2 = {in[5:0], in[7:6]};\n\n// Shift by 1 position\nassign shifted1 = {in[6:0], in[7]};\n\n// Muxes to select the intermediate results based on ctrl signal\nalways @(*) begin\n    case (ctrl)\n        3'b100: out = shifted4;\n        3'b010: out = shifted2;\n        3'b001: out = shifted1;\n        default: out = in;\n    endcase\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:15:46.215849",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T17:15:41.755920"
+        }
+      },
+      {
+        "code": "module barrel_shifter (\n    input [7:0] in,\n    input [2:0] ctrl,\n    output reg [7:0] out\n);\n\nwire [7:0] shifted4, shifted2, shifted1;\n\n// Shift by 4 positions\nassign shifted4 = {in[3:0], 4'b0000};\n\n// Shift by 2 positions\nassign shifted2 = {in[5:0], 2'b00};\n\n// Shift by 1 position\nassign shifted1 = {in[6:0], 1'b0};\n\n// Mux to select between shifted inputs based on ctrl signals\nalways @(*) begin\n    case (ctrl)\n        3'b100: out = shifted4;\n        3'b010: out = shifted2;\n        default: out = shifted1;\n    endcase\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:15:46.215850",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T17:15:46.215831"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module barrel_shifter (\n    input [7:0] in,\n    input [2:0] ctrl,\n    output reg [7:0] out\n);\n\nwire [7:0] shifted4, shifted2, shifted1;\n\n// Shift by 4 positions\nassign shifted4 = {in[3:0], in[7:4]};\n\n// Shift by 2 positions\nassign shifted2 = {in[5:0], in[7:6]};\n\n// Shift by 1 position\nassign shifted1 = {in[6:0], in[7]};\n\n// Muxes to select the intermediate results based on ctrl signal\nalways @(*) begin\n    case (ctrl)\n        3'b100: out = shifted4;\n        3'b010: out = shifted2;\n        3'b001: out = shifted1;\n        default: out = in;\n    endcase\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:15:59.858483",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T17:15:50.738333"
+        }
+      },
+      {
+        "code": "module barrel_shifter (\n    input [7:0] in,\n    input [2:0] ctrl,\n    output reg [7:0] out\n);\n\nwire [7:0] shifted4, shifted2, shifted1;\n\n// Shift by 4 positions\nassign shifted4 = {in[3:0], in[7:4]};\n\n// Shift by 2 positions\nassign shifted2 = {in[5:0], in[7:6]};\n\n// Shift by 1 position\nassign shifted1 = {in[6:0], in[7]};\n\n// Muxes to select the intermediate results based on ctrl signal\nalways @(*) begin\n    case (ctrl)\n        3'b100: out = shifted4;\n        3'b010: out = shifted2;\n        3'b001: out = shifted1;\n        default: out = in;\n    endcase\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:15:59.858487",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T17:15:55.543049"
+        }
+      },
+      {
+        "code": "module barrel_shifter (\n    input [7:0] in,\n    input [2:0] ctrl,\n    output reg [7:0] out\n);\n\nwire [7:0] shifted4, shifted2, shifted1;\n\n// Shift by 4 positions\nassign shifted4 = {in[3:0], in[7:4]};\n\n// Shift by 2 positions\nassign shifted2 = {in[5:0], in[7:6]};\n\n// Shift by 1 position\nassign shifted1 = {in[6:0], in[7]};\n\nalways @(*) begin\n    case (ctrl)\n        3'b100: out = shifted4;\n        3'b010: out = shifted2;\n        3'b001: out = shifted1;\n        default: out = in;\n    endcase\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:15:59.858488",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T17:15:59.858469"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T17:15:59.858493",
+    "total_hdl_codes": 9
+  }
+}

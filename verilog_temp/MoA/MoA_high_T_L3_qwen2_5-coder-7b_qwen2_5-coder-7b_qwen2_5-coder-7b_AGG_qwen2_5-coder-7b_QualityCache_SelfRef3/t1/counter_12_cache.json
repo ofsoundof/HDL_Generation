@@ -1,0 +1,156 @@
+{
+  "design_name": "counter_12",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:52:38.502308",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module counter_12(\n    input wire rst_n,\n    input wire clk,\n    input wire valid_count,\n    output reg [3:0] out\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        out <= 4'b0000;\n    else if (valid_count) begin\n        if (out == 4'd11)\n            out <= 4'b0000;\n        else\n            out <= out + 1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:52:42.267651",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:52:39.194042"
+        }
+      },
+      {
+        "code": "module counter_12 (\n    input rst_n,\n    input clk,\n    input valid_count,\n    output reg [3:0] out\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        out <= 4'b0000;\n    end else begin\n        if (valid_count) begin\n            if (out == 4'd11) begin\n                out <= 4'b0000;\n            end else begin\n                out <= out + 1;\n            end\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:52:42.267654",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:52:41.518405"
+        }
+      },
+      {
+        "code": "module counter_12 (\n    input rst_n,\n    input clk,\n    input valid_count,\n    output reg [3:0] out\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        out <= 4'b0000;\n    end else if (valid_count) begin\n        if (out == 4'd11) begin\n            out <= 4'b0000;\n        end else begin\n            out <= out + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:52:42.267655",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:52:42.267639"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module counter_12(\n    input wire rst_n,\n    input wire clk,\n    input wire valid_count,\n    output reg [3:0] out\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        out <= 4'b0000;\n    else if (valid_count) begin\n        if (out == 4'd11)\n            out <= 4'b0000;\n        else\n            out <= out + 1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:52:44.369695",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:52:43.031562"
+        }
+      },
+      {
+        "code": "module counter_12 (\n    input rst_n,\n    input clk,\n    input valid_count,\n    output reg [3:0] out\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        out <= 4'b0000;\n    else if (valid_count) begin\n        if (out == 4'd11)\n            out <= 4'b0000;\n        else\n            out <= out + 1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:52:44.369697",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:52:43.693333"
+        }
+      },
+      {
+        "code": "module counter_12(\n    input wire rst_n,\n    input wire clk,\n    input wire valid_count,\n    output reg [3:0] out\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        out <= 4'b0000;\n    else if (valid_count) begin\n        if (out == 4'd11)\n            out <= 4'b0000;\n        else\n            out <= out + 1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:52:44.369698",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:52:44.369684"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module counter_12(\n    input wire rst_n,\n    input wire clk,\n    input wire valid_count,\n    output reg [3:0] out\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        out <= 4'b0000;\n    else if (valid_count) begin\n        if (out == 4'd11)\n            out <= 4'b0000;\n        else\n            out <= out + 1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:52:46.368531",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:52:45.045775"
+        }
+      },
+      {
+        "code": "module counter_12(\n    input wire rst_n,\n    input wire clk,\n    input wire valid_count,\n    output reg [3:0] out\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        out <= 4'b0000;\n    else if (valid_count) begin\n        if (out == 4'd11)\n            out <= 4'b0000;\n        else\n            out <= out + 1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:52:46.368534",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:52:45.694113"
+        }
+      },
+      {
+        "code": "module counter_12(\n    input wire rst_n,\n    input wire clk,\n    input wire valid_count,\n    output reg [3:0] out\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        out <= 4'b0000;\n    else if (valid_count) begin\n        if (out == 4'd11)\n            out <= 4'b0000;\n        else\n            out <= out + 1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:52:46.368535",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:52:46.368519"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:52:46.368540",
+    "total_hdl_codes": 9
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "design_name": "float_multi",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:35:47.402302",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module float_multi (\n    input clk,\n    input rst,\n    input [31:0] a,\n    input [31:0] b,\n    output reg [31:0] z\n);\n\n    reg [2:0] counter;\n    reg [23:0] a_mantissa, b_mantissa, product_mantissa;\n    reg [9:0] a_exponent, b_exponent;\n    reg a_sign, b_sign;\n    reg [49:0] product;\n    reg guard_bit, round_bit, sticky;\n\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            counter <= 3'b000;\n            a_mantissa <= 24'b0;\n            b_mantissa <= 24'b0;\n            product_mantissa <= 24'b0;\n            a_exponent <= 10'b0;\n            b_exponent <= 10'b0;\n            product <= 50'b0;\n            guard_bit <= 1'b0;\n            round_bit <= 1'b0;\n            sticky <= 1'b0;\n        end else begin\n            case (counter)\n                3'b000: begin\n                    a_mantissa <= {a[22:0], 1'b0};\n                    b_mantissa <= {b[22:0], 1'b0};\n                    a_exponent <= a[30:23];\n                    b_exponent <= b[30:23];\n                    a_sign <= a[31];\n                    b_sign <= b[31];\n                end\n                3'b001: begin\n                    product <= (a_mantissa * b_mantissa);\n                    product_mantissa <= {product[49], product[48:26]};\n                    z_exponent <= a_exponent + b_exponent - 127;\n                    z_sign <= a_sign ^ b_sign;\n                end\n                3'b010: begin\n                    sticky <= |product[25:0];\n                    guard_bit <= product[24];\n                    round_bit <= product[23];\n                    if (round_bit && (guard_bit || sticky)) begin\n                        product_mantissa <= product_mantissa + 1;\n                    end\n                    if (product_mantissa[23]) begin\n                        z_exponent <= z_exponent + 1;\n                        product_mantissa <= product_mantissa >> 1;\n                    end\n                end\n                default: begin\n                    counter <= 3'b000;\n                end\n            endcase\n        end\n    end\n\n    always @(*) begin\n        if (z_exponent > 255) begin\n            z = {1'b1, 8'b11111111, 23'b0}; // Overflow\n        end else if (z_exponent < 0) begin\n            z = {1'b0, 8'b00000000, 23'b0}; // Underflow\n        end else begin\n            z = {z_sign, z_exponent[7:0], product_mantissa};\n        end\n    end\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:36:34.425572",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:36:00.853684"
+        }
+      },
+      {
+        "code": "module float_multi (\n    input clk,\n    input rst,\n    input [31:0] a,\n    input [31:0] b,\n    output reg [31:0] z\n);\n\nreg [2:0] counter;\nreg [23:0] a_mantissa, b_mantissa, z_mantissa;\nreg [9:0] a_exponent, b_exponent, z_exponent;\nreg a_sign, b_sign, z_sign;\nreg [49:0] product;\nreg guard_bit, round_bit, sticky;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        counter <= 3'b000;\n        a_mantissa <= 24'b0;\n        b_mantissa <= 24'b0;\n        z_mantissa <= 24'b0;\n        a_exponent <= 10'b0;\n        b_exponent <= 10'b0;\n        z_exponent <= 10'b0;\n        a_sign <= 1'b0;\n        b_sign <= 1'b0;\n        z_sign <= 1'b0;\n        product <= 50'b0;\n        guard_bit <= 1'b0;\n        round_bit <= 1'b0;\n        sticky <= 1'b0;\n        z <= 32'b0;\n    end else begin\n        case (counter)\n            3'b000: begin // Input processing and special cases handling\n                a_sign <= a[31];\n                b_sign <= b[31];\n                if (a[31] == 1'b1 && a[30:23] == 8'hFF && a[22:0] != 24'b0) begin // NaN handling\n                    z <= 32'b1111111111111111111111111111111\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:36:34.425575",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:36:19.803016"
+        }
+      },
+      {
+        "code": "module float_multi (\n    input clk,\n    input rst,\n    input [31:0] a,\n    input [31:0] b,\n    output reg [31:0] z\n);\n\nreg [2:0] counter;\nreg [23:0] a_mantissa, b_mantissa, z_mantissa;\nreg [9:0] a_exponent, b_exponent, z_exponent;\nreg a_sign, b_sign, z_sign;\nreg [49:0] product;\nreg guard_bit, round_bit, sticky;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        counter <= 3'b000;\n        a_mantissa <= 24'b0;\n        b_mantissa <= 24'b0;\n        z_mantissa <= 24'b0;\n        a_exponent <= 10'b0;\n        b_exponent <= 10'b0;\n        z_exponent <= 10'b0;\n        a_sign <= 1'b0;\n        b_sign <= 1'b0;\n        z_sign <= 1'b0;\n        product <= 50'b0;\n        guard_bit <= 1'b0;\n        round_bit <= 1'b0;\n        sticky <= 1'b0;\n    end else begin\n        case (counter)\n            3'b000: begin\n                a_mantissa <= a[22:0];\n                b_mantissa <= b[22:0];\n                a_exponent <= a[30:23];\n                b_exponent <= b[30:23];\n                a_sign <= a[31];\n                b_sign <= b[31];\n            end\n            3'b001: begin\n                // Multiplication and exponent calculation\n                product <= a_mantissa * b_mantissa;\n                z_exponent <= a_exponent + b_exponent - 127;\n                z_sign <= a_sign ^ b_sign;\n            end\n            3'b010: begin\n                // Rounding and normalization\n                guard_bit <= product[48];\n                round_bit <= product[47];\n                sticky <= |product[46:0];\n                if (round_bit && (sticky || guard_bit)) begin\n                    z_mantissa <= product[49:25] + 1;\n                end else begin\n                    z_mantissa <= product[49:25];\n                end\n            end\n            default: begin\n                // Output formatting and handling overflow/underflow\n                if (z_exponent >= 255) begin\n                    z[31:0] <= 32'h7F800000; // Infinity\n                } else if (z_exponent <= -126) begin\n                    z[31:0] <= 32'h80000001; // Denormalized number\n                end else begin\n                    z[22:0] <= z_mantissa;\n                    z[30:23] <= z_exponent + 127;\n                    z[31] <= z_sign;\n                end\n            end\n        endcase\n        counter <= counter + 1'b1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:36:34.425576",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:36:34.425557"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module float_multi (\n    input clk,\n    input rst,\n    input [31:0] a,\n    input [31:0] b,\n    output reg [31:0] z\n);\n\nreg [2:0] counter;\nreg [23:0] a_mantissa, b_mantissa, product_mantissa;\nreg [9:0] a_exponent, b_exponent, z_exponent;\nreg a_sign, b_sign, z_sign;\nreg [49:0] product;\nreg guard_bit, round_bit, sticky;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        counter <= 3'b000;\n        a_mantissa <= 24'b0;\n        b_mantissa <= 24'b0;\n        product_mantissa <= 24'b0;\n        a_exponent <= 10'b0;\n        b_exponent <= 10'b0;\n        z_exponent <= 10'b0;\n        a_sign <= 1'b0;\n        b_sign <= 1'b0;\n        z_sign <= 1'b0;\n        product <= 50'b0;\n        guard_bit <= 1'b0;\n        round_bit <= 1'b0;\n        sticky <= 1'b0;\n    end else begin\n        case (counter)\n            3'b000: begin // Input processing and special cases handling\n                a_sign <= a[31];\n                b_sign <= b[31];\n                a_mantissa <= {a[22:0], 1'b0};\n                b_mantissa <= {b[22:0], 1'b0};\n                a_exponent <= a[30:23];\n                b_exponent <= b[30:23];\n            end\n            3'b001: begin // Multiplication and exponent calculation\n                product <= (a_mantissa * b_mantissa);\n                z_exponent <= a_exponent + b_exponent - 127;\n                z_sign <= a_sign ^ b_sign;\n            end\n            3'b010: begin // Rounding and normalization\n                sticky <= |product[45:0];\n                guard_bit <= product[46];\n                round_bit <= product[45];\n                if (round_bit && (sticky || guard_bit)) begin\n                    product_mantissa <= product[49:26] + 1;\n                end else begin\n                    product_mantissa <= product[49:26];\n                end\n                if (product_mantissa[23]) begin\n                    z_exponent <= z_exponent + 1;\n                    product_mantissa <= product_mantissa >> 1;\n                end\n            end\n            default: begin // Output formatting and handling overflow/underflow\n                if (z_exponent > 254) begin\n                    z = {1'b1, 8'b11111111, 23'b0}; // Overflow\n                } else if (z_exponent < -126) begin\n                    z = {1'b0, 8'b00000000, 23'b0}; // Underflow\n                end else begin\n                    z = {z_sign, z_exponent[7:0], product_mantissa};\n                end\n                counter <= 3'b000;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:37:19.614437",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:36:49.950316"
+        }
+      },
+      {
+        "code": "module float_multi (\n    input clk,\n    input rst,\n    input [31:0] a,\n    input [31:0] b,\n    output reg [31:0] z\n);\n\nreg [2:0] counter;\nreg [23:0] a_mantissa, b_mantissa, z_mantissa;\nreg [9:0] a_exponent, b_exponent, z_exponent;\nreg a_sign, b_sign, z_sign;\nreg [49:0] product;\nreg guard_bit, round_bit, sticky;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        counter <= 3'b000;\n        a_mantissa <= 24'b0;\n        b_mantissa <= 24'b0;\n        z_mantissa <= 24'b0;\n        a_exponent <= 10'b0;\n        b_exponent <= 10'b0;\n        z_exponent <= 10'b0;\n        a_sign <= 1'b0;\n        b_sign <= 1'b0;\n        z_sign <= 1'b0;\n        product <= 50'b0;\n        guard_bit <= 1'b0;\n        round_bit <= 1'b0;\n        sticky <= 1'b0;\n    end else begin\n        case (counter)\n            3'b000: begin\n                a_mantissa <= {a[22:0], 1'b0};\n                b_mantissa <= {b[22:0], 1'b0};\n                a_exponent <= a[30:23];\n                b_exponent <= b[30:23];\n                a_sign <= a[31];\n                b_sign <= b[31];\n            end\n            3'b001: begin\n                product <= (a_mantissa * b_mantissa);\n                z_exponent <= a_exponent + b_exponent - 127;\n                z_sign <= a_sign ^ b_sign;\n            end\n            3'b010: begin\n                sticky <= |product[25:0];\n                guard_bit <= product[24];\n                round_bit <= product[23];\n                if (round_bit && (guard_bit || sticky)) begin\n                    z_mantissa <= {product[49], product[48:26]} + 1;\n                end else begin\n                    z_mantissa <= {product[49], product[48:26]};\n                end\n            end\n            default: begin\n                if (z_exponent > 255) begin\n                    z = {1'b1, 8'b11111111, 23'b0}; // Overflow\n                end else if (z_exponent < 0) begin\n                    z = {1'b0, 8'b00000000, 23'b0}; // Underflow\n                end else begin\n                    z = {z_sign, z_exponent[7:0], z_mantissa};\n                end\n                counter <= 3'b000;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.45,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:37:19.614440",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:37:04.308460"
+        }
+      },
+      {
+        "code": "module float_multi (\n    input clk,\n    input rst,\n    input [31:0] a,\n    input [31:0] b,\n    output reg [31:0] z\n);\n\nreg [2:0] counter;\nreg [23:0] a_mantissa, b_mantissa, product_mantissa;\nreg [9:0] a_exponent, b_exponent, z_exponent;\nreg a_sign, b_sign, z_sign;\nreg [49:0] product;\nreg guard_bit, round_bit, sticky;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        counter <= 3'b000;\n        a_mantissa <= 24'b0;\n        b_mantissa <= 24'b0;\n        product_mantissa <= 24'b0;\n        a_exponent <= 10'b0;\n        b_exponent <= 10'b0;\n        z_exponent <= 10'b0;\n        a_sign <= 1'b0;\n        b_sign <= 1'b0;\n        z_sign <= 1'b0;\n        product <= 50'b0;\n        guard_bit <= 1'b0;\n        round_bit <= 1'b0;\n        sticky <= 1'b0;\n    end else begin\n        case (counter)\n            3'b000: begin // Input processing and special cases handling\n                a_mantissa <= {a[22:0], 1'b0};\n                b_mantissa <= {b[22:0], 1'b0};\n                a_exponent <= a[30:23];\n                b_exponent <= b[30:23];\n                a_sign <= a[31];\n                b_sign <= b[31];\n            end\n            3'b001: begin // Multiplication and exponent calculation\n                product <= a_mantissa * b_mantissa;\n                z_exponent <= a_exponent + b_exponent - 127;\n                z_sign <= a_sign ^ b_sign;\n            end\n            3'b010: begin // Rounding and normalization\n                guard_bit <= product[49];\n                round_bit <= product[48];\n                sticky <= |product[47:0];\n                if (round_bit && (sticky || guard_bit)) begin\n                    product_mantissa <= product[49:26] + 1;\n                end else begin\n                    product_mantissa <= product[49:26];\n                end\n                if (product_mantissa[23]) begin\n                    z_exponent <= z_exponent + 1;\n                    product_mantissa <= product_mantissa >> 1;\n                end\n            end\n            default: begin // Output formatting and handling overflow/underflow\n                if (z_exponent > 255) begin\n                    z = {1'b1, 8'hFF, 23'b0}; // Overflow\n                end else if (z_exponent < 0) begin\n                    z = {1'b0, 8'b0, 23'b0}; // Underflow\n                end else begin\n                    z = {z_sign, z_exponent[7:0], product_mantissa};\n                end\n            end\n        endcase\n        counter <= counter + 1'b1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.45,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:37:19.614441",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:37:19.614423"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module float_multi (\n    input clk,\n    input rst,\n    input [31:0] a,\n    input [31:0] b,\n    output reg [31:0] z\n);\n\nreg [2:0] counter;\nreg [23:0] a_mantissa, b_mantissa, product_mantissa;\nreg [9:0] a_exponent, b_exponent, z_exponent;\nreg a_sign, b_sign, z_sign;\nreg [49:0] product;\nreg guard_bit, round_bit, sticky;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        counter <= 3'b000;\n        a_mantissa <= 24'b0;\n        b_mantissa <= 24'b0;\n        product_mantissa <= 24'b0;\n        a_exponent <= 10'b0;\n        b_exponent <= 10'b0;\n        z_exponent <= 10'b0;\n        a_sign <= 1'b0;\n        b_sign <= 1'b0;\n        z_sign <= 1'b0;\n        product <= 50'b0;\n        guard_bit <= 1'b0;\n        round_bit <= 1'b0;\n        sticky <= 1'b0;\n    end else begin\n        case (counter)\n            3'b000: begin // Input processing and special cases handling\n                a_sign <= a[31];\n                b_sign <= b[31];\n                if (a[31] == 1'b1 && a[30:23] == 8'hFF && a[22:0] != 24'b0) begin // NaN handling\n                    z <= 32'b1111111111111111111111111111111\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:38:00.058933",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:37:33.126186"
+        }
+      },
+      {
+        "code": "module float_multi (\n    input clk,\n    input rst,\n    input [31:0] a,\n    input [31:0] b,\n    output reg [31:0] z\n);\n\nreg [2:0] counter;\nreg [23:0] a_mantissa, b_mantissa, product_mantissa;\nreg [9:0] a_exponent, b_exponent, z_exponent;\nreg a_sign, b_sign, z_sign;\nreg [49:0] product;\nreg guard_bit, round_bit, sticky;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        counter <= 3'b000;\n        a_mantissa <= 24'b0;\n        b_mantissa <= 24'b0;\n        product_mantissa <= 24'b0;\n        a_exponent <= 10'b0;\n        b_exponent <= 10'b0;\n        z_exponent <= 10'b0;\n        a_sign <= 1'b0;\n        b_sign <= 1'b0;\n        z_sign <= 1'b0;\n        product <= 50'b0;\n        guard_bit <= 1'b0;\n        round_bit <= 1'b0;\n        sticky <= 1'b0;\n    end else begin\n        case (counter)\n            3'b000: begin // Input processing and special cases handling\n                a_mantissa <= {a[22:0], 1'b0};\n                b_mantissa <= {b[22:0], 1'b0};\n                a_exponent <= a[30:23];\n                b_exponent <= b[30:23];\n                a_sign <= a[31];\n                b_sign <= b[31];\n            end\n            3'b001: begin // Multiplication and exponent calculation\n                product <= (a_mantissa * b_mantissa);\n                z_exponent <= a_exponent + b_exponent - 127;\n                z_sign <= a_sign ^ b_sign;\n            end\n            3'b010: begin // Rounding and normalization\n                sticky <= |product[25:0];\n                guard_bit <= product[24];\n                round_bit <= product[23];\n                if (round_bit && (guard_bit || sticky)) begin\n                    product_mantissa <= product[49:26] + 1;\n                end else begin\n                    product_mantissa <= product[49:26];\n                end\n                if (product_mantissa[23]) begin\n                    z_exponent <= z_exponent + 1;\n                    product_mantissa <= product_mantissa >> 1;\n                end\n            end\n            default: begin // Output formatting and handling overflow/underflow\n                counter <= 3'b000;\n            end\n        endcase\n    end\nend\n\nalways @(*) begin\n    if (z_exponent > 255) begin\n        z = {1'b1, 8'b11111111, 23'b0}; // Overflow\n    end else if (z_exponent < 0) begin\n        z = {1'b0, 8'b00000000, 23'b0}; // Underflow\n    end else begin\n        z = {z_sign, z_exponent[7:0], product_mantissa};\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.45,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:38:00.058935",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:37:48.811997"
+        }
+      },
+      {
+        "code": "module float_multi (\n    input clk,\n    input rst,\n    input [31:0] a,\n    input [31:0] b,\n    output reg [31:0] z\n);\n\nreg [2:0] counter;\nreg [23:0] a_mantissa, b_mantissa, z_mantissa;\nreg [9:0] a_exponent, b_exponent, z_exponent;\nreg a_sign, b_sign, z_sign;\nreg [49:0] product;\nreg guard_bit, round_bit, sticky;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        counter <= 3'b000;\n        a_mantissa <= 24'b0;\n        b_mantissa <= 24'b0;\n        z_mantissa <= 24'b0;\n        a_exponent <= 10'b0;\n        b_exponent <= 10'b0;\n        z_exponent <= 10'b0;\n        a_sign <= 1'b0;\n        b_sign <= 1'b0;\n        z_sign <= 1'b0;\n        product <= 50'b0;\n        guard_bit <= 1'b0;\n        round_bit <= 1'b0;\n        sticky <= 1'b0;\n    end else begin\n        case (counter)\n            3'b000: begin // Input processing and special cases handling\n                a_sign <= a[31];\n                b_sign <= b[31];\n                if (a[31] == 1'b1 && a[30:23] == 8'hFF) begin // NaN handling\n                    z <= 32'b1111111111111111111111111111111\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:38:00.058936",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:38:00.058917"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:38:00.058942",
+    "total_hdl_codes": 9
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "design_name": "clkgenerator",
+  "trial_num": 1,
+  "created_at": "2026-02-03T17:08:58.209320",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module clkgenerator #(parameter PERIOD = 10) (\n    output reg clk\n);\n\nreg [31:0] count;\n\ninitial begin\n    clk = 0;\n    count = 0;\nend\n\nalways @(posedge count) begin\n    if (count == PERIOD / 2 - 1)\n        clk = ~clk;\n    count <= count + 1;\nend\n\nalways @(negedge count) begin\n    if (count == 0)\n        count <= PERIOD / 2 - 1;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:09:06.042238",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:09:00.345997"
+        }
+      },
+      {
+        "code": "module clkgenerator #(parameter PERIOD = 10) (\n    output reg clk\n);\n\nreg [31:0] counter;\n\ninitial begin\n    clk = 0;\n    counter = 0;\nend\n\nalways @(posedge clk or posedge counter[31]) begin\n    if (counter == PERIOD - 1)\n        counter <= 0;\n    else\n        counter <= counter + 1;\nend\n\nalways @(posedge counter[31]) begin\n    clk <= ~clk;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:09:06.042240",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:09:03.105388"
+        }
+      },
+      {
+        "code": "module clkgenerator #(parameter PERIOD = 10) (\n    output reg clk,\n    input wire rst_n,\n    input wire clk_in\n);\n\nreg count;\n\nalways @(posedge clk_in or negedge rst_n) begin\n    if (!rst_n) begin\n        clk <= 0;\n        count <= 0;\n    end else begin\n        count <= count + 1;\n        if (count >= PERIOD / 2) begin\n            clk <= ~clk;\n            count <= 0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:09:06.042242",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:09:06.042226"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module clkgenerator #(parameter PERIOD = 10) (\n    output reg clk,\n    input wire rst_n,\n    input wire clk_in\n);\n\nreg [31:0] counter;\n\nalways @(posedge clk_in or negedge rst_n) begin\n    if (!rst_n) begin\n        clk <= 0;\n        counter <= 0;\n    end else begin\n        counter <= counter + 1;\n        if (counter >= PERIOD / 2 - 1)\n            clk <= ~clk;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:09:15.137706",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.6399999999999999,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:09:09.017190"
+        }
+      },
+      {
+        "code": "module clkgenerator #(parameter PERIOD = 10) (\n    output reg clk,\n    input wire rst_n,\n    input wire clk_in\n);\n\nreg [31:0] counter;\n\nalways @(posedge clk_in or negedge rst_n) begin\n    if (!rst_n) begin\n        clk <= 0;\n        counter <= 0;\n    end else begin\n        counter <= counter + 1;\n        if (counter >= PERIOD / 2 - 1)\n            clk <= ~clk;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:09:15.137708",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.6399999999999999,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:09:12.043909"
+        }
+      },
+      {
+        "code": "module clkgenerator #(parameter PERIOD = 10) (\n    output reg clk,\n    input wire rst_n,\n    input wire clk_in\n);\n\nreg [31:0] counter;\n\nalways @(posedge clk_in or negedge rst_n) begin\n    if (!rst_n) begin\n        clk <= 0;\n        counter <= 0;\n    end else begin\n        counter <= counter + 1;\n        if (counter >= PERIOD / 2 - 1) begin\n            clk <= ~clk;\n            counter <= 0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:09:15.137709",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.6399999999999999,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:09:15.137693"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module clkgenerator #(parameter PERIOD = 10) (\n    output reg clk,\n    input wire rst_n,\n    input wire clk_in\n);\n\nreg [31:0] counter;\n\nalways @(posedge clk_in or negedge rst_n) begin\n    if (!rst_n) begin\n        clk <= 0;\n        counter <= 0;\n    end else begin\n        counter <= counter + 1;\n        if (counter >= PERIOD / 2 - 1)\n            clk <= ~clk;\n        else if (counter == 0)\n            counter <= PERIOD / 2 - 1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:09:24.432236",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:09:18.284579"
+        }
+      },
+      {
+        "code": "module clkgenerator #(parameter PERIOD = 10) (\n    output reg clk,\n    input wire rst_n,\n    input wire clk_in\n);\n\nreg [31:0] counter;\n\nalways @(posedge clk_in or negedge rst_n) begin\n    if (!rst_n) begin\n        clk <= 0;\n        counter <= 0;\n    end else begin\n        counter <= counter + 1;\n        if (counter >= PERIOD / 2 - 1)\n            clk <= ~clk;\n        counter <= counter % (PERIOD / 2); // Ensure counter wraps correctly\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:09:24.432239",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:09:21.504338"
+        }
+      },
+      {
+        "code": "module clkgenerator #(parameter PERIOD = 10) (\n    output reg clk,\n    input wire rst_n,\n    input wire clk_in\n);\n\nreg [31:0] counter;\n\nalways @(posedge clk_in or negedge rst_n) begin\n    if (!rst_n) begin\n        clk <= 0;\n        counter <= 0;\n    end else begin\n        counter <= counter + 1;\n        if (counter >= PERIOD / 2 - 1)\n            clk <= ~clk;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:09:24.432240",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:09:24.432223"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T17:09:24.432245",
+    "total_hdl_codes": 9
+  }
+}

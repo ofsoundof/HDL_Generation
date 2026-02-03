@@ -1,0 +1,156 @@
+{
+  "design_name": "fsm",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:49:36.406318",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module fsm (\n    input clk,\n    input rst,\n    input in,\n    output reg match\n);\n\nparameter IDLE = 3'b000,\n           S1   = 3'b001,\n           S2   = 3'b010,\n           S3   = 3'b011,\n           S4   = 3'b100,\n           S5   = 3'b101;\n\nreg [2:0] state, next_state;\nalways @(posedge clk or posedge rst) begin\n    if (rst)\n        state <= IDLE;\n    else\n        state <= next_state;\nend\n\nalways @(*) begin\n    next_state = state;\n    match = 0;\n    \n    case (state)\n        IDLE: begin\n            if (in == 1'b1) \n                next_state = S1;\n        end\n        S1: begin\n            if (in == 1'b0)\n                next_state = S2;\n        end\n        S2: begin\n            if (in == 1'b0)\n                next_state = S3;\n        end\n        S3: begin\n            if (in == 1'b1)\n                next_state = S4;\n        end\n        S4: begin\n            if (in == 1'b1) \n                match = 1;\n        end\n    endcase\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:50:05.591720",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:49:42.846677"
+        }
+      },
+      {
+        "code": "module fsm(\n    input CLK,\n    input RST,\n    input IN,\n    output reg MATCH\n);\n\nreg [3:0] state;\n\nalways @(posedge CLK or posedge RST) begin\n    if (RST)\n        state <= 4'b0000;\n    else\n        state <= next_state(IN, state);\nend\n\nassign MATCH = (state == 4'b0101);\n\nfunction [3:0] next_state;\n    input IN;\n    input [3:0] state;\n    begin\n        case(state)\n            4'b0000: if (IN == 1) next_state = 4'b0001; else next_state = 4'b0000;\n            4'b0001: if (IN == 0) next_state = 4'b0010; else next_state = 4'b0000;\n            4'b0010: if (IN == 0) next_state = 4'b0011; else next_state = 4'b0000;\n            4'b0011: if (IN == 1) next_state = 4'b0100; else next_state = 4'b0000;\n            4'b0100: if (IN == 1) next_state = 4'b0101; else next_state = 4'b0000;\n            default : next_state = 4'b0000;\n        endcase\n    end\nendfunction\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:50:05.591722",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:49:56.373566"
+        }
+      },
+      {
+        "code": "module fsm (\n    input wire CLK,\n    input wire RST,\n    input wire IN,\n    output reg MATCH\n);\n\nreg [3:0] state, next_state;\n\nalways @(posedge CLK or posedge RST) begin\n    if (RST)\n        state <= 4'b0000;\n    else\n        state <= next_state;\nend\n\nalways @(*) begin\n    MATCH = 0;\n    case (state)\n        4'b0000: begin // IDLE\n            if (IN == 1) \n                next_state = 4'b0001; // GO_TO_0\n            else\n                next_state = state; // Stay in IDLE\n        end\n        4'b0001: begin // GO_TO_0\n            if (IN == 0) \n                next_state = 4'b0010; // GO_TO_00\n            else\n                next_state = 4'b0001; // Stay in GO_TO_0\n        end\n        4'b0010: begin // GO_TO_00\n            if (IN == 0) \n                next_state = 4'b0011; // GO_TO_000\n            else\n                next_state = 4'b0010; // Stay in GO_TO_00\n        end\n        4'b0011: begin // GO_TO_000\n            if (IN == 1) \n                next_state = 4'b0100; // MATCH\n            else\n                next_state = 4'b0011; // Stay in GO_TO_000\n        end\n        4'b0100: begin // MATCH\n            if (IN == 1) \n                next_state = 4'b0001; // GO_TO_0\n            else\n                next_state = state; // Stay in MATCH\n        end\n    endcase\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:50:05.591724",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:50:05.591705"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module fsm (\n    input CLK,\n    input RST,\n    input IN,\n    output reg MATCH\n);\n\nreg [3:0] state;\n\nalways @(posedge CLK or posedge RST) begin\n    if (RST)\n        state <= 4'b0000;\n    else\n        state <= next_state(IN, state);\nend\n\nassign MATCH = (state == 4'b0101);\n\nfunction [3:0] next_state;\n    input IN;\n    input [3:0] state;\n    begin\n        case(state)\n            4'b0000: if (IN == 1) next_state = 4'b0001; else next_state = 4'b0000;\n            4'b0001: if (IN == 0) next_state = 4'b0010; else next_state = 4'b0000;\n            4'b0010: if (IN == 0) next_state = 4'b0011; else next_state = 4'b0000;\n            4'b0011: if (IN == 1) next_state = 4'b0100; else next_state = 4'b0000;\n            4'b0100: if (IN == 1) next_state = 4'b0101; else next_state = 4'b0000;\n            default : next_state = 4'b0000;\n        endcase\n    end\nendfunction\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:50:25.897116",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:50:13.310707"
+        }
+      },
+      {
+        "code": "module fsm (\n    input CLK,\n    input RST,\n    input IN,\n    output reg MATCH\n);\n\nparameter IDLE = 4'b0000,\n           S1   = 4'b0001,\n           S2   = 4'b0010,\n           S3   = 4'b0011,\n           S4   = 4'b0100,\n           S5   = 4'b0101;\n\nreg [3:0] state, next_state;\n\nalways @(posedge CLK or posedge RST) begin\n    if (RST)\n        state <= IDLE;\n    else\n        state <= next_state;\nend\n\nalways @(*) begin\n    MATCH = 0;\n    \n    case (state)\n        IDLE: begin\n            if (IN == 1) \n                next_state = S1;\n            else\n                next_state = IDLE;\n        end\n        S1: begin\n            if (IN == 0) \n                next_state = S2;\n            else\n                next_state = IDLE;\n        end\n        S2: begin\n            if (IN == 0)\n                next_state = S3;\n            else\n                next_state = IDLE;\n        end\n        S3: begin\n            if (IN == 1)\n                next_state = S4;\n            else\n                next_state = IDLE;\n        end\n        S4: begin\n            MATCH = 1;\n            next_state = S5;\n        end\n        S5: begin\n            if (IN == 0)\n                next_state = S2;\n            else\n                next_state = S5;\n        end\n    endcase\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:50:25.897119",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:50:21.275563"
+        }
+      },
+      {
+        "code": "module fsm (\n    input wire CLK,\n    input wire RST,\n    input wire IN,\n    output reg MATCH\n);\n\nreg [3:0] state, next_state;\n\nalways @(posedge CLK or posedge RST) begin\n    if (RST)\n        state <= 4'b0000;\n    else\n        state <= next_state;\nend\n\nalways @(*) begin\n    MATCH = 0;\n    case (state)\n        4'b0000: begin // IDLE\n            if (IN == 1) \n                next_state = 4'b0001; // GO_TO_0\n            else\n                next_state = state; // Stay in IDLE\n        end\n        4'b0001: begin // GO_TO_0\n            if (IN == 0) \n                next_state = 4'b0010; // GO_TO_00\n            else\n                next_state = state; // Stay in GO_TO_0\n        end\n        4'b0010: begin // GO_TO_00\n            if (IN == 0) \n                next_state = 4'b0011; // GO_TO_000\n            else\n                next_state = state; // Stay in GO_TO_00\n        end\n        4'b0011: begin // GO_TO_000\n            if (IN == 1) \n                next_state = 4'b0100; // MATCH\n            else\n                next_state = state; // Stay in GO_TO_000\n        end\n        4'b0100: begin // MATCH\n            MATCH = 1; // Set MATCH to 1 when in MATCH state\n            if (IN == 1) \n                next_state = 4'b0001; // GO_TO_0 if IN is 1\n            else\n                next_state = 4'b0000; // Stay in IDLE if IN is 0\n        end\n    endcase\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:50:25.897120",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:50:25.897102"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module fsm(\n    input CLK,\n    input RST,\n    input IN,\n    output reg MATCH\n);\n\nreg [3:0] state;\n\nalways @(posedge CLK or posedge RST) begin\n    if (RST)\n        state <= 4'b0000;\n    else\n        state <= next_state(IN, state);\nend\n\nassign MATCH = (state == 4'b0101);\n\nfunction [3:0] next_state;\n    input IN;\n    input [3:0] state;\n    begin\n        case(state)\n            4'b0000: if (IN == 1) next_state = 4'b0001; else next_state = 4'b0000;\n            4'b0001: if (IN == 0) next_state = 4'b0010; else next_state = 4'b0000;\n            4'b0010: if (IN == 0) next_state = 4'b0011; else next_state = 4'b0000;\n            4'b0011: if (IN == 1) next_state = 4'b0100; else next_state = 4'b0000;\n            4'b0100: if (IN == 1) next_state = 4'b0101; else next_state = 4'b0000;\n            default : next_state = 4'b0000;\n        endcase\n    end\nendfunction\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:50:46.470648",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:50:36.364716"
+        }
+      },
+      {
+        "code": "module fsm (\n    input wire CLK,\n    input wire RST,\n    input wire IN,\n    output reg MATCH\n);\n\nreg [3:0] state, next_state;\n\nalways @(posedge CLK or posedge RST) begin\n    if (RST)\n        state <= 4'b0000;\n    else\n        state <= next_state;\nend\n\nassign MATCH = (state == 4'b0101);\n\nfunction [3:0] calc_next_state;\n    input IN;\n    input [3:0] state;\n    begin\n        case(state)\n            4'b0000: if (IN == 1) calc_next_state = 4'b0001; else calc_next_state = 4'b0000;\n            4'b0001: if (IN == 0) calc_next_state = 4'b0010; else calc_next_state = 4'b0000;\n            4'b0010: if (IN == 0) calc_next_state = 4'b0011; else calc_next_state = 4'b0000;\n            4'b0011: if (IN == 1) calc_next_state = 4'b0100; else calc_next_state = 4'b0000;\n            4'b0100: if (IN == 1) calc_next_state = 4'b0101; else calc_next_state = 4'b0000;\n            default : calc_next_state = 4'b0000;\n        endcase\n    end\nendfunction\n\nassign next_state = calc_next_state(IN, state);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.84,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:50:46.470651",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:50:44.033164"
+        }
+      },
+      {
+        "code": "module fsm (\n    input wire CLK,\n    input wire RST,\n    input wire IN,\n    output reg MATCH\n);\n\nreg [3:0] state, next_state;\n\nalways @(posedge CLK or posedge RST) begin\n    if (RST)\n        state <= 4'b0000;\n    else\n        state <= next_state;\nend\n\nalways @(*) begin\n    MATCH = 0;\n    case (state)\n        4'b0000: begin // IDLE\n            if (IN == 1) \n                next_state = 4'b0001; // GO_TO_0\n            else\n                next_state = state; // Stay in IDLE\n        end\n        4'b0001: begin // GO_TO_0\n            if (IN == 0) \n                next_state = 4'b0010; // GO_TO_00\n            else\n                next_state = state; // Stay in GO_TO_0\n        end\n        4'b0010: begin // GO_TO_00\n            if (IN == 0) \n                next_state = 4'b0011; // GO_TO_000\n            else\n                next_state = state; // Stay in GO_TO_00\n        end\n        4'b0011: begin // GO_TO_000\n            if (IN == 1) \n                next_state = 4'b0100; // MATCH\n            else\n                next_state = state; // Stay in GO_TO_000\n        end\n        4'b0100: begin // MATCH\n            MATCH = 1; // Set MATCH to 1 when in MATCH state\n            if (IN == 1) \n                next_state = 4'b0001; // GO_TO_0 if IN is 1\n            else\n                next_state = 4'b0000; // Stay in IDLE if IN is 0\n        end\n    endcase\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:50:46.470652",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:50:46.470634"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:50:46.470658",
+    "total_hdl_codes": 9
+  }
+}

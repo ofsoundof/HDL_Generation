@@ -1,0 +1,156 @@
+{
+  "design_name": "freq_divbyeven",
+  "trial_num": 1,
+  "created_at": "2026-02-03T17:13:51.855324",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module freq_diveven #(parameter NUM_DIV = 8) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [3:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0;\n        clk_div <= 1'b0;\n    end else begin\n        if (cnt < (NUM_DIV / 2 - 1)) begin\n            cnt <= cnt + 1;\n        end else begin\n            cnt <= 4'b0;\n            clk_div <= ~clk_div;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:14:01.956724",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:13:55.171520"
+        }
+      },
+      {
+        "code": "module freq_diveven #(\n    parameter NUM_DIV = 4\n) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [3:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0;\n        clk_div <= 1'b0;\n    end else begin\n        if (cnt < (NUM_DIV / 2 - 1)) begin\n            cnt <= cnt + 1;\n        end else begin\n            cnt <= 4'b0;\n            clk_div <= ~clk_div;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:14:01.956727",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:13:58.557578"
+        }
+      },
+      {
+        "code": "module freq_diveven #(parameter NUM_DIV = 2) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [3:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0000;\n        clk_div <= 1'b0;\n    end else begin\n        if (cnt < NUM_DIV / 2 - 1) begin\n            cnt <= cnt + 1;\n        end else begin\n            cnt <= 4'b0000;\n            clk_div <= ~clk_div;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:14:01.956728",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:14:01.956709"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module freq_diveven #(parameter NUM_DIV = 8) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [3:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0;\n        clk_div <= 1'b0;\n    end else begin\n        if (cnt < (NUM_DIV / 2 - 1)) begin\n            cnt <= cnt + 1;\n        end else begin\n            cnt <= 4'b0;\n            clk_div <= ~clk_div;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:14:12.157669",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:14:05.309409"
+        }
+      },
+      {
+        "code": "module freq_diveven #(\n    parameter NUM_DIV = 8\n) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [3:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0;\n        clk_div <= 1'b0;\n    end else begin\n        if (cnt < (NUM_DIV / 2 - 1)) begin\n            cnt <= cnt + 1;\n        end else begin\n            cnt <= 4'b0;\n            clk_div <= ~clk_div;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:14:12.157671",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:14:08.748782"
+        }
+      },
+      {
+        "code": "module freq_diveven #(parameter NUM_DIV = 8) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [3:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0;\n        clk_div <= 1'b0;\n    end else begin\n        if (cnt < (NUM_DIV / 2 - 1)) begin\n            cnt <= cnt + 1;\n        end else begin\n            cnt <= 4'b0;\n            clk_div <= ~clk_div;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:14:12.157672",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:14:12.157655"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module freq_diveven #(parameter NUM_DIV = 8) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [3:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0;\n        clk_div <= 1'b0;\n    end else begin\n        if (cnt < NUM_DIV / 2 - 1) begin\n            cnt <= cnt + 1;\n        end else begin\n            cnt <= 4'b0;\n            clk_div <= ~clk_div;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:14:22.454587",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:14:15.577291"
+        }
+      },
+      {
+        "code": "module freq_diveven #(parameter NUM_DIV = 8) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [3:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0;\n        clk_div <= 1'b0;\n    end else begin\n        if (cnt < (NUM_DIV / 2 - 1)) begin\n            cnt <= cnt + 1;\n        end else begin\n            cnt <= 4'b0;\n            clk_div <= ~clk_div;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:14:22.454589",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:14:18.988399"
+        }
+      },
+      {
+        "code": "module freq_diveven #(\n    parameter NUM_DIV = 8\n) (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [3:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0;\n        clk_div <= 1'b0;\n    end else begin\n        if (cnt < (NUM_DIV / 2 - 1)) begin\n            cnt <= cnt + 1;\n        end else begin\n            cnt <= 4'b0;\n            clk_div <= ~clk_div;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:14:22.454590",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:14:22.454574"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T17:14:22.454595",
+    "total_hdl_codes": 9
+  }
+}

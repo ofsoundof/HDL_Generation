@@ -1,0 +1,156 @@
+{
+  "design_name": "synchronizer",
+  "trial_num": 1,
+  "created_at": "2026-02-03T17:03:41.668348",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module synchronizer (\n    input  wire clk_a,\n    input  wire clk_b,\n    input  wire arstn,\n    input  wire brstn,\n    input  wire [3:0] data_in,\n    input  wire data_en,\n    output reg [3:0] dataout\n);\n\nreg [3:0] data_reg;\nreg en_data_reg;\nreg en_clap_one, en_clap_two;\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn)\n        data_reg <= 4'b0000;\n    else\n        data_reg <= data_in;\nend\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn)\n        en_data_reg <= 1'b0;\n    else\n        en_data_reg <= data_en;\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn) begin\n        en_clap_one <= 1'b0;\n        en_clap_two <= 1'b0;\n    end else begin\n        en_clap_two <= en_clap_one;\n        en_clap_one <= en_data_reg;\n    end\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn)\n        dataout <= 4'b0000;\n    else if (en_clap_two)\n        dataout <= data_reg;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:03:48.094931",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:03:43.396227"
+        }
+      },
+      {
+        "code": "module synchronizer (\n    input wire clk_a,\n    input wire clk_b,\n    input wire arstn,\n    input wire brstn,\n    input wire [3:0] data_in,\n    input wire data_en,\n    output reg [3:0] dataout\n);\n\nreg [3:0] data_reg;\nreg [3:0] en_data_reg;\nreg [3:0] en_clap_one, en_clap_two;\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn) begin\n        data_reg <= 4'b0;\n        en_data_reg <= 4'b0;\n    end else begin\n        data_reg <= data_in;\n        en_data_reg <= data_en;\n    end\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn) begin\n        en_clap_one <= 4'b0;\n        en_clap_two <= 4'b0;\n        dataout <= 4'b0;\n    end else begin\n        en_clap_one <= en_data_reg;\n        en_clap_two <= en_clap_one;\n        if (en_clap_two) begin\n            dataout <= data_reg;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:03:48.094934",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:03:44.822999"
+        }
+      },
+      {
+        "code": "module synchronizer (\n    input wire clk_a,\n    input wire clk_b,\n    input wire arstn,\n    input wire brstn,\n    input wire [3:0] data_in,\n    input wire data_en,\n    output reg [3:0] dataout\n);\n\nreg [3:0] data_reg;\nreg en_data_reg;\nreg en_clap_one;\nreg en_clap_two;\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn)\n        data_reg <= 4'b0;\n    else\n        data_reg <= data_in;\nend\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn)\n        en_data_reg <= 1'b0;\n    else\n        en_data_reg <= data_en;\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn) begin\n        en_clap_one <= 1'b0;\n        en_clap_two <= 1'b0;\n    end else begin\n        en_clap_one <= en_data_reg;\n        en_clap_two <= en_clap_one;\n    end\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn)\n        dataout <= 4'b0;\n    else if (en_clap_two)\n        dataout <= data_reg;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:03:48.094935",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:03:48.094916"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module synchronizer (\n    input  wire clk_a,\n    input  wire clk_b,\n    input  wire arstn,\n    input  wire brstn,\n    input  wire [3:0] data_in,\n    input  wire data_en,\n    output reg [3:0] dataout\n);\n\nreg [3:0] data_reg;\nreg en_data_reg;\nreg en_clap_one, en_clap_two;\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn)\n        data_reg <= 4'b0;\n    else\n        data_reg <= data_in;\nend\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn)\n        en_data_reg <= 1'b0;\n    else\n        en_data_reg <= data_en;\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn) begin\n        en_clap_one <= 1'b0;\n        en_clap_two <= 1'b0;\n        dataout <= 4'b0;\n    end else begin\n        en_clap_one <= en_data_reg;\n        en_clap_two <= en_clap_one;\n        if (en_clap_two) begin\n            dataout <= data_reg;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:03:58.116959",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T17:03:49.784583"
+        }
+      },
+      {
+        "code": "module synchronizer (\n    input  wire clk_a,\n    input  wire clk_b,\n    input  wire arstn,\n    input  wire brstn,\n    input  wire [3:0] data_in,\n    input  wire data_en,\n    output reg [3:0] dataout\n);\n\nreg [3:0] data_reg;\nreg en_data_reg;\nreg [1:0] en_clap;\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn) begin\n        data_reg <= 4'b0;\n        en_data_reg <= 1'b0;\n    end else begin\n        data_reg <= data_in;\n        en_data_reg <= data_en;\n    end\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn)\n        en_clap <= 2'b00;\n    else\n        en_clap <= {en_clap[0], en_clap[1], en_data_reg}[2:0];\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn)\n        dataout <= 4'b0;\n    else if (en_clap == 2'b11)\n        dataout <= data_reg;\n    else\n        dataout <= {dataout[3:1], dataout[0]};\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:03:58.116962",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T17:03:56.332350"
+        }
+      },
+      {
+        "code": "module synchronizer (\n    input  wire clk_a,\n    input  wire clk_b,\n    input  wire arstn,\n    input  wire brstn,\n    input  wire [3:0] data_in,\n    input  wire data_en,\n    output reg [3:0] dataout\n);\n\nreg [3:0] data_reg;\nreg en_data_reg;\nreg en_clap_one, en_clap_two;\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn)\n        data_reg <= 4'b0;\n    else\n        data_reg <= data_in;\nend\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn)\n        en_data_reg <= 1'b0;\n    else\n        en_data_reg <= data_en;\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn) begin\n        en_clap_one <= 1'b0;\n        en_clap_two <= 1'b0;\n    end else begin\n        en_clap_one <= en_data_reg;\n        en_clap_two <= en_clap_one;\n    end\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn)\n        dataout <= 4'b0;\n    else if (en_clap_two)\n        dataout <= data_reg;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:03:58.116963",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T17:03:58.116944"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module synchronizer (\n    input  wire clk_a,\n    input  wire clk_b,\n    input  wire arstn,\n    input  wire brstn,\n    input  wire [3:0] data_in,\n    input  wire data_en,\n    output reg [3:0] dataout\n);\n\nreg [3:0] data_reg;\nreg en_data_reg;\nreg en_clap_one, en_clap_two;\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn)\n        data_reg <= 4'b0;\n    else\n        data_reg <= data_in;\nend\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn)\n        en_data_reg <= 1'b0;\n    else\n        en_data_reg <= data_en;\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn) begin\n        en_clap_one <= 1'b0;\n        en_clap_two <= 1'b0;\n    end else begin\n        en_clap_two <= en_clap_one;\n        en_clap_one <= en_data_reg;\n    end\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn)\n        dataout <= 4'b0;\n    else if (en_clap_two)\n        dataout <= data_reg;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:04:06.712766",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T17:03:59.710906"
+        }
+      },
+      {
+        "code": "module synchronizer (\n    input  wire clk_a,\n    input  wire clk_b,\n    input  wire arstn,\n    input  wire brstn,\n    input  wire [3:0] data_in,\n    input  wire data_en,\n    output reg [3:0] dataout\n);\n\nreg [3:0] data_reg;\nreg en_data_reg;\nreg [1:0] en_clap_one, en_clap_two;\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn)\n        data_reg <= 4'b0;\n    else\n        data_reg <= data_in;\nend\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn)\n        en_data_reg <= 1'b0;\n    else\n        en_data_reg <= data_en;\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn) begin\n        en_clap_one <= 2'b00;\n        en_clap_two <= 2'b00;\n    end else begin\n        en_clap_two <= en_clap_one;\n        en_clap_one <= en_data_reg;\n    end\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn)\n        dataout <= 4'b0;\n    else if (en_clap_two == 2'b11)\n        dataout <= data_reg;\n    else\n        dataout <= data_reg; // Fixed the variable name here\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:04:06.712768",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T17:04:04.987399"
+        }
+      },
+      {
+        "code": "module synchronizer (\n    input wire clk_a,\n    input wire clk_b,\n    input wire arstn,\n    input wire brstn,\n    input wire [3:0] data_in,\n    input wire data_en,\n    output reg [3:0] dataout\n);\n\nreg [3:0] data_reg;\nreg en_data_reg;\nreg en_clap_one, en_clap_two;\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn)\n        data_reg <= 4'b0;\n    else\n        data_reg <= data_in;\nend\n\nalways @(posedge clk_a or negedge arstn) begin\n    if (!arstn)\n        en_data_reg <= 1'b0;\n    else\n        en_data_reg <= data_en;\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn) begin\n        en_clap_one <= 1'b0;\n        en_clap_two <= 1'b0;\n    end else begin\n        en_clap_one <= en_data_reg;\n        en_clap_two <= en_clap_one;\n    end\nend\n\nalways @(posedge clk_b or negedge brstn) begin\n    if (!brstn)\n        dataout <= 4'b0;\n    else if (en_clap_two)\n        dataout <= data_reg;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:04:06.712769",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T17:04:06.712752"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T17:04:06.712775",
+    "total_hdl_codes": 9
+  }
+}

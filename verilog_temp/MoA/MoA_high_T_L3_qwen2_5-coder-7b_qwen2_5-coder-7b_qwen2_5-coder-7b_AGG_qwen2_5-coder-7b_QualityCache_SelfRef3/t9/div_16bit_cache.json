@@ -1,0 +1,156 @@
+{
+  "design_name": "div_16bit",
+  "trial_num": 9,
+  "created_at": "2026-02-03T16:11:33.854267",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0]  B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nalways @(A or B) begin\n    result = 0;\n    odd = A;\n    \n    for (int i = 0; i < 16; i = i + 1) begin\n        if (odd[15:8] >= B) begin\n            odd = odd - {B, 8'b0};\n            result[i] = 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:11:46.290252",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:11:37.434789"
+        }
+      },
+      {
+        "code": "module div_16bit (A, B, result, odd);\n    input [15:0] A;\n    input [7:0] B;\n    output reg [15:0] result;\n    output reg [15:0] odd;\n\n    always @(*) begin\n        if (B == 0) begin\n            result = 16'hFFFF;\n            odd = A;\n        end else begin\n            result = 0;\n            odd = A;\n            for (int i = 15; i >= 8; i--) begin\n                odd = {odd[7:0], odd[15:8]};\n                if (odd[15:8] >= B) begin\n                    odd = odd - B;\n                    result[i] = 1;\n                end\n            end\n        end\n    end\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:11:46.290255",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:11:41.768184"
+        }
+      },
+      {
+        "code": "module div_16bit(A, B, result, odd);\n    input [15:0] A;\n    input [7:0] B;\n    output reg [15:0] result;\n    output reg [15:0] odd;\n\n    reg [15:0] quotient;\n    reg [15:0] remainder;\n\n    always @(A or B) begin\n        quotient = 0;\n        remainder = A;\n        for (int i = 15; i >= 0; i--) begin\n            if (remainder[16]) begin\n                remainder <<= 1;\n            end else begin\n                remainder <<= 1;\n                remainder = {1'b0, remainder[16:1]};\n            end\n            if (remainder[15:8] >= B) begin\n                remainder -= {8'b0, B};\n                quotient[i] = 1;\n            end\n        end\n    end\n\n    assign result = quotient;\n    assign odd = remainder & 16'd255;\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:11:46.290256",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:11:46.290240"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nalways @(*) begin\n    if (B == 0) begin\n        result = 16'hFFFF;\n        odd = A;\n    end else begin\n        result = 0;\n        odd = A;\n        for (int i = 15; i >= 8; i--) begin\n            odd = {odd[7:0], odd[15:8]};\n            if (odd[15:8] >= B) begin\n                odd = odd - B;\n                result[i] = 1;\n            end\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:11:58.827472",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:11:50.320905"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0]  B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nalways @(*) begin\n    if (B == 0) begin\n        result = 16'hFFFF;\n        odd = A;\n    end else begin\n        result = 0;\n        odd = A;\n        for (int i = 15; i >= 8; i--) begin\n            odd = {odd[7:0], odd[15:8]};\n            if (odd[15:8] >= B) begin\n                odd = odd - B;\n                result[i] = 1;\n            end\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:11:58.827475",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:11:54.527916"
+        }
+      },
+      {
+        "code": "module div_16bit(A, B, result, odd);\n    input [15:0] A;\n    input [7:0] B;\n    output reg [15:0] result;\n    output reg [15:0] odd;\n\n    always @(*) begin\n        if (B == 0) begin\n            result = 16'hFFFF;\n            odd = A;\n        end else begin\n            result = 0;\n            odd = A;\n            for (int i = 15; i >= 8; i--) begin\n                odd = {odd[7:0], odd[15:8]};\n                if (odd[15:8] >= B) begin\n                    odd = odd - B;\n                    result[i] = 1;\n                end\n            end\n        end\n    end\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:11:58.827476",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:11:58.827458"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module div_16bit(\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nalways @(*) begin\n    if (B == 0) begin\n        result = 16'hFFFF;\n        odd = A;\n    end else begin\n        result = 0;\n        odd = A;\n        for (int i = 15; i >= 8; i--) begin\n            odd = {odd[7:0], odd[15:8]};\n            if (odd[15:8] >= B) begin\n                odd = odd - B;\n                result[i] = 1;\n            end\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:12:11.497516",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:12:02.965170"
+        }
+      },
+      {
+        "code": "module div_16bit(A, B, result, odd);\n    input [15:0] A;\n    input [7:0] B;\n    output reg [15:0] result;\n    output reg [15:0] odd;\n\n    always @(*) begin\n        if (B == 0) begin\n            result = 16'hFFFF;\n            odd = A;\n        end else begin\n            result = 0;\n            odd = A;\n            for (int i = 15; i >= 8; i--) begin\n                odd = {odd[7:0], odd[15:8]};\n                if (odd[15:8] >= B) begin\n                    odd = odd - B;\n                    result[i] = 1;\n                end\n            end\n        end\n    end\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:12:11.497519",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:12:07.350742"
+        }
+      },
+      {
+        "code": "module div_16bit(A, B, result, odd);\n    input [15:0] A;\n    input [7:0] B;\n    output reg [15:0] result;\n    output reg [15:0] odd;\n\n    always @(*) begin\n        if (B == 0) begin\n            result = 16'hFFFF;\n            odd = A;\n        end else begin\n            result = 0;\n            odd = A;\n            for (int i = 15; i >= 8; i--) begin\n                odd = {odd[7:0], odd[15:8]};\n                if (odd[15:8] >= B) begin\n                    odd = odd - B;\n                    result[i] = 1;\n                end\n            end\n        end\n    end\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:12:11.497520",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:12:11.497504"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:12:11.497525",
+    "total_hdl_codes": 9
+  }
+}

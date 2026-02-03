@@ -1,0 +1,156 @@
+{
+  "design_name": "JC_counter",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:52:48.531321",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module JC_counter (\n    input wire clk,\n    input wire rst_n,\n    output reg [63:0] Q\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        Q <= 64'b0;\n    end else begin\n        if (Q[0] == 1'b0) begin\n            Q <= {Q[62:0], 1'b1};\n        end else begin\n            Q <= {Q[62:0], 1'b0};\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6499999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:52:57.716367",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:52:51.582601"
+        }
+      },
+      {
+        "code": "module JC_counter (\n    input wire clk,\n    input wire rst_n,\n    output reg [63:0] Q\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        Q <= 64'b0;\n    end else begin\n        if (Q[0] == 1'b0) begin\n            Q <= {Q[63:1], 1'b1};\n        end else begin\n            Q <= {Q[63:1], 1'b0};\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6499999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:52:57.716369",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:52:54.661364"
+        }
+      },
+      {
+        "code": "module JC_counter (\n    input wire clk,\n    input wire rst_n,\n    output reg [63:0] Q\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        Q <= 64'b0;\n    end else begin\n        if (Q[0] == 1'b0) begin\n            Q <= {Q[62:0], 1'b1};\n        end else begin\n            Q <= {Q[62:0], 1'b0};\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6499999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:52:57.716370",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:52:57.716353"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module JC_counter (\n    input wire clk,\n    input wire rst_n,\n    output reg [63:0] Q\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        Q <= 64'b0;\n    end else begin\n        if (Q[0] == 1'b0) begin\n            Q <= {Q[62:0], 1'b1};\n        end else begin\n            Q <= {Q[63:1], 1'b0};\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6499999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:53:07.088815",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6499999999999999,
+            0.6499999999999999,
+            0.6499999999999999
+          ],
+          "generation_time": "2026-02-03T16:53:00.843458"
+        }
+      },
+      {
+        "code": "module JC_counter (\n    input wire clk,\n    input wire rst_n,\n    output reg [63:0] Q\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        Q <= 64'b0;\n    end else begin\n        if (Q[0] == 1'b0) begin\n            Q <= {Q[62:0], 1'b1};\n        end else begin\n            Q <= {Q[63:1], 1'b0};\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6499999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:53:07.088818",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6499999999999999,
+            0.6499999999999999,
+            0.6499999999999999
+          ],
+          "generation_time": "2026-02-03T16:53:03.966428"
+        }
+      },
+      {
+        "code": "module JC_counter (\n    input wire clk,\n    input wire rst_n,\n    output reg [63:0] Q\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        Q <= 64'b0;\n    end else begin\n        if (Q[0] == 1'b0) begin\n            Q <= {Q[62:0], 1'b1};\n        end else begin\n            Q <= {Q[63:1], 1'b0};\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6499999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:53:07.088819",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6499999999999999,
+            0.6499999999999999,
+            0.6499999999999999
+          ],
+          "generation_time": "2026-02-03T16:53:07.088802"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module JC_counter (\n    input wire clk,\n    input wire rst_n,\n    output reg [63:0] Q\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        Q <= 64'b0;\n    end else begin\n        if (Q[0] == 1'b0) begin\n            Q <= {Q[62:0], 1'b1};\n        end else begin\n            Q <= {Q[63:1], 1'b0};\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6499999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:53:16.338009",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6499999999999999,
+            0.6499999999999999,
+            0.6499999999999999
+          ],
+          "generation_time": "2026-02-03T16:53:10.159182"
+        }
+      },
+      {
+        "code": "module JC_counter (\n    input wire clk,\n    input wire rst_n,\n    output reg [63:0] Q\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        Q <= 64'b0;\n    end else begin\n        if (Q[0] == 1'b0) begin\n            Q <= {Q[62:0], 1'b1};\n        end else begin\n            Q <= {Q[63:1], 1'b0};\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6499999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:53:16.338012",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6499999999999999,
+            0.6499999999999999,
+            0.6499999999999999
+          ],
+          "generation_time": "2026-02-03T16:53:13.225830"
+        }
+      },
+      {
+        "code": "module JC_counter (\n    input wire clk,\n    input wire rst_n,\n    output reg [63:0] Q\n);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        Q <= 64'b0;\n    end else begin\n        if (Q[0] == 1'b0) begin\n            Q <= {Q[62:0], 1'b1};\n        end else begin\n            Q <= {Q[63:1], 1'b0};\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6499999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:53:16.338013",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6499999999999999,
+            0.6499999999999999,
+            0.6499999999999999
+          ],
+          "generation_time": "2026-02-03T16:53:16.337996"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:53:16.338017",
+    "total_hdl_codes": 9
+  }
+}

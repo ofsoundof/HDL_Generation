@@ -1,0 +1,156 @@
+{
+  "design_name": "pe",
+  "trial_num": 1,
+  "created_at": "2026-02-03T17:05:18.088383",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module pe (\n    input wire clk,\n    input wire rst,\n    input wire [31:0] a,\n    input wire [31:0] b,\n    output reg [31:0] c\n);\n\nalways @(posedge clk or posedge rst) begin\n    if (rst)\n        c <= 0;\n    else\n        c <= c + (a * b);\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:05:19.795237",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:05:18.695721"
+        }
+      },
+      {
+        "code": "module pe (\n    input wire clk,\n    input wire rst,\n    input wire [31:0] a,\n    input wire [31:0] b,\n    output reg [31:0] c\n);\n\nalways @(posedge clk or posedge rst) begin\n    if (rst)\n        c <= 32'b0;\n    else\n        c <= c + (a * b);\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:05:19.795239",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:05:19.263801"
+        }
+      },
+      {
+        "code": "module pe (\n    input wire clk,\n    input wire rst,\n    input wire [31:0] a,\n    input wire [31:0] b,\n    output reg [31:0] c\n);\n\nalways @(posedge clk or posedge rst) begin\n    if (rst)\n        c <= 32'd0;\n    else\n        c <= c + a * b;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:05:19.795240",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:05:19.795226"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module pe (\n    input wire clk,\n    input wire rst,\n    input wire [31:0] a,\n    input wire [31:0] b,\n    output reg [31:0] c\n);\n\nalways @(posedge clk or posedge rst) begin\n    if (rst)\n        c <= 32'b0;\n    else\n        c <= c + (a * b);\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:05:21.502435",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T17:05:20.436193"
+        }
+      },
+      {
+        "code": "module pe (\n    input wire clk,\n    input wire rst,\n    input wire [31:0] a,\n    input wire [31:0] b,\n    output reg [31:0] c\n);\n\nalways @(posedge clk or posedge rst) begin\n    if (rst)\n        c <= 0;\n    else\n        c <= c + (a * b);\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:05:21.502438",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T17:05:20.975938"
+        }
+      },
+      {
+        "code": "module pe (\n    input wire clk,\n    input wire rst,\n    input wire [31:0] a,\n    input wire [31:0] b,\n    output reg [31:0] c\n);\n\nalways @(posedge clk or posedge rst) begin\n    if (rst)\n        c <= 32'b0;\n    else\n        c <= c + (a * b);\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:05:21.502439",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T17:05:21.502422"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module pe (\n    input wire clk,\n    input wire rst,\n    input wire [31:0] a,\n    input wire [31:0] b,\n    output reg [31:0] c\n);\n\nalways @(posedge clk or posedge rst) begin\n    if (rst)\n        c <= 32'd0;\n    else\n        c <= c + a * b;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:05:23.127560",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T17:05:22.051302"
+        }
+      },
+      {
+        "code": "module pe (\n    input wire clk,\n    input wire rst,\n    input wire [31:0] a,\n    input wire [31:0] b,\n    output reg [31:0] c\n);\n\nalways @(posedge clk or posedge rst) begin\n    if (rst)\n        c <= 32'b0;\n    else\n        c <= c + (a * b);\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:05:23.127562",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T17:05:22.578546"
+        }
+      },
+      {
+        "code": "module pe (\n    input wire clk,\n    input wire rst,\n    input wire [31:0] a,\n    input wire [31:0] b,\n    output reg [31:0] c\n);\n\nalways @(posedge clk or posedge rst) begin\n    if (rst)\n        c <= 32'b0;\n    else\n        c <= c + a * b;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:05:23.127563",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T17:05:23.127549"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T17:05:23.127569",
+    "total_hdl_codes": 9
+  }
+}

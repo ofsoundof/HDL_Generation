@@ -1,0 +1,156 @@
+{
+  "design_name": "adder_32bit",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:45:32.689312",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module adder_32bit (\n    input wire [31:0] A,\n    input wire [31:0] B,\n    output wire [31:0] S,\n    output wire C32\n);\n\nwire [15:0] S16;\nwire C16;\n\nadder_16bit CLA1 (\n    .A(A[15:0]),\n    .B(B[15:0]),\n    .S(S16),\n    .C(C16)\n);\n\nwire [31:16] S24;\nwire C24;\n\nadder_16bit CLA2 (\n    .A({16'b0, A[31:16]}),\n    .B({16'b0, B[31:16]}),\n    .S(S24),\n    .C(C24)\n);\n\nwire [31:0] S_out;\nwire C32_out;\n\nadder_16bit CLA3 (\n    .A(S16),\n    .B(S24[15:0]),\n    .S(S_out[15:0]),\n    .C(C32_out)\n);\n\nadder_16bit CLA4 (\n    .A({16'b0, S16}),\n    .B(S24[31:16]),\n    .S(S_out[31:16]),\n    .C(C32)\n);\n\nassign S = S_out;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:46:13.988106",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial_retry",
+          "generation_time": "2026-02-03T16:45:44.884588"
+        }
+      },
+      {
+        "code": "module adder_32bit(A, B, S, C32);\n    input [31:0] A;\n    input [31:0] B;\n    output reg [31:0] S;\n    output reg C32;\n\n    wire [15:0] S16;\n    wire C16;\n    wire [7:0] S8_1, S8_2;\n    wire C8_1, C8_2;\n    wire [3:0] S4_1, S4_2, S4_3;\n    wire C4_1, C4_2, C4_3;\n\n    // 16-bit CLA block\n    generate\n        genvar i;\n        for (i = 0; i < 2; i++) begin : clablocks\n            carrylookahead_adder_16(A[i*16 +: 16], B[i*16 +: 16], S16, C16);\n        end\n    endgenerate\n\n    // 8-bit CLA block\n    generate\n        genvar j;\n        for (j = 0; j < 2; j++) begin : clablocks_8\n            carrylookahead_adder_8(S16[j*8 +: 8], C16, S8_1[j], C8_1[j]);\n        end\n    endgenerate\n\n    // 4-bit CLA block\n    generate\n        genvar k;\n        for (k = 0; k < 2; k++) begin : clablocks_4\n            carrylookahead_adder_4(S8_1[k*4 +: 4], C8_1[k], S4_1[k], C4_1[k]);\n        end\n    endgenerate\n\n    // 2-bit CLA block\n    generate\n        genvar l;\n        for (l = 0; l < 2; l++) begin : clablocks_2\n            carrylookahead_adder_2(S4_1[l*2 +: 2], C4_1[l], S4_2[l], C4_2[l]);\n        end\n    endgenerate\n\n    // Full adder for the most significant bit with carry-in from CLA blocks\n    full_adder S4_3[0](S4_2[1], A[32], B[32], C4_2[1]);\n\n    // Assign outputs\n    assign {C32, S} = {C4_2[1], S4_3};\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:46:13.988109",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:46:01.635860"
+        }
+      },
+      {
+        "code": "module adder_32bit (A, B, S, C32);\n    input [32:1] A;\n    input [32:1] B;\n    output reg [32:1] S;\n    output reg C32;\n\n    wire [15:0] carry16, sum16_1, sum16_2;\n    wire [17:0] carry32;\n\n    // 16-bit CLA block instance for the least significant half\n    cla_block_16 clablk1 (.cin(0), .a(A[15:1]), .b(B[15:1]), .sum(sum16_1), .carry(carry16));\n\n    // 16-bit CLA block instance for the most significant half\n    cla_block_16 clablk2 (.cin(carry16[15]), .a(A[31:16]), .b(B[31:16]), .sum(sum16_2), .carry(carry32[17]));\n\n    // Sum calculation for the least significant half\n    assign S[15:1] = sum16_1;\n\n    // Sum calculation for the most significant half\n    assign S[31:16] = sum16_2;\n\n    // Carry-out calculation\n    assign C32 = carry32[17];\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:46:13.988110",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:46:13.988091"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module adder_32bit (\n    input wire [31:0] A,\n    input wire [31:0] B,\n    output wire [31:0] S,\n    output wire C32\n);\n\nwire [15:0] S16;\nwire C16;\n\nadder_16bit CLA1 (\n    .A(A[15:0]),\n    .B(B[15:0]),\n    .S(S16),\n    .C(C16)\n);\n\nwire [31:16] S24;\nwire C24;\n\nadder_16bit CLA2 (\n    .A({16'b0, A[31:16]}),\n    .B({16'b0, B[31:16]}),\n    .S(S24),\n    .C(C24)\n);\n\nwire [31:0] S_out;\nwire C32_out;\n\nadder_16bit CLA3 (\n    .A(S16),\n    .B(S24[15:0]),\n    .S(S_out[15:0]),\n    .C(C32_out)\n);\n\nadder_16bit CLA4 (\n    .A({16'b0, S16}),\n    .B(S24[31:16]),\n    .S(S_out[31:16]),\n    .C(C32)\n);\n\nassign S = S_out;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:46:36.245042",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:46:21.049999"
+        }
+      },
+      {
+        "code": "module adder_32bit (\n    input wire [31:0] A,\n    input wire [31:0] B,\n    output reg [31:0] S,\n    output reg C32\n);\n\nwire [15:0] S16;\nwire C16;\n\ncarrylookahead_adder_16 CLA1 (\n    .A(A[15:0]),\n    .B(B[15:0]),\n    .S(S16),\n    .C(C16)\n);\n\nwire [31:16] S24;\nwire C24;\n\nadder_16bit CLA2 (\n    .A({16'b0, A[31:16]}),\n    .B({16'b0, B[31:16]}),\n    .S(S24),\n    .C(C24)\n);\n\nwire [31:0] S_out;\nwire C32_out;\n\nadder_16bit CLA3 (\n    .A(S16),\n    .B(S24[15:0]),\n    .S(S_out[15:0]),\n    .C(C32_out)\n);\n\nadder_16bit CLA4 (\n    .A({16'b0, S16}),\n    .B(S24[31:16]),\n    .S(S_out[31:16]),\n    .C(C32_out)\n);\n\nassign {C32, S} = {C32_out, S_out};\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:46:36.245045",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:46:30.122216"
+        }
+      },
+      {
+        "code": "module adder_32bit (\n    input wire [31:0] A,\n    input wire [31:0] B,\n    output wire [31:0] S,\n    output wire C32\n);\n\nwire [15:0] S16, S16_c;\nwire C16;\n\nadder_16bit CLA1 (\n    .A(A[15:0]),\n    .B(B[15:0]),\n    .S(S16),\n    .C(C16)\n);\n\nadder_16bit CLA2 (\n    .A({1'b0, A[31:16]}),\n    .B({1'b0, B[31:16]}),\n    .S(S16_c),\n    .C(C32)\n);\n\nwire [31:0] S_out;\nassign S_out = {S16_c[15:0], S16};\n\nadder_16bit CLA3 (\n    .A(S16),\n    .B(S16_c[15:0]),\n    .S(S_out[15:0]),\n    .C(C32)\n);\n\nassign S = S_out;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:46:36.245046",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:46:36.245028"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module adder_32bit(\n    input wire [31:0] A,\n    input wire [31:0] B,\n    output reg [31:0] S,\n    output reg C32\n);\n\nwire [15:0] carry16, sum16_1, sum16_2;\nwire [17:0] carry32;\n\n// 16-bit CLA block instance for the least significant half\ncarrylookahead_adder_16 clablk1 (.cin(0), .a(A[15:1]), .b(B[15:1]), .sum(sum16_1), .carry(carry16));\n\n// 16-bit CLA block instance for the most significant half\ncarrylookahead_adder_16 clablk2 (.cin(carry16[15]), .a(A[31:16]), .b(B[31:16]), .sum(sum16_2), .carry(carry32[17]));\n\n// Sum calculation for the least significant half\nassign S[15:0] = sum16_1;\n\n// Sum calculation for the most significant half\nassign S[31:16] = sum16_2;\n\n// Carry-out calculation\nassign C32 = carry32[17];\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:47:04.346090",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:46:42.495474"
+        }
+      },
+      {
+        "code": "module full_adder (\n    input wire A,\n    input wire B,\n    input wire Cin,\n    output reg S,\n    output reg Cout\n);\n\nassign {Cout, S} = A + B + Cin;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:47:04.346093",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:46:54.314445"
+        }
+      },
+      {
+        "code": "module adder_32bit (\n    input wire [31:0] A,\n    input wire [31:0] B,\n    output wire [31:0] S,\n    output wire C32\n);\n\nwire [15:0] S16;\nwire C16;\n\nadder_16bit CLA1 (\n    .A(A[15:0]),\n    .B(B[15:0]),\n    .S(S16),\n    .C(C16)\n);\n\nwire [31:16] S24;\nwire C24;\n\nadder_16bit CLA2 (\n    .A({16'b0, A[31:16]}),\n    .B({16'b0, B[31:16]}),\n    .S(S24),\n    .C(C24)\n);\n\nwire [31:0] S_out;\nwire C32_out;\n\nadder_16bit CLA3 (\n    .A(S16),\n    .B(S24[15:0]),\n    .S(S_out[15:0]),\n    .C(C32_out)\n);\n\nadder_16bit CLA4 (\n    .A({16'b0, S16}),\n    .B(S24[31:16]),\n    .S(S_out[31:16]),\n    .C(C32)\n);\n\nassign S = S_out;\nassign C32 = C32_out;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:47:04.346094",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:47:04.346075"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:47:04.346100",
+    "total_hdl_codes": 9
+  }
+}

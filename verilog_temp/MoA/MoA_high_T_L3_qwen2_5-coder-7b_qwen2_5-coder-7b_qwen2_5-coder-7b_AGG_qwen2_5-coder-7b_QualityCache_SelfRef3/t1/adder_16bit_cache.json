@@ -1,0 +1,156 @@
+{
+  "design_name": "adder_16bit",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:44:07.842332",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module adder_8bit (\n    input [7:0] a,\n    input [7:0] b,\n    input Cin,\n    output reg [7:0] y,\n    output reg Cout\n);\n\n    wire [8:0] sum;\n    assign sum = a + b + Cin;\n\n    assign y = sum[7:0];\n    assign Cout = sum[8];\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:44:31.170316",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial_retry",
+          "generation_time": "2026-02-03T16:44:15.357318"
+        }
+      },
+      {
+        "code": "module adder_8bit (\n    input [7:0] a,\n    input [7:0] b,\n    input cin,\n    output reg [7:0] sum,\n    output reg cout\n);\n    assign {cout, sum} = a + b + cin;\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:44:31.170319",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:44:21.120849"
+        }
+      },
+      {
+        "code": "module adder_16bit (\n    input [15:0] a,\n    input [15:0] b,\n    input Cin,\n    output reg [15:0] y,\n    output reg Co\n);\n\nreg [7:0] sum8;\nwire Co8;\n\nadder_8bit u1 (\n    .a(a[7:0]),\n    .b(b[7:0]),\n    .Cin(Cin),\n    .y(sum8[7:0]),\n    .Co(Co8)\n);\n\nadder_8bit u2 (\n    .a(a[15:8]),\n    .b(b[15:8]),\n    .Cin(Co8),\n    .y(y[15:8]),\n    .Co(Co)\n);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.5499999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:44:31.170320",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:44:31.170302"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module adder_8bit (\n    input [7:0] a,\n    input [7:0] b,\n    input Cin,\n    output reg [7:0] y,\n    output reg Co\n);\n\nassign {Co, y} = a + b + Cin;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:44:45.471101",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.5499999999999999
+          ],
+          "generation_time": "2026-02-03T16:44:36.035139"
+        }
+      },
+      {
+        "code": "module adder_8bit (\n    input [7:0] a,\n    input [7:0] b,\n    input Cin,\n    output reg [7:0] y,\n    output reg Co\n);\n\nassign {y, Co} = a + b + Cin;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:44:45.471103",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.5499999999999999
+          ],
+          "generation_time": "2026-02-03T16:44:40.861292"
+        }
+      },
+      {
+        "code": "module adder_8bit (\n    input [7:0] a,\n    input [7:0] b,\n    input Cin,\n    output reg y,\n    output reg Co\n);\n\nwire temp;\n\nadder_8bit u1 (\n    .a(a[7:0]),\n    .b(b[7:0]),\n    .Cin(Cin),\n    .y(temp),\n    .Co(Co)\n);\n\nadder_8bit u2 (\n    .a(a[15:8]),\n    .b(b[15:8]),\n    .Cin(temp),\n    .y(y[15:8]),\n    .Co(Co)\n);\n\nassign y[7] = temp;\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:44:45.471104",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.5499999999999999
+          ],
+          "generation_time": "2026-02-03T16:44:45.471087"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module adder_16bit (\n    input [15:0] a,\n    input [15:0] b,\n    input Cin,\n    output reg [15:0] y,\n    output reg Co\n);\n\n    wire [8:0] sum_a_b;\n    wire [9:0] sum_ab_cin;\n\n    adder_8bit adder_8bit_1 (\n        .a(a[7:0]),\n        .b(b[7:0]),\n        .Cin(Cin),\n        .y(y[7:0]),\n        .Co(sum_a_b[8])\n    );\n\n    adder_8bit adder_8bit_2 (\n        .a(a[15:8]),\n        .b(b[15:8]),\n        .Cin(sum_a_b[8]),\n        .y(y[15:8]),\n        .Co(sum_ab_cin[9])\n    );\n\n    assign {Co, y} = {sum_ab_cin[9], y};\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:45:03.290998",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:44:53.489892"
+        }
+      },
+      {
+        "code": "module adder_8bit (\n    input [7:0] a,\n    input [7:0] b,\n    input Cin,\n    output reg [7:0] y,\n    output reg Co\n);\n    wire sum;\n    wire Cout;\n\n    assign {Cout, sum} = a + b + Cin;\n\n    assign {y[7:0], Co} = {sum, Cout};\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:45:03.291000",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:44:59.531777"
+        }
+      },
+      {
+        "code": "module adder_16bit (\n    input [15:0] a,\n    input [15:0] b,\n    input Cin,\n    output reg [15:0] y,\n    output reg Co\n);\n\n    wire [16:0] sum;\n\n    assign {Co, y} = a + b + Cin;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:45:03.291001",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:45:03.290983"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:45:03.291007",
+    "total_hdl_codes": 9
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "design_name": "fixed_point_substractor",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:38:16.113306",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module fixed_point_subtractor #(parameter Q = 8, parameter N = 16)\n(\n    input [N-1:0] a,\n    input [N-1:0] b,\n    output reg [N-1:0] c\n);\n\n    wire [Q-1:0] a_frac = a[N-1:Q];\n    wire [N-Q-1:0] a_int = a[Q-1:0];\n    wire [Q-1:0] b_frac = b[N-1:Q];\n    wire [N-Q-1:0] b_int = b[Q-1:0];\n\n    wire [Q:0] sub_res_frac;\n    wire [N-Q:0] sub_res_int;\n\n    assign sub_res_frac = (a_frac > b_frac) ? a_frac - b_frac : b_frac - a_frac;\n    assign sub_res_int = (a_int > b_int) ? a_int - b_int : b_int - a_int;\n\n    reg [Q-1:0] abs_a_frac, abs_b_frac;\n    reg [N-Q-1:0] abs_a_int, abs_b_int;\n\n    always @(*) begin\n        if (a[N-1] == b[N-1]) begin\n            c = (a > b) ? a - b : b - a;\n        end else begin\n            abs_a_frac = (a[N-1]) ? ~a_frac + 1 : a_frac;\n            abs_b_frac = (b[N-1]) ? ~b_frac + 1 : b_frac;\n            abs_a_int = (a[N-1]) ? ~a_int + 1 : a_int;\n            abs_b_int = (b[N-1]) ? ~b_int + 1 : b_int;\n\n            if ((abs_a_int > abs_b_int) || (abs_a_int == abs_b_int && abs_a_frac >= abs_b_frac)) begin\n                c = a - b;\n            end else begin\n                c = -(b - a);\n            end\n        end\n    end\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:38:29.059914",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:38:18.338569"
+        }
+      },
+      {
+        "code": "module fixed_point_subtractor #(parameter Q = 8, parameter N = 16)\n(\n    input [N-1:0] a,\n    input [N-1:0] b,\n    output reg [N-1:0] c\n);\n\nreg sign_a, sign_b;\nreg [Q-1:0] int_part_a, frac_part_a;\nreg [Q-1:0] int_part_b, frac_part_b;\nreg [N-1:0] abs_a, abs_b;\n\nassign sign_a = a[N-1];\nassign sign_b = b[N-1];\n\nassign int_part_a = a[N-2:Q];\nassign frac_part_a = a[Q-1:0];\nassign int_part_b = b[N-2:Q];\nassign frac_part_b = b[Q-1:0];\n\nalways @(*) begin\n    abs_a = {int_part_a, frac_part_a};\n    abs_b = {int_part_b, frac_part_b};\n\n    if (sign_a == sign_b) begin\n        c[N-2:Q] = int_part_a - int_part_b;\n        c[Q-1] = frac_part_a - frac_part_b;\n        c[N-1] = sign_a;\n    end else begin\n        if (abs_a > abs_b) begin\n            c[N-2:Q] = int_part_a - int_part_b;\n            c[Q-1] = frac_part_a - frac_part_b;\n            c[N-1] = sign_a;\n        end else begin\n            c[N-2:Q] = int_part_b - int_part_a;\n            c[Q-1] = frac_part_b - frac_part_a;\n            c[N-1] = ~sign_a;\n        end\n    end\n\n    // Handling zero result\n    if (c[N-2:0] == 0) begin\n        c[N-1] = 0;\n    end else begin\n        c[N-1:N-Q-1] = 0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:38:29.059916",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:38:27.251872"
+        }
+      },
+      {
+        "code": "module fixed_point_subtractor #(parameter Q = 8, parameter N = 16) (\n    input [N-1:0] a,\n    input [N-1:0] b,\n    output reg [N-1:0] c\n);\n\nreg [N:0] res;\nreg sign_a, sign_b, result_sign;\n\nassign sign_a = a[N-1];\nassign sign_b = b[N-1];\n\nalways @(*) begin\n    if (sign_a == sign_b) begin\n        res = sign_a ? a - b : b - a;\n        result_sign = sign_a;\n    end else begin\n        if (sign_a && !sign_b) begin\n            if (a >= b) begin\n                res = a + (~b) + 1;\n                result_sign = 0;\n            end else begin\n                res = b + (~a) + 1;\n                result_sign = 1;\n            end\n        end else begin\n            if (!sign_a && sign_b) begin\n                if (b >= a) begin\n                    res = b + (~a) + 1;\n                    result_sign = 0;\n                end else begin\n                    res = a + (~b) + 1;\n                    result_sign = 1;\n                end\n            end\n        end\n    end\n\n    if (res == 0)\n        result_sign = 0;\n\n    c[N-1] = result_sign;\n    c[N-2:N-Q] = res[N-2:N-Q];\n    c[Q-1:0] = res[Q-1:0];\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:38:29.059917",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:38:29.059899"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module fixed_point_subtractor #(parameter Q = 8, parameter N = 16)\n(\n    input [N-1:0] a,\n    input [N-1:0] b,\n    output reg [N-1:0] c\n);\n\nreg sign_a, sign_b, result_sign;\nwire [Q-1:0] int_part_a, frac_part_a;\nwire [Q-1:0] int_part_b, frac_part_b;\n\nassign sign_a = a[N-1];\nassign sign_b = b[N-1];\n\nassign int_part_a = a[N-2:Q];\nassign frac_part_a = a[Q-1:0];\nassign int_part_b = b[N-2:Q];\nassign frac_part_b = b[Q-1:0];\n\nalways @(*) begin\n    if (sign_a == sign_b) begin\n        c[N-2:Q] = int_part_a - int_part_b;\n        c[Q-1] = frac_part_a - frac_part_b;\n        result_sign = sign_a;\n    end else begin\n        if (int_part_a > int_part_b || (int_part_a == int_part_b && frac_part_a >= frac_part_b)) begin\n            c[N-2:Q] = int_part_a - int_part_b;\n            c[Q-1] = frac_part_a - frac_part_b;\n        end else begin\n            c[N-2:Q] = -(int_part_b - int_part_a);\n            c[Q-1] = frac_part_b - frac_part_a;\n        end\n    end\n\n    // Handling zero result\n    if (c[N-2:0] == 0) begin\n        result_sign = 0;\n    end else begin\n        result_sign = sign_a;\n    end\n\n    c[N-1] = result_sign;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:38:55.902816",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:38:31.275320"
+        }
+      },
+      {
+        "code": "module fixed_point_subtractor #(parameter Q = 8, parameter N = 16)\n(\n    input [N-1:0] a,\n    input [N-1:0] b,\n    output reg [N-1:0] c\n);\n\nreg sign_a, sign_b, result_sign;\nwire [Q-1:0] a_frac = a[N-1:Q];\nwire [N-Q-1:0] a_int = a[Q-1:0];\nwire [Q-1:0] b_frac = b[N-1:Q];\nwire [N-Q-1:0] b_int = b[Q-1:0];\n\nassign sign_a = a[N-1];\nassign sign_b = b[N-1];\n\nalways @(*) begin\n    if (sign_a == sign_b) begin\n        wire [Q:0] sub_res_frac;\n        wire [N-Q:0] sub_res_int;\n        assign sub_res_frac = (a_frac > b_frac) ? a_frac - b_frac : b_frac - a_frac;\n        assign sub_res_int = (a_int > b_int) ? a_int - b_int : b_int - a_int;\n        reg [Q-1:0] abs_a_frac, abs_b_frac;\n        reg [N-Q-1:0] abs_a_int, abs_b_int;\n        if (sign_a)\n            abs_a_frac = ~a_frac + 1;\n        else\n            abs_a_frac = a_frac;\n        if (sign_b)\n            abs_b_frac = ~b_frac + 1;\n        else\n            abs_b_frac = b_frac;\n        if (sign_a)\n            abs_a_int = ~a_int + 1;\n        else\n            abs_a_int = a_int;\n        if (sign_b)\n            abs_b_int = ~b_int + 1;\n        else\n            abs_b_int = b_int;\n\n        if ((abs_a_int > abs_b_int) || (abs_a_int == abs_b_int && abs_a_frac >= abs_b_frac)) begin\n            c[N-2:Q] = sub_res_int;\n            c[Q-1] = sub_res_frac[0];\n            c[N-1] = sign_a;\n        end else begin\n            c[N-2:Q] = sub_res_int;\n            c[Q-1] = ~sub_res_frac[0];\n            c[N-1] = ~sign_a;\n        end\n    end else begin\n        if (abs(a) > abs(b)) begin\n            c[N-2:Q] = a_int - b_int;\n            c[Q-1] = a_frac - b_frac;\n            c[N-1] = sign_a;\n        end else begin\n            c[N-2:Q] = b_int - a_int;\n            c[Q-1] = b_frac - a_frac;\n            c[N-1] = ~sign_a;\n        end\n    end\n\n    if (c[N-2:0] == 0) begin\n        c[N-1] = 0;\n    end else begin\n        c[N-1:N-Q-1] = 0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:38:55.902819",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:38:43.374598"
+        }
+      },
+      {
+        "code": "module fixed_point_subtractor #(parameter Q = 8, parameter N = 16) (\n    input [N-1:0] a,\n    input [N-1:0] b,\n    output reg [N-1:0] c\n);\n\nreg sign_a, sign_b, result_sign;\nwire [Q-1:0] int_part_a, frac_part_a;\nwire [Q-1:0] int_part_b, frac_part_b;\nwire [N-2:0] abs_a_int, abs_b_int;\nwire [Q-1:0] abs_a_frac, abs_b_frac;\n\nassign sign_a = a[N-1];\nassign sign_b = b[N-1];\n\nassign int_part_a = a[N-2:Q];\nassign frac_part_a = a[Q-1:0];\nassign int_part_b = b[N-2:Q];\nassign frac_part_b = b[Q-1:0];\n\nalways @(*) begin\n    abs_a_int = (sign_a) ? ~int_part_a + 1 : int_part_a;\n    abs_a_frac = (sign_a) ? ~frac_part_a + 1 : frac_part_a;\n    abs_b_int = (sign_b) ? ~int_part_b + 1 : int_part_b;\n    abs_b_frac = (sign_b) ? ~frac_part_b + 1 : frac_part_b;\n\n    if (sign_a == sign_b) begin\n        if ((abs_a_int > abs_b_int) || (abs_a_int == abs_b_int && abs_a_frac >= abs_b_frac)) begin\n            c[N-2:Q] = int_part_a - int_part_b;\n            c[Q-1] = frac_part_a - frac_part_b;\n        end else begin\n            c[N-2:Q] = int_part_b - int_part_a;\n            c[Q-1] = frac_part_b - frac_part_a;\n        end\n    end else begin\n        if (abs_a_int > abs_b_int) || (abs_a_int == abs_b_int && abs_a_frac >= abs_b_frac) begin\n            c[N-2:Q] = int_part_a + ~int_part_b + 1;\n            c[Q-1] = frac_part_a + ~frac_part_b + 1;\n            result_sign = sign_a;\n        end else begin\n            c[N-2:Q] = int_part_b + ~int_part_a + 1;\n            c[Q-1] = frac_part_b + ~frac_part_a + 1;\n            result_sign = ~sign_a;\n        end\n    end\n\n    if (c[N-2:0] == 0) begin\n        result_sign = 0;\n    end\n\n    c[N-1] = result_sign;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:38:55.902820",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:38:55.902802"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module fixed_point_subtractor #(parameter Q = 8, parameter N = 16) (\n    input [N-1:0] a,\n    input [N-1:0] b,\n    output reg [N-1:0] c\n);\n\nreg sign_a, sign_b;\nreg [Q-1:0] int_part_a, frac_part_a;\nreg [Q-1:0] int_part_b, frac_part_b;\n\nassign sign_a = a[N-1];\nassign sign_b = b[N-1];\n\nassign int_part_a = a[N-2:Q];\nassign frac_part_a = a[Q-1:0];\nassign int_part_b = b[N-2:Q];\nassign frac_part_b = b[Q-1:0];\n\nalways @(*) begin\n    if (sign_a == sign_b) begin\n        c[N-2:Q] = int_part_a - int_part_b;\n        c[Q-1] = frac_part_a - frac_part_b;\n        c[N-1] = sign_a;\n    end else begin\n        if ((int_part_a > int_part_b) || (int_part_a == int_part_b && frac_part_a >= frac_part_b)) begin\n            c[N-2:Q] = int_part_a - int_part_b;\n            c[Q-1] = frac_part_a - frac_part_b;\n            c[N-1] = sign_a;\n        end else begin\n            c[N-2:Q] = -(int_part_b - int_part_a);\n            c[Q-1] = -(frac_part_b - frac_part_a);\n            c[N-1] = ~sign_a;\n        end\n    end\n\n    // Handling zero result\n    if (c[N-2:0] == 0) begin\n        c[N-1] = 0;\n    end else begin\n        c[N-1:N-Q-1] = 0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:39:13.117596",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:38:58.194499"
+        }
+      },
+      {
+        "code": "module fixed_point_subtractor #(parameter Q = 8, parameter N = 16) (\n    input [N-1:0] a,\n    input [N-1:0] b,\n    output reg [N-1:0] c\n);\n\nreg sign_a, sign_b, result_sign;\nwire [Q-1:0] abs_frac_a, abs_frac_b;\nwire [N-Q-1:0] abs_int_a, abs_int_b;\n\nassign sign_a = a[N-1];\nassign sign_b = b[N-1];\n\nalways @(*) begin\n    abs_frac_a = (sign_a) ? ~a[N-2:Q] + 1 : a[N-2:Q];\n    abs_frac_b = (sign_b) ? ~b[N-2:Q] + 1 : b[N-2:Q];\n    abs_int_a = (sign_a) ? ~a[Q-1:N-Q] + 1 : a[Q-1:N-Q];\n    abs_int_b = (sign_b) ? ~b[Q-1:N-Q] + 1 : b[Q-1:N-Q];\n\n    if (sign_a == sign_b) begin\n        if ((abs_int_a > abs_int_b) || (abs_int_a == abs_int_b && abs_frac_a >= abs_frac_b)) begin\n            c[N-2:0] = a - b;\n        end else begin\n            c[N-2:0] = -(b - a);\n        end\n    end else begin\n        if (!sign_a) begin\n            if (a >= b) begin\n                c[N-2:0] = a + (~b) + 1;\n            end else begin\n                c[N-2:0] = -(b + (~a) + 1);\n            end\n        end else begin\n            if (b >= a) begin\n                c[N-2:0] = b + (~a) + 1;\n            end else begin\n                c[N-2:0] = -(a + (~b) + 1);\n            end\n        end\n    end\n\n    result_sign = c[N-1];\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:39:13.117598",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:39:08.317085"
+        }
+      },
+      {
+        "code": "module fixed_point_subtractor #(parameter Q = 8, parameter N = 16)\n(\n    input [N-1:0] a,\n    input [N-1:0] b,\n    output reg [N-1:0] c\n);\n\n    reg sign_a, sign_b, result_sign;\n    wire [Q-1:0] int_part_a, frac_part_a;\n    wire [Q-1:0] int_part_b, frac_part_b;\n\n    assign sign_a = a[N-1];\n    assign sign_b = b[N-1];\n\n    assign int_part_a = a[N-2:Q];\n    assign frac_part_a = a[Q-1:0];\n    assign int_part_b = b[N-2:Q];\n    assign frac_part_b = b[Q-1:0];\n\n    reg [N-1:0] abs_a;\n    reg [N-1:0] abs_b;\n\n    always @(*) begin\n        if (sign_a == sign_b) begin\n            if ((int_part_a > int_part_b) || (int_part_a == int_part_b && frac_part_a >= frac_part_b)) begin\n                c = a - b;\n                result_sign = sign_a;\n            end else begin\n                c = -(b - a);\n                result_sign = ~sign_a;\n            end\n        end else begin\n            if (a[N-1]) begin\n                abs_a = {int_part_a, frac_part_a};\n                abs_b = {int_part_b, frac_part_b};\n                if (abs_a > abs_b) begin\n                    c = a - b;\n                    result_sign = 0;\n                end else begin\n                    c = -(b - a);\n                    result_sign = 1;\n                end\n            end else begin\n                c[N-2:Q] = int_part_b - int_part_a;\n                c[Q-1] = frac_part_b - frac_part_a;\n                c[N-1] = sign_a;\n            end\n        end\n\n        if (c == 0)\n            result_sign = 0;\n\n        c[N-1] = result_sign;\n    end\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:39:13.117599",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:39:13.117579"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:39:13.117606",
+    "total_hdl_codes": 9
+  }
+}

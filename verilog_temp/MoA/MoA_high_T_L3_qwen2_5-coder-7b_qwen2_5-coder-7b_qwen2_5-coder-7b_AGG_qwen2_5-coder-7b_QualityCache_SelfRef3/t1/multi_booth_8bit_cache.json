@@ -1,0 +1,156 @@
+{
+  "design_name": "multi_booth_8bit",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:39:47.338315",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module multi_booth_8bit (\n    input clk,\n    input reset,\n    input [7:0] a,\n    input [7:0] b,\n    output reg [15:0] p,\n    output reg rdy\n);\n\nreg [31:0] multiplier;\nreg [31:0] multiplicand;\nreg [4:0] ctr;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        multiplier <= {{8{a[7]}}, a};\n        multiplicand <= {{8{b[7]}}, b};\n        p <= 16'b0;\n        rdy <= 1'b0;\n        ctr <= 5'd0;\n    end else begin\n        if (ctr < 5'd16) begin\n            multiplicand <= {multiplicand[30:0], 1'b0};\n            if (multiplier[ctr] == 4'b01 || multiplier[ctr] == 4'b11) begin\n                p <= p + multiplicand;\n            end\n            ctr <= ctr + 5'd1;\n        end else begin\n            rdy <= 1'b1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.7899999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:40:05.941388",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:39:53.485389"
+        }
+      },
+      {
+        "code": "module multi_booth_8bit (\n    input wire clk,\n    input wire reset,\n    input wire [7:0] a,\n    input wire [7:0] b,\n    output reg [15:0] p,\n    output reg rdy\n);\n\nreg [23:0] multiplier;\nreg [23:0] multiplicand;\nreg [4:0] ctr;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        multiplier <= {{8{a[7]}}, a};\n        multiplicand <= {{8{b[7]}}, b};\n        p <= 16'd0;\n        rdy <= 1'b0;\n        ctr <= 5'd0;\n    end else begin\n        if (ctr < 5'd16) begin\n            multiplicand <= {multiplicand[22:0], 1'b0};\n            if (multiplier[23] == 1'b1)\n                p <= p + multiplicand;\n            ctr <= ctr + 1'b1;\n        end else begin\n            rdy <= 1'b1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.74,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:40:05.941390",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:39:59.335496"
+        }
+      },
+      {
+        "code": "module multi_booth_8bit (\n    input wire clk,\n    input wire reset,\n    input wire [7:0] a,\n    input wire [7:0] b,\n    output reg [15:0] p,\n    output reg rdy\n);\n\nreg [15:0] multiplicand;\nreg [15:0] multiplier;\nreg [4:0] ctr;\n\ninitial begin\n    p = 0;\n    multiplicand = 0;\n    multiplier = 0;\n    ctr = 0;\n    rdy = 0;\nend\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        multiplicand <= {{8{a[7]}}, a};\n        multiplier <= {{8{b[7]}}, b};\n        ctr <= 5'd0;\n        p <= 0;\n        rdy <= 0;\n    end else begin\n        if (ctr < 5'd16) begin\n            multiplicand <= {multiplicand[14:0], 1'b0};\n            if (multiplier[ctr] == 1'b1 && multiplier[ctr-1] == 1'b0) begin\n                p <= p + multiplicand;\n            end else if (multiplier[ctr] == 1'b0 && multiplier[ctr-1] == 1'b1) begin\n                p <= p - multiplicand;\n            end\n            ctr <= ctr + 5'd1;\n        end else begin\n            rdy <= 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.7899999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:40:05.941391",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:40:05.941374"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module multi_booth_8bit (\n    input wire clk,\n    input wire reset,\n    input wire [7:0] a,\n    input wire [7:0] b,\n    output reg [15:0] p,\n    output reg rdy\n);\n\nreg [23:0] multiplier;\nreg [23:0] multiplicand;\nreg [4:0] ctr;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        multiplier <= {{8{a[7]}}, a};\n        multiplicand <= {{8{b[7]}}, b};\n        p <= 16'd0;\n        rdy <= 1'b0;\n        ctr <= 5'd0;\n    end else begin\n        if (ctr < 5'd16) begin\n            multiplicand <= {multiplicand[22:0], 1'b0};\n            case (multiplier[23:22])\n                2'b00: ;\n                2'b01: p <= p + multiplicand;\n                2'b11: p <= p - multiplicand;\n            endcase\n            ctr <= ctr + 5'd1;\n        end else begin\n            rdy <= 1'b1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.7899999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:40:24.296695",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.7899999999999999,
+            0.7899999999999999,
+            0.74
+          ],
+          "generation_time": "2026-02-03T16:40:12.108476"
+        }
+      },
+      {
+        "code": "module multi_booth_8bit (\n    input clk,\n    input reset,\n    input [7:0] a,\n    input [7:0] b,\n    output reg [15:0] p,\n    output reg rdy\n);\n\nreg [23:0] multiplier;\nreg [23:0] multiplicand;\nreg [4:0] ctr;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        multiplier <= {{8{a[7]}}, a};\n        multiplicand <= {{8{b[7]}}, b};\n        p <= 16'b0;\n        rdy <= 1'b0;\n        ctr <= 5'd0;\n    end else begin\n        if (ctr < 5'd16) begin\n            multiplicand <= {multiplicand[22:0], 1'b0};\n            if (multiplier[23] == 4'b01 || multiplier[23] == 4'b11) begin\n                p <= p + multiplicand;\n            end else if (multiplier[23] == 4'b10) begin\n                p <= p - multiplicand;\n            end\n            ctr <= ctr + 5'd1;\n        end else begin\n            rdy <= 1'b1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.7899999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:40:24.296697",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.7899999999999999,
+            0.7899999999999999,
+            0.74
+          ],
+          "generation_time": "2026-02-03T16:40:18.331358"
+        }
+      },
+      {
+        "code": "module multi_booth_8bit (\n    input wire clk,\n    input wire reset,\n    input wire [7:0] a,\n    input wire [7:0] b,\n    output reg [15:0] p,\n    output reg rdy\n);\n\nreg [31:0] multiplier;\nreg [31:0] multiplicand;\nreg [4:0] ctr;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        multiplier <= {{8{a[7]}}, a};\n        multiplicand <= {{8{b[7]}}, b};\n        p <= 16'b0;\n        rdy <= 1'b0;\n        ctr <= 5'd0;\n    end else begin\n        if (ctr < 5'd16) begin\n            multiplicand <= {multiplicand[30:0], 1'b0};\n            if ((multiplier[ctr] == 4'b01 || multiplier[ctr] == 4'b11)) begin\n                p <= p + multiplicand;\n            end\n            ctr <= ctr + 5'd1;\n        end else begin\n            rdy <= 1'b1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.7899999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:40:24.296698",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.7899999999999999,
+            0.7899999999999999,
+            0.74
+          ],
+          "generation_time": "2026-02-03T16:40:24.296680"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module multi_booth_8bit (\n    input wire clk,\n    input wire reset,\n    input wire [7:0] a,\n    input wire [7:0] b,\n    output reg [15:0] p,\n    output reg rdy\n);\n\nreg [31:0] multiplier;\nreg [31:0] multiplicand;\nreg [4:0] ctr;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        multiplier <= {{8{a[7]}}, a};\n        multiplicand <= {{8{b[7]}}, b};\n        p <= 16'b0;\n        rdy <= 1'b0;\n        ctr <= 5'd0;\n    end else begin\n        if (ctr < 5'd16) begin\n            multiplicand <= {multiplicand[30:0], 1'b0};\n            case (multiplier[31:30])\n                2'b00: ;\n                2'b01: p <= p + multiplicand;\n                2'b11: p <= p - multiplicand;\n            endcase\n            ctr <= ctr + 5'd1;\n        end else begin\n            rdy <= 1'b1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.7899999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:40:42.807276",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.7899999999999999,
+            0.7899999999999999,
+            0.7899999999999999
+          ],
+          "generation_time": "2026-02-03T16:40:30.471780"
+        }
+      },
+      {
+        "code": "module multi_booth_8bit (\n    input wire clk,\n    input wire reset,\n    input wire [7:0] a,\n    input wire [7:0] b,\n    output reg [15:0] p,\n    output reg rdy\n);\n\nreg [31:0] multiplier;\nreg [31:0] multiplicand;\nreg [4:0] ctr;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        multiplier <= {{8{a[7]}}, a};\n        multiplicand <= {{8{b[7]}}, b};\n        p <= 16'd0;\n        rdy <= 1'b0;\n        ctr <= 5'd0;\n    end else begin\n        if (ctr < 5'd16) begin\n            multiplicand <= {multiplicand[30:0], 1'b0};\n            if (multiplier[ctr] == 4'b01 || multiplier[ctr] == 4'b11) begin\n                p <= p + multiplicand;\n            end else if (multiplier[ctr] == 4'b10) begin\n                p <= p - multiplicand;\n            end\n            ctr <= ctr + 5'd1;\n        end else begin\n            rdy <= 1'b1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.7899999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:40:42.807279",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.7899999999999999,
+            0.7899999999999999,
+            0.7899999999999999
+          ],
+          "generation_time": "2026-02-03T16:40:36.619690"
+        }
+      },
+      {
+        "code": "module multi_booth_8bit (\n    input wire clk,\n    input wire reset,\n    input wire [7:0] a,\n    input wire [7:0] b,\n    output reg [15:0] p,\n    output reg rdy\n);\n\nreg [31:0] multiplicand;\nreg [31:0] multiplier;\nreg [4:0] ctr;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        multiplicand <= {{8{a[7]}}, a};\n        multiplier <= {{8{b[7]}}, b};\n        p <= 16'b0;\n        rdy <= 1'b0;\n        ctr <= 5'd0;\n    end else begin\n        if (ctr < 5'd16) begin\n            multiplicand <= {multiplicand[30:0], 1'b0};\n            case (multiplier[31:30])\n                2'b00: ;\n                2'b01: p <= p + multiplicand;\n                2'b11: p <= p - multiplicand;\n            endcase\n            ctr <= ctr + 5'd1;\n        end else begin\n            rdy <= 1'b1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.7899999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:40:42.807280",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.7899999999999999,
+            0.7899999999999999,
+            0.7899999999999999
+          ],
+          "generation_time": "2026-02-03T16:40:42.807262"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:40:42.807285",
+    "total_hdl_codes": 9
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "design_name": "alu",
+  "trial_num": 1,
+  "created_at": "2026-02-03T17:05:25.167333",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module alu (\n    input  [31:0] a,\n    input  [31:0] b,\n    input  [5:0] aluc,\n    output reg [31:0] r,\n    output reg zero,\n    output reg carry,\n    output reg negative,\n    output reg overflow,\n    output reg flag\n);\n\nparameter ADD = 6'b100000;\nparameter ADDU = 6'b100001;\nparameter SUB = 6'b100010;\nparameter SUBU = 6'b100011;\nparameter AND = 6'b100100;\nparameter OR = 6'b100101;\nparameter XOR = 6'b100110;\nparameter NOR = 6'b100111;\nparameter SLT = 6'b101010;\nparameter SLTU = 6'b101011;\nparameter SLL = 6'b000000;\nparameter SRL = 6'b000010;\nparameter SRA = 6'b000011;\nparameter SLLV = 6'b000100;\nparameter SRLV = 6'b000110;\nparameter SRAV = 6'b000111;\nparameter LUI = 6'b001111;\n\nreg [31:0] res;\nwire [4:0] sa;\n\nalways @(*) begin\n    zero = 1'b0;\n    carry = 1'b0;\n    negative = 1'b0;\n    overflow = 1'b0;\n    flag = 1'bz;\n\n    case (aluc)\n        ADD: res = $signed(a) + $signed(b);\n        ADDU: res = a + b;\n        SUB: res = $signed(a) - $signed(b);\n        SUBU: res = a - b;\n        AND: res = a & b;\n        OR: res = a | b;\n        XOR: res = a ^ b;\n        NOR: res = ~(a | b);\n        SLT: begin\n            if ($signed(a) < $signed(b)) res = 32'b1;\n            else res = 32'b0;\n            flag = (res == 32'b1) ? 1'bz : 1'b0;\n        end\n        SLTU: begin\n            if (a < b) res = 32'b1;\n            else res = 32'b0;\n            flag = (res == 32'b1) ? 1'bz : 1'b0;\n        end\n        SLL: sa = a[4:0]; res = {32-sa{b[31]} , b} << sa;\n        SRL: res = b >> sa;\n        SRA: res = $signed(b) >>> sa;\n        SLLV: res = a << (b[4:0]);\n        SRLV: res = b >> (b[4:0]);\n        SRAV: res = $signed(b) >>> (b[4:0]);\n        LUI: res = {a[15:0], 16'b0};\n        default: res = 32'bz;\n    endcase\n\n    r = res;\n    zero = (res == 32'b0);\n    negative = res[31];\n    if (aluc == ADD || aluc == ADDU) begin\n        carry = (res < a || res < b);\n        overflow = ((a[31] == b[31]) && (res[31] != a[31]));\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:06:23.825005",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:05:41.617855"
+        }
+      },
+      {
+        "code": "module alu (\n    input  [31:0] a,\n    input  [31:0] b,\n    input  [5:0]  aluc,\n    output reg [31:0] r,\n    output reg zero,\n    output reg carry,\n    output reg negative,\n    output reg overflow,\n    output reg flag\n);\n\nparameter ADD = 6'b100000;\nparameter ADDU = 6'b100001;\nparameter SUB = 6'b100010;\nparameter SUBU = 6'b100011;\nparameter AND = 6'b100100;\nparameter OR = 6'b100101;\nparameter XOR = 6'b100110;\nparameter NOR = 6'b100111;\nparameter SLT = 6'b101010;\nparameter SLTU = 6'b101011;\nparameter SLL = 6'b000000;\nparameter SRL = 6'b000010;\nparameter SRA = 6'b000011;\nparameter SLLV = 6'b000100;\nparameter SRLV = 6'b000110;\nparameter SRAV = 6'b000111;\nparameter LUI = 6'b001111;\n\nreg [31:0] res;\nreg [5:0] shift_amount;\n\nalways @(*) begin\n    zero = 1'b0;\n    carry = 1'b0;\n    negative = 1'b0;\n    overflow = 1'b0;\n    flag = 1'b0;\n    r = 32'bz;\n    res = 32'bz;\n\n    case (aluc)\n        ADD: begin\n            r = a + b;\n            carry = (a[31] & ~b[31] & ~r[31]) | (~a[31] & b[31] & r[31]);\n            negative = r[31];\n            overflow = ((a[31] & b[31] & ~r[31]) | (~a[31] & ~b[31] & r[31]));\n        end\n        ADDU: begin\n            res = a + b;\n            carry = (a[31] & ~b[31] & ~res[31]) | (~a[31] & b[31] & res[31]);\n        end\n        SUB: begin\n            r = a - b;\n            carry = (a[31] & b[31] & ~r[31]) | (~a[31] & ~b[31] & r[31]);\n            negative = r[31];\n            overflow = ((a[31] & ~b[31] & ~r[31]) | (~a[31] & b[31] & r[31]));\n        end\n        SUBU: begin\n            res = a - b;\n            carry = (a[31] & ~b[31] & ~res[31]) | (~a[31] & b[31] & res[31]);\n        end\n        AND: r = a & b;\n        OR: r = a | b;\n        XOR: r = a ^ b;\n        NOR: r = ~(a | b);\n        SLT: begin\n            if (a < b) flag = 1'b1;\n        end\n        SLTU: begin\n            if (a < b) flag = 1'b1;\n        end\n        SLL: shift_amount = aluc[4:0];\n        SRL: shift_amount = aluc[4:0];\n        SRA: shift_amount = aluc[4:0];\n        SLLV: begin\n            shift_amount = a[4:0];\n        end\n        SRLV: begin\n            shift_amount = a[4:0];\n        end\n        SRAV: begin\n            shift_amount = a[4:0];\n        end\n        LUI: begin\n            res = {a[15:0], 16'b0};\n        end\n        default: r = 32'bz;\n    endcase\n\n    if (r == 32'b0) zero = 1'b1;\n\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.84,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:06:23.825007",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:06:02.210538"
+        }
+      },
+      {
+        "code": "module alu (\n    input [31:0] a,\n    input [31:0] b,\n    input [5:0] aluc,\n    output reg [31:0] r,\n    output reg zero,\n    output reg carry,\n    output reg negative,\n    output reg overflow,\n    output reg flag\n);\n\n    parameter ADD = 6'b100000;\n    parameter ADDU = 6'b100001;\n    parameter SUB = 6'b100010;\n    parameter SUBU = 6'b100011;\n    parameter AND = 6'b100100;\n    parameter OR = 6'b100101;\n    parameter XOR = 6'b100110;\n    parameter NOR = 6'b100111;\n    parameter SLT = 6'b101010;\n    parameter SLTU = 6'b101011;\n    parameter SLL = 6'b000000;\n    parameter SRL = 6'b000010;\n    parameter SRA = 6'b000011;\n    parameter SLLV = 6'b000100;\n    parameter SRLV = 6'b000110;\n    parameter SRAV = 6'b000111;\n    parameter LUI = 6'b001111;\n\n    reg [31:0] signed_a;\n    reg [31:0] signed_b;\n    reg [31:0] res;\n    integer i, shift_amount;\n\n    assign signed_a = $signed(a);\n    assign signed_b = $signed(b);\n\n    always @(*) begin\n        zero = 1'b0;\n        carry = 1'b0;\n        negative = 1'b0;\n        overflow = 1'b0;\n        flag = 1'bz;\n\n        case (aluc)\n            ADD: res = signed_a + signed_b;\n            ADDU: res = a + b;\n            SUB: res = signed_a - signed_b;\n            SUBU: res = a - b;\n            AND: res = a & b;\n            OR: res = a | b;\n            XOR: res = a ^ b;\n            NOR: res = ~(a | b);\n            SLT: begin\n                if (signed_a < signed_b) begin\n                    res = 32'b1;\n                    flag = 1'b1;\n                end else begin\n                    res = 32'b0;\n                    flag = 1'bz;\n                end\n            end\n            SLTU: begin\n                if (a < b) begin\n                    res = 32'b1;\n                    flag = 1'b1;\n                end else begin\n                    res = 32'b0;\n                    flag = 1'bz;\n                end\n            end\n            SLL, SLLV: begin\n                shift_amount = (aluc == SLL) ? a[4:0] : a & 5'b11111;\n                if (shift_amount != 0) begin\n                    res = {a << shift_amount[4:0], {(32 - shift_amount[4:0]){'b0}};\n                    carry = res[31];\n                end else begin\n                    res = a;\n                end\n            end\n            SRL, SRLV: begin\n                shift_amount = (aluc == SRL) ? a[4:0] : a & 5'b11111;\n                if (shift_amount != 0) begin\n                    res = {a >> shift_amount[4:0], {(32 - shift_amount[4:0]){'b0}};\n                    carry = res[31];\n                end else begin\n                    res = a;\n                end\n            end\n            SRA, SRAV: begin\n                if (a[31] == 1'b1) begin\n                    shift_amount = (aluc == SRA) ? a[4:0] : a & 5'b11111;\n                    if (shift_amount != 0) begin\n                        res = {a >> shift_amount[4:0], {(32 - shift_amount[4:0]){'b1}};\n                        carry = res[31];\n                    end else begin\n                        res = a;\n                    end\n                end else begin\n                    res = SRL(a, shift_amount);\n                end\n            end\n            LUI: res = {a[15:0], 16'b0};\n            default: res = 32'bz;\n        endcase\n\n        if (res == 32'b0) zero = 1'b1;\n        if (aluc != SLT && aluc != SLTU) begin\n            negative = res[31];\n        end\n        if ((aluc == ADD || aluc == SUB) && a[31] == b[31] && res[31] != a[31]) overflow = 1'b1;\n    end\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:06:23.825009",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:06:23.824990"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module alu (\n    input  [31:0] a,\n    input  [31:0] b,\n    input  [5:0]  aluc,\n    output reg [31:0] r,\n    output reg zero,\n    output reg carry,\n    output reg negative,\n    output reg overflow,\n    output reg flag\n);\n\nparameter ADD = 6'b100000;\nparameter ADDU = 6'b100001;\nparameter SUB = 6'b100010;\nparameter SUBU = 6'b100011;\nparameter AND = 6'b100100;\nparameter OR = 6'b100101;\nparameter XOR = 6'b100110;\nparameter NOR = 6'b100111;\nparameter SLT = 6'b101010;\nparameter SLTU = 6'b101011;\nparameter SLL = 6'b000000;\nparameter SRL = 6'b000010;\nparameter SRA = 6'b000011;\nparameter SLLV = 6'b000100;\nparameter SRLV = 6'b000110;\nparameter SRAV = 6'b000111;\nparameter LUI = 6'b001111;\n\nreg [31:0] res;\n\nalways @(*) begin\n    zero = 1'b0;\n    carry = 1'b0;\n    negative = 1'b0;\n    overflow = 1'b0;\n    flag = 1'bz;\n\n    case (aluc)\n        ADD: res = $signed(a) + $signed(b);\n        ADDU: res = a + b;\n        SUB: res = $signed(a) - $signed(b);\n        SUBU: res = a - b;\n        AND: res = a & b;\n        OR: res = a | b;\n        XOR: res = a ^ b;\n        NOR: res = ~(a | b);\n        SLT: begin\n            if ($signed(a) < $signed(b)) begin\n                res = 32'b1;\n                flag = 1'b1;\n            end else begin\n                res = 32'b0;\n                flag = 1'bz;\n            end\n        end\n        SLTU: begin\n            if (a < b) begin\n                res = 32'b1;\n                flag = 1'b1;\n            end else begin\n                res = 32'b0;\n                flag = 1'bz;\n            end\n        end\n        SLL: res = {b << (a[4:0])};\n        SRL: res = b >> (a[4:0]);\n        SRA: res = $signed(b) >>> (a[4:0]);\n        SLLV: res = a << (b & 31);\n        SRLV: res = b >> (b & 31);\n        SRAV: res = $signed(b) >>> (b & 31);\n        LUI: res = {a[15:0], 16'b0};\n        default: res = 32'bz;\n    endcase\n\n    r = res;\n    zero = (res == 32'b0);\n    negative = res[31];\n    if ((aluc == ADD) || (aluc == SUB)) begin\n        carry = (res < a) || (res < b);\n        overflow = ((a[31] == b[31]) && (res[31] != a[31]));\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.84,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:07:15.118279",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.84,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:06:40.699051"
+        }
+      },
+      {
+        "code": "module alu (\n    input  [31:0] a,\n    input  [31:0] b,\n    input  [5:0]  aluc,\n    output reg [31:0] r,\n    output reg zero,\n    output reg carry,\n    output reg negative,\n    output reg overflow,\n    output reg flag\n);\n\nparameter ADD = 6'b100000;\nparameter ADDU = 6'b100001;\nparameter SUB = 6'b100010;\nparameter SUBU = 6'b100011;\nparameter AND = 6'b100100;\nparameter OR = 6'b100101;\nparameter XOR = 6'b100110;\nparameter NOR = 6'b100111;\nparameter SLT = 6'b101010;\nparameter SLTU = 6'b101011;\nparameter SLL = 6'b000000;\nparameter SRL = 6'b000010;\nparameter SRA = 6'b000011;\nparameter SLLV = 6'b000100;\nparameter SRLV = 6'b000110;\nparameter SRAV = 6'b000111;\nparameter LUI = 6'b001111;\n\nreg [31:0] signed_a, signed_b, res;\nwire [4:0] sa;\n\nassign signed_a = $signed(a);\nassign signed_b = $signed(b);\n\nalways @(*) begin\n    zero = 1'b0;\n    carry = 1'b0;\n    negative = 1'b0;\n    overflow = 1'b0;\n    flag = 1'bz;\n\n    case (aluc)\n        ADD: res = signed_a + signed_b;\n        ADDU: res = a + b;\n        SUB: res = signed_a - signed_b;\n        SUBU: res = a - b;\n        AND: res = a & b;\n        OR: res = a | b;\n        XOR: res = a ^ b;\n        NOR: res = ~(a | b);\n        SLT: begin\n            if (signed_a < signed_b) begin\n                res = 32'b1;\n                flag = 1'b1;\n            end else begin\n                res = 32'b0;\n                flag = 1'bz;\n            end\n        end\n        SLTU: begin\n            if (a < b) begin\n                res = 32'b1;\n                flag = 1'b1;\n            end else begin\n                res = 32'b0;\n                flag = 1'bz;\n            end\n        end\n        SLL: sa = a[4:0]; res = {a << sa, {(32 - sa){1'b0}}};\n        SRL: res = {a >> sa, {(32 - sa){1'b0}}};\n        SRA: res = $signed(a) >>> sa;\n        SLLV: res = a << (b[4:0]);\n        SRLV: res = b >> (b[4:0]);\n        SRAV: res = $signed(b) >>> (b[4:0]);\n        LUI: res = {a[15:0], 16'b0};\n        default: res = 32'bz;\n    endcase\n\n    r = res;\n    zero = (res == 32'b0);\n    negative = (aluc != SLT && aluc != SLTU) ? res[31] : 1'bz;\n\n    if ((aluc == ADD || aluc == SUB) && a[31] == b[31] && res[31] != a[31]) overflow = 1'b1;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:07:15.118282",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.84,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:06:58.291558"
+        }
+      },
+      {
+        "code": "module alu (\n    input [31:0] a,\n    input [31:0] b,\n    input [5:0] aluc,\n    output reg [31:0] r,\n    output reg zero,\n    output reg carry,\n    output reg negative,\n    output reg overflow,\n    output reg flag\n);\n\nparameter ADD = 6'b100000;\nparameter ADDU = 6'b100001;\nparameter SUB = 6'b100010;\nparameter SUBU = 6'b100011;\nparameter AND = 6'b100100;\nparameter OR = 6'b100101;\nparameter XOR = 6'b100110;\nparameter NOR = 6'b100111;\nparameter SLT = 6'b101010;\nparameter SLTU = 6'b101011;\nparameter SLL = 6'b000000;\nparameter SRL = 6'b000010;\nparameter SRA = 6'b000011;\nparameter SLLV = 6'b000100;\nparameter SRLV = 6'b000110;\nparameter SRAV = 6'b000111;\nparameter LUI = 6'b001111;\n\nreg [31:0] res;\nwire [4:0] shift_amount;\n\nalways @(*) begin\n    zero = 1'b0;\n    carry = 1'b0;\n    negative = 1'b0;\n    overflow = 1'b0;\n    flag = 1'bz;\n\n    case (aluc)\n        ADD: res = $signed(a) + $signed(b);\n        ADDU: res = a + b;\n        SUB: res = $signed(a) - $signed(b);\n        SUBU: res = a - b;\n        AND: res = a & b;\n        OR: res = a | b;\n        XOR: res = a ^ b;\n        NOR: res = ~(a | b);\n        SLT: begin\n            if ($signed(a) < $signed(b)) begin\n                res = 32'b1;\n                flag = 1'bz;\n            end else begin\n                res = 32'b0;\n                flag = 1'bz;\n            end\n        end\n        SLTU: begin\n            if (a < b) begin\n                res = 32'b1;\n                flag = 1'bz;\n            end else begin\n                res = 32'b0;\n                flag = 1'bz;\n            end\n        end\n        SLL: shift_amount = a[4:0]; res = {a << shift_amount, {(32 - shift_amount){'b0}};\n        SRL: res = b >> shift_amount;\n        SRA: res = $signed(b) >>> shift_amount;\n        SLLV: res = a << (b & 5'b11111);\n        SRLV: res = b >> (b & 5'b11111);\n        SRAV: res = $signed(b) >>> (b & 5'b11111);\n        LUI: res = {a[15:0], 16'b0};\n        default: res = 32'bz;\n    endcase\n\n    r = res;\n    zero = (res == 32'b0);\n    negative = res[31];\n    if (aluc == ADD || aluc == SUBU) begin\n        carry = (a >= b);\n    end else if (aluc == SLT || aluc == SLTU) begin\n        flag = (res == 32'b1);\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:07:15.118283",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.84,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:07:15.118264"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module alu (\n    input  [31:0] a,\n    input  [31:0] b,\n    input  [5:0]  aluc,\n    output reg [31:0] r,\n    output reg zero,\n    output reg carry,\n    output reg negative,\n    output reg overflow,\n    output reg flag\n);\n\nparameter ADD = 6'b100000;\nparameter ADDU = 6'b100001;\nparameter SUB = 6'b100010;\nparameter SUBU = 6'b100011;\nparameter AND = 6'b100100;\nparameter OR = 6'b100101;\nparameter XOR = 6'b100110;\nparameter NOR = 6'b100111;\nparameter SLT = 6'b101010;\nparameter SLTU = 6'b101011;\nparameter SLL = 6'b000000;\nparameter SRL = 6'b000010;\nparameter SRA = 6'b000011;\nparameter SLLV = 6'b000100;\nparameter SRLV = 6'b000110;\nparameter SRAV = 6'b000111;\nparameter LUI = 6'b001111;\n\nreg [31:0] res;\nwire [4:0] sa;\n\nalways @(*) begin\n    zero = 1'b0;\n    carry = 1'b0;\n    negative = 1'b0;\n    overflow = 1'b0;\n    flag = 1'bz;\n\n    case (aluc)\n        ADD: begin\n            res = $signed(a) + $signed(b);\n            carry = (a[31] & ~b[31] & ~res[31]) | (~a[31] & b[31] & res[31]);\n            negative = res[31];\n            overflow = ((a[31] & b[31] & ~res[31]) | (~a[31] & ~b[31] & res[31]));\n        end\n        ADDU: begin\n            res = a + b;\n            carry = (a[31] & ~b[31] & ~res[31]) | (~a[31] & b[31] & res[31]);\n        end\n        SUB: begin\n            res = $signed(a) - $signed(b);\n            carry = (a[31] & b[31] & ~res[31]) | (~a[31] & ~b[31] & res[31]);\n            negative = res[31];\n            overflow = ((a[31] & ~b[31] & ~res[31]) | (~a[31] & b[31] & res[31]));\n        end\n        SUBU: begin\n            res = a - b;\n            carry = (a[31] & ~b[31] & ~res[31]) | (~a[31] & b[31] & res[31]);\n        end\n        AND: res = a & b;\n        OR: res = a | b;\n        XOR: res = a ^ b;\n        NOR: res = ~(a | b);\n        SLT: begin\n            if ($signed(a) < $signed(b)) begin\n                res = 32'b1;\n                flag = 1'bz;\n            end else begin\n                res = 32'b0;\n                flag = 1'bz;\n            end\n        end\n        SLTU: begin\n            if (a < b) begin\n                res = 32'b1;\n                flag = 1'bz;\n            end else begin\n                res = 32'b0;\n                flag = 1'bz;\n            end\n        end\n        SLL: sa = a[4:0]; res = {b << sa};\n        SRL: res = b >> sa;\n        SRA: res = $signed(b) >>> sa;\n        SLLV: res = a << (b & 31);\n        SRLV: res = b >> (b & 31);\n        SRAV: res = $signed(b) >>> (b & 31);\n        LUI: res = {a[15:0], 16'b0};\n        default: res = 32'bz;\n    endcase\n\n    r = res;\n    zero = (res == 32'b0);\n    negative = res[31];\n    if ((aluc == ADD) || (aluc == SUB)) begin\n        carry = (res < a) || (res < b);\n        overflow = ((a[31] == b[31]) && (res[31] != a[31]));\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:08:17.418323",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.84,
+            0.84,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:07:37.737874"
+        }
+      },
+      {
+        "code": "module alu (\n    input  [31:0] a,\n    input  [31:0] b,\n    input  [5:0] aluc,\n    output reg [31:0] r,\n    output reg zero,\n    output reg carry,\n    output reg negative,\n    output reg overflow,\n    output reg flag\n);\n\nparameter ADD = 6'b100000;\nparameter ADDU = 6'b100001;\nparameter SUB = 6'b100010;\nparameter SUBU = 6'b100011;\nparameter AND = 6'b100100;\nparameter OR = 6'b100101;\nparameter XOR = 6'b100110;\nparameter NOR = 6'b100111;\nparameter SLT = 6'b101010;\nparameter SLTU = 6'b101011;\nparameter SLL = 6'b000000;\nparameter SRL = 6'b000010;\nparameter SRA = 6'b000011;\nparameter SLLV = 6'b000100;\nparameter SRLV = 6'b000110;\nparameter SRAV = 6'b000111;\nparameter LUI = 6'b001111;\n\nreg [31:0] res;\n\nalways @(*) begin\n    zero = 1'b0;\n    carry = 1'b0;\n    negative = 1'b0;\n    overflow = 1'b0;\n    flag = 1'bz;\n\n    case (aluc)\n        ADD: res = $signed(a) + $signed(b);\n        ADDU: res = a + b;\n        SUB: res = $signed(a) - $signed(b);\n        SUBU: res = a - b;\n        AND: res = a & b;\n        OR: res = a | b;\n        XOR: res = a ^ b;\n        NOR: res = ~(a | b);\n        SLT: begin\n            if ($signed(a) < $signed(b)) begin\n                res = 32'b1;\n                flag = 1'bz;\n            end else begin\n                res = 32'b0;\n                flag = 1'b0;\n            end\n        end\n        SLTU: begin\n            if (a < b) begin\n                res = 32'b1;\n                flag = 1'bz;\n            end else begin\n                res = 32'b0;\n                flag = 1'b0;\n            end\n        end\n        SLL, SRLV: begin\n            sa = (aluc == SRL) ? a[4:0] : b[4:0];\n            res = (aluc == SLL) ? {32-sa{b[31]} , b} << sa : b >> sa;\n        end\n        SRA: res = $signed(b) >>> a[4:0];\n        LUI: res = {a[15:0], 16'b0};\n        default: res = 32'bz;\n    endcase\n\n    r = res;\n    zero = (res == 32'b0);\n    negative = res[31];\n    if (aluc == ADD || aluc == ADDU) begin\n        carry = (res < a || res < b);\n        overflow = ((a[31] == b[31]) && (res[31] != a[31]));\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:08:17.418326",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.84,
+            0.84,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:07:54.335677"
+        }
+      },
+      {
+        "code": "module alu (\n    input  [31:0] a,\n    input  [31:0] b,\n    input  [5:0]  aluc,\n    output reg [31:0] r,\n    output reg zero,\n    output reg carry,\n    output reg negative,\n    output reg overflow,\n    output reg flag\n);\n\nparameter ADD = 6'b100000;\nparameter ADDU = 6'b100001;\nparameter SUB = 6'b100010;\nparameter SUBU = 6'b100011;\nparameter AND = 6'b100100;\nparameter OR = 6'b100101;\nparameter XOR = 6'b100110;\nparameter NOR = 6'b100111;\nparameter SLT = 6'b101010;\nparameter SLTU = 6'b101011;\nparameter SLL = 6'b000000;\nparameter SRL = 6'b000010;\nparameter SRA = 6'b000011;\nparameter SLLV = 6'b000100;\nparameter SRLV = 6'b000110;\nparameter SRAV = 6'b000111;\nparameter LUI = 6'b001111;\n\nreg [31:0] res;\nwire [4:0] shift_amount;\n\nalways @(*) begin\n    zero = 1'b0;\n    carry = 1'b0;\n    negative = 1'b0;\n    overflow = 1'b0;\n    flag = 1'b0;\n    r = 32'bz;\n    res = 32'bz;\n\n    case (aluc)\n        ADD: begin\n            res = $signed(a) + $signed(b);\n            carry = ((a[31] == 1'b0 && b[31] == 1'b1 && res[31] == 1'b1) || \n                      (a[31] == 1'b1 && b[31] == 1'b0 && res[31] == 1'b0));\n            negative = res[31];\n            overflow = ((a[31] == b[31]) && (res[31] != a[31]));\n        end\n        ADDU: begin\n            r = a + b;\n            carry = ((a[31] == 1'b0 && b[31] == 1'b1 && r[31] == 1'b1) || \n                      (a[31] == 1'b1 && b[31] == 1'b0 && r[31] == 1'b0));\n        end\n        SUB: begin\n            res = $signed(a) - $signed(b);\n            carry = ((a[31] == 1'b1 && b[31] == 1'b0 && res[31] == 1'b1) || \n                      (a[31] == 1'b0 && b[31] == 1'b1 && res[31] == 1'b0));\n            negative = res[31];\n            overflow = ((a[31] != b[31]) && (res[31] != a[31]));\n        end\n        SUBU: begin\n            r = a - b;\n            carry = ((a[31] == 1'b1 && b[31] == 1'b0 && r[31] == 1'b1) || \n                      (a[31] == 1'b0 && b[31] == 1'b1 && r[31] == 1'b0));\n        end\n        AND: r = a & b;\n        OR: r = a | b;\n        XOR: r = a ^ b;\n        NOR: r = ~(a | b);\n        SLT: begin\n            if ($signed(a) < $signed(b)) flag = 1'b1;\n        end\n        SLTU: begin\n            if (a < b) flag = 1'b1;\n        end\n        SLL: shift_amount = aluc[4:0];\n        SRL: shift_amount = aluc[4:0];\n        SRA: shift_amount = aluc[4:0];\n        SLLV: begin\n            shift_amount = a[4:0];\n        end\n        SRLV: begin\n            shift_amount = a[4:0];\n        end\n        SRAV: begin\n            shift_amount = a[4:0];\n        end\n        LUI: begin\n            res = {a[15:0], 16'b0};\n        end\n        default: r = 32'bz;\n    endcase\n\n    if (r == 32'b0) zero = 1'b1;\n\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:08:17.418327",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.84,
+            0.84,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:08:17.418308"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T17:08:17.418333",
+    "total_hdl_codes": 9
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "design_name": "div_16bit",
+  "trial_num": 6,
+  "created_at": "2026-02-03T16:08:54.936232",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nalways @(A or B) begin\n    reg [31:0] dividend = {A, 8'b0};\n    reg [15:0] quotient = 0;\n    reg [15:0] remainder = 0;\n\n    for (int i = 1; i <= 16; i = i + 1) begin\n        if (remainder >= B) begin\n            quotient[i-1] = 1'b1;\n            remainder = remainder - B;\n        end\n        remainder = {remainder[7:0], 1'b0};\n    end\n\n    result = quotient;\n    odd = remainder;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:09:08.842659",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:08:59.388624"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input wire [15:0] A,\n    input wire [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(A or B) begin\n    a_reg <= A;\n    b_reg <= B;\nend\n\nalways @(*) begin\n    if (b_reg == 0) begin\n        result = 0;\n        odd = a_reg;\n    end else begin\n        reg [15:0] temp_result = 0;\n        reg [15:0] temp_odd = a_reg;\n        for (int i = 7; i >= 0; i = i - 1) begin\n            if ((temp_odd << i) >= b_reg) begin\n                temp_result[i] <= 1;\n                temp_odd = temp_odd - (b_reg << i);\n            end else begin\n                temp_result[i] <= 0;\n            end\n        end\n        result = temp_result;\n        odd = temp_odd;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:09:08.842662",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:09:04.648265"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input wire [15:0] A,\n    input wire [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nalways @(*) begin\n    a_reg = A;\n    b_reg = B;\nend\n\nreg [15:0] a_reg, b_reg;\nwire [15:0] quotient;\nwire [15:0] remainder;\n\nassign quotient = (a_reg[15:8] >= b_reg) ? 16'd1 : 16'd0;\nassign remainder = (a_reg[15:8] >= b_reg) ? a_reg[15:8] - b_reg : a_reg[15:8];\n\nalways @(*) begin\n    result = (a_reg >> 4) | (quotient << 8);\n    odd = remainder;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:09:08.842663",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:09:08.842646"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module div_16bit (\n    input wire [15:0] A,\n    input wire [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [31:0] dividend = {A, 8'b0};\nreg [15:0] quotient = 0;\nreg [15:0] remainder = 0;\n\nalways @(A or B) begin\n    if (B == 0) begin\n        result = 0;\n        odd = A;\n    end else begin\n        for (int i = 16; i > 0; i--) begin\n            remainder = {remainder[7:0], dividend[15:8]};\n            dividend = {dividend[7:0], 1'b0};\n            if (remainder >= B) begin\n                quotient[i-1] = 1;\n                remainder = remainder - B;\n            end\n        end\n        result = quotient;\n        odd = remainder;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:09:24.992352",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:09:13.759515"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(A or B) begin\n    a_reg <= A;\n    b_reg <= B;\nend\n\nalways @(*) begin\n    if (b_reg == 0) begin\n        result = 0;\n        odd = a_reg;\n    end else begin\n        reg [15:0] temp_result = 0;\n        reg [15:0] temp_odd = a_reg;\n        for (int i = 7; i >= 0; i = i - 1) begin\n            if ((temp_odd << i) >= b_reg) begin\n                temp_result[i] <= 1;\n                temp_odd = temp_odd - (b_reg << i);\n            end else begin\n                temp_result[i] <= 0;\n            end\n        end\n        result = temp_result;\n        odd = temp_odd;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:09:24.992355",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:09:18.824948"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input wire [15:0] A,\n    input wire [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(A or B) begin\n    a_reg <= A;\n    b_reg <= B;\nend\n\nalways @(*) begin\n    if (b_reg == 0) begin\n        result = 0;\n        odd = a_reg;\n    end else begin\n        reg [15:0] temp_result = 0;\n        reg [15:0] temp_odd = a_reg;\n        for (int i = 7; i >= 0; i = i - 1) begin\n            if ((temp_odd << i) >= b_reg) begin\n                temp_result[i] <= 1;\n                temp_odd = temp_odd - (b_reg << i);\n            end else begin\n                temp_result[i] <= 0;\n            end\n        end\n        result = temp_result;\n        odd = temp_odd;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:09:24.992356",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:09:24.992337"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module div_16bit (\n    input wire [15:0] A,\n    input wire [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [31:0] dividend;\nreg [15:0] quotient;\nreg [15:0] remainder;\n\nalways @(A or B) begin\n    dividend = {A, 8'b0};\n    quotient = 0;\n    remainder = A[15:8];\n\n    for (int i = 7; i >= 0; i = i - 1) begin\n        if ((remainder << i) >= B) begin\n            quotient[i] = 1;\n            remainder = remainder - (B << i);\n        end\n    end\n\n    result = {quotient, A[7:0]};\n    odd = remainder;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:09:39.500184",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:09:29.598192"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input wire [15:0] A,\n    input wire [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nalways @(*) begin\n    if (B == 0) begin\n        result = 16'd0;\n        odd = A;\n    end else begin\n        reg [15:0] temp_result = 0;\n        reg [15:0] temp_odd = A;\n        for (int i = 7; i >= 0; i = i - 1) begin\n            if ((temp_odd << i) >= B) begin\n                temp_result[i] = 1'b1;\n                temp_odd = temp_odd - (B << i);\n            end else begin\n                temp_result[i] = 1'b0;\n            end\n        end\n        result = temp_result;\n        odd = temp_odd;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:09:39.500187",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:09:34.544734"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input wire [15:0] A,\n    input wire [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(A or B) begin\n    a_reg <= A;\n    b_reg <= B;\nend\n\nalways @(*) begin\n    if (b_reg == 0) begin\n        result = 0;\n        odd = a_reg;\n    end else begin\n        reg [15:0] temp_result = 0;\n        reg [15:0] temp_odd = a_reg;\n        for (int i = 7; i >= 0; i = i - 1) begin\n            if ((temp_odd << i) >= b_reg) begin\n                temp_result[i] <= 1;\n                temp_odd = temp_odd - (b_reg << i);\n            end else begin\n                temp_result[i] <= 0;\n            end\n        end\n        result = temp_result;\n        odd = temp_odd;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:09:39.500188",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:09:39.500170"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:09:39.500193",
+    "total_hdl_codes": 9
+  }
+}

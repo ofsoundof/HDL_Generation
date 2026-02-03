@@ -1,0 +1,156 @@
+{
+  "design_name": "ring_counter",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:51:57.274371",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module ring_counter (\n    input wire clk,\n    input wire reset,\n    output reg [7:0] out\n);\n\nreg [3:0] state;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset)\n        state <= 4'b0001;\n    else\n        state <= {state[2:0], state[3]};\nend\n\nassign out = 8'b1 << state;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:52:06.074640",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:51:59.798080"
+        }
+      },
+      {
+        "code": "module ring_counter (\n    input clk,\n    input reset,\n    output reg [7:0] out\n);\n\nreg [2:0] count;\n\ninitial begin\n    count = 3'b001;\nend\n\nalways @(posedge clk or posedge reset) begin\n    if (reset)\n        count <= 3'b001;\n    else\n        count <= count == 3'b111 ? 3'b001 : count + 1;\nend\n\nassign out = 8'b0000_0000;\nout[count] = 1'b1;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:52:06.074642",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:52:02.865038"
+        }
+      },
+      {
+        "code": "module ring_counter (\n    input wire clk,\n    input wire reset,\n    output reg [7:0] out\n);\n\nreg [3:0] counter;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        counter <= 4'b0001;\n    end else begin\n        counter <= counter << 1;\n        if (counter == 8'b1000_0000) begin\n            counter <= 4'b0001;\n        end\n    end\nend\n\nassign out = 8'b0 << counter;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:52:06.074644",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:52:06.074625"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module ring_counter (\n    input wire clk,\n    input wire reset,\n    output reg [7:0] out\n);\n\nreg [3:0] state;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset)\n        state <= 4'b0001;\n    else\n        state <= {state[2:0], state[3]};\nend\n\nassign out = 8'b1 << state;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:52:13.658415",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.75,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:52:08.497089"
+        }
+      },
+      {
+        "code": "module ring_counter (\n    input wire clk,\n    input wire reset,\n    output reg [7:0] out\n);\n\nreg [3:0] state;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset)\n        state <= 4'b0001;\n    else\n        state <= {state[2:0], state[3]};\nend\n\nassign out = 8'b1 << state;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:52:13.658418",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.75,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:52:11.001910"
+        }
+      },
+      {
+        "code": "module ring_counter (\n    input wire clk,\n    input wire reset,\n    output reg [7:0] out\n);\n\nreg [3:0] state;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset)\n        state <= 4'b0001;\n    else\n        state <= {state[2:0], state[3]};\nend\n\nassign out = 8'b1 << state;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:52:13.658419",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.75,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:52:13.658402"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module ring_counter (\n    input wire clk,\n    input wire reset,\n    output reg [7:0] out\n);\n\nreg [3:0] state;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset)\n        state <= 4'b0001;\n    else\n        state <= {state[2:0], state[3]};\nend\n\nassign out = 8'b1 << state;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:52:20.902407",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:52:16.060513"
+        }
+      },
+      {
+        "code": "module ring_counter (\n    input wire clk,\n    input wire reset,\n    output reg [7:0] out\n);\n\nreg [3:0] state;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset)\n        state <= 4'b0001;\n    else\n        state <= {state[2:0], state[3]};\nend\n\nassign out = 8'b1 << state;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:52:20.902409",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:52:18.457841"
+        }
+      },
+      {
+        "code": "module ring_counter (\n    input wire clk,\n    input wire reset,\n    output reg [7:0] out\n);\n\nreg [3:0] state;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset)\n        state <= 4'b0001;\n    else\n        state <= {state[2:0], state[3]};\nend\n\nassign out = 8'b1 << state;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:52:20.902410",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:52:20.902393"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:52:20.902415",
+    "total_hdl_codes": 9
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "design_name": "freq_div",
+  "trial_num": 1,
+  "created_at": "2026-02-03T17:12:32.688357",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module freq_div (\n    input CLK_in,\n    input RST,\n    output reg CLK_50,\n    output reg CLK_10,\n    output reg CLK_1\n);\n\nreg [1:0] cnt_50;\nreg [2:0] cnt_10;\nreg [6:0] cnt_100;\n\nalways @(posedge CLK_in or posedge RST) begin\n    if (RST) begin\n        CLK_50 <= 0;\n        CLK_10 <= 0;\n        CLK_1 <= 0;\n        cnt_50 <= 2'b00;\n        cnt_10 <= 3'b000;\n        cnt_100 <= 7'b0000000;\n    end else begin\n        // CLK_50 generation\n        CLK_50 <= ~CLK_50;\n\n        // CLK_10 generation\n        if (cnt_10 == 3'b100) begin\n            CLK_10 <= ~CLK_10;\n            cnt_10 <= 3'b000;\n        end else begin\n            cnt_10 <= cnt_10 + 1;\n        end\n\n        // CLK_1 generation\n        if (cnt_100 == 7'b1100001) begin\n            CLK_1 <= ~CLK_1;\n            cnt_100 <= 7'b0000000;\n        end else begin\n            cnt_100 <= cnt_100 + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:12:55.914208",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:12:40.961429"
+        }
+      },
+      {
+        "code": "module freq_div (\n    input CLK_in,\n    input RST,\n    output reg CLK_50,\n    output reg CLK_10,\n    output reg CLK_1\n);\n\nreg [1:0] cnt_50;\nreg [3:0] cnt_10;\nreg [6:0] cnt_100;\n\nalways @(posedge CLK_in or posedge RST) begin\n    if (RST) begin\n        CLK_50 <= 0;\n        CLK_10 <= 0;\n        CLK_1 <= 0;\n        cnt_50 <= 2'b00;\n        cnt_10 <= 4'b0000;\n        cnt_100 <= 7'b0000000;\n    end else begin\n        CLK_50 <= ~CLK_50;\n        if (cnt_10 == 4'b1000) begin\n            CLK_10 <= ~CLK_10;\n            cnt_10 <= 4'b0000;\n        end else begin\n            cnt_10 <= cnt_10 + 1'b1;\n        end\n\n        if (cnt_100 == 7'b1111111) begin\n            CLK_1 <= ~CLK_1;\n            cnt_100 <= 7'b0000000;\n        end else begin\n            cnt_100 <= cnt_100 + 1'b1;\n        end\n\n        if (cnt_50 == 2'b11) begin\n            cnt_50 <= 2'b00;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.5399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:12:55.914210",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:12:48.560700"
+        }
+      },
+      {
+        "code": "module freq_div (\n    input CLK_in,\n    input RST,\n    output reg CLK_50,\n    output reg CLK_10,\n    output reg CLK_1\n);\n\nreg [1:0] cnt_50;\nreg [2:0] cnt_10;\nreg [6:0] cnt_100;\n\nalways @(posedge CLK_in or posedge RST) begin\n    if (RST) begin\n        CLK_50 <= 0;\n        CLK_10 <= 0;\n        CLK_1 <= 0;\n        cnt_50 <= 2'b00;\n        cnt_10 <= 3'b000;\n        cnt_100 <= 7'b0000000;\n    end else begin\n        // CLK_50 generation\n        CLK_50 <= ~CLK_50;\n\n        // CLK_10 generation\n        if (cnt_10 == 3'b011) begin\n            CLK_10 <= ~CLK_10;\n            cnt_10 <= 3'b000;\n        end else begin\n            cnt_10 <= cnt_10 + 1;\n        end\n\n        // CLK_1 generation\n        if (cnt_100 == 7'b0101011) begin\n            CLK_1 <= ~CLK_1;\n            cnt_100 <= 7'b0000000;\n        end else begin\n            cnt_100 <= cnt_100 + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:12:55.914211",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:12:55.914194"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module freq_div (\n    input CLK_in,\n    input RST,\n    output reg CLK_50,\n    output reg CLK_10,\n    output reg CLK_1\n);\n\nreg [1:0] cnt_50;\nreg [2:0] cnt_10;\nreg [6:0] cnt_100;\n\nalways @(posedge CLK_in or posedge RST) begin\n    if (RST) begin\n        CLK_50 <= 0;\n        CLK_10 <= 0;\n        CLK_1 <= 0;\n        cnt_50 <= 2'b00;\n        cnt_10 <= 3'b000;\n        cnt_100 <= 7'b0000000;\n    end else begin\n        // CLK_50 generation\n        CLK_50 <= ~CLK_50;\n\n        // CLK_10 generation\n        if (cnt_10 == 3'b100) begin\n            CLK_10 <= ~CLK_10;\n            cnt_10 <= 3'b000;\n        end else begin\n            cnt_10 <= cnt_10 + 1;\n        end\n\n        // CLK_1 generation\n        if (cnt_100 == 7'b1100001) begin\n            CLK_1 <= ~CLK_1;\n            cnt_100 <= 7'b0000000;\n        end else begin\n            cnt_100 <= cnt_100 + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:13:19.606641",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6399999999999999,
+            0.5399999999999999
+          ],
+          "generation_time": "2026-02-03T17:13:03.479636"
+        }
+      },
+      {
+        "code": "module freq_div (\n    input CLK_in,\n    input RST,\n    output reg CLK_50,\n    output reg CLK_10,\n    output reg CLK_1\n);\n\nreg [1:0] cnt_50;\nreg [2:0] cnt_10;\nreg [6:0] cnt_100;\n\nalways @(posedge CLK_in or posedge RST) begin\n    if (RST) begin\n        CLK_50 <= 0;\n        CLK_10 <= 0;\n        CLK_1 <= 0;\n        cnt_50 <= 2'b00;\n        cnt_10 <= 3'b000;\n        cnt_100 <= 7'b0000000;\n    end else begin\n        // CLK_50 generation\n        CLK_50 <= ~CLK_50;\n\n        // CLK_10 generation\n        if (cnt_10 == 3'b100) begin\n            CLK_10 <= ~CLK_10;\n            cnt_10 <= 3'b000;\n        end else begin\n            cnt_10 <= cnt_10 + 1;\n        end\n\n        // CLK_1 generation\n        if (cnt_100 == 7'b1100001) begin\n            CLK_1 <= ~CLK_1;\n            cnt_100 <= 7'b0000000;\n        end else begin\n            cnt_100 <= cnt_100 + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:13:19.606644",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6399999999999999,
+            0.5399999999999999
+          ],
+          "generation_time": "2026-02-03T17:13:11.582516"
+        }
+      },
+      {
+        "code": "module freq_div (\n    input CLK_in,\n    input RST,\n    output reg CLK_50,\n    output reg CLK_10,\n    output reg CLK_1\n);\n\nreg [1:0] cnt_50;\nreg [2:0] cnt_10;\nreg [6:0] cnt_100;\n\nalways @(posedge CLK_in or posedge RST) begin\n    if (RST) begin\n        CLK_50 <= 0;\n        CLK_10 <= 0;\n        CLK_1 <= 0;\n        cnt_50 <= 2'b00;\n        cnt_10 <= 3'b000;\n        cnt_100 <= 7'b0000000;\n    end else begin\n        // CLK_50 generation\n        CLK_50 <= ~CLK_50;\n\n        // CLK_10 generation\n        if (cnt_10 == 3'b100) begin\n            CLK_10 <= ~CLK_10;\n            cnt_10 <= 3'b000;\n        end else begin\n            cnt_10 <= cnt_10 + 1;\n        end\n\n        // CLK_1 generation\n        if (cnt_100 == 7'b1100001) begin\n            CLK_1 <= ~CLK_1;\n            cnt_100 <= 7'b0000000;\n        end else begin\n            cnt_100 <= cnt_100 + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:13:19.606645",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6399999999999999,
+            0.5399999999999999
+          ],
+          "generation_time": "2026-02-03T17:13:19.606626"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module freq_div (\n    input CLK_in,\n    input RST,\n    output reg CLK_50,\n    output reg CLK_10,\n    output reg CLK_1\n);\n\nreg [1:0] cnt_50;\nreg [2:0] cnt_10;\nreg [6:0] cnt_100;\n\nalways @(posedge CLK_in or posedge RST) begin\n    if (RST) begin\n        CLK_50 <= 0;\n        CLK_10 <= 0;\n        CLK_1 <= 0;\n        cnt_50 <= 2'b00;\n        cnt_10 <= 3'b000;\n        cnt_100 <= 7'b0000000;\n    end else begin\n        // CLK_50 generation\n        CLK_50 <= ~CLK_50;\n\n        // CLK_10 generation\n        if (cnt_10 == 3'b011) begin\n            CLK_10 <= ~CLK_10;\n            cnt_10 <= 3'b000;\n        end else begin\n            cnt_10 <= cnt_10 + 1;\n        end\n\n        // CLK_1 generation\n        if (cnt_100 == 7'b0101011) begin\n            CLK_1 <= ~CLK_1;\n            cnt_100 <= 7'b0000000;\n        end else begin\n            cnt_100 <= cnt_100 + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:13:42.790715",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6399999999999999,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T17:13:27.278912"
+        }
+      },
+      {
+        "code": "module freq_div (\n    input CLK_in,\n    input RST,\n    output reg CLK_50,\n    output reg CLK_10,\n    output reg CLK_1\n);\n\nreg [1:0] cnt_50;\nreg [2:0] cnt_10;\nreg [6:0] cnt_100;\n\nalways @(posedge CLK_in or posedge RST) begin\n    if (RST) begin\n        CLK_50 <= 0;\n        CLK_10 <= 0;\n        CLK_1 <= 0;\n        cnt_50 <= 2'b00;\n        cnt_10 <= 3'b000;\n        cnt_100 <= 7'b0000000;\n    end else begin\n        // CLK_50 generation\n        CLK_50 <= ~CLK_50;\n\n        // CLK_10 generation\n        if (cnt_10 == 3'b100) begin\n            CLK_10 <= ~CLK_10;\n            cnt_10 <= 3'b000;\n        end else begin\n            cnt_10 <= cnt_10 + 1;\n        end\n\n        // CLK_1 generation\n        if (cnt_100 == 7'b1100001) begin\n            CLK_1 <= ~CLK_1;\n            cnt_100 <= 7'b0000000;\n        end else begin\n            cnt_100 <= cnt_100 + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:13:42.790718",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6399999999999999,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T17:13:35.052252"
+        }
+      },
+      {
+        "code": "module freq_div (\n    input CLK_in,\n    input RST,\n    output reg CLK_50,\n    output reg CLK_10,\n    output reg CLK_1\n);\n\nreg [1:0] cnt_50;\nreg [2:0] cnt_10;\nreg [6:0] cnt_100;\n\nalways @(posedge CLK_in or posedge RST) begin\n    if (RST) begin\n        CLK_50 <= 0;\n        CLK_10 <= 0;\n        CLK_1 <= 0;\n        cnt_50 <= 2'b00;\n        cnt_10 <= 3'b000;\n        cnt_100 <= 7'b0000000;\n    end else begin\n        // CLK_50 generation\n        CLK_50 <= ~CLK_50;\n\n        // CLK_10 generation\n        if (cnt_10 == 3'b100) begin\n            CLK_10 <= ~CLK_10;\n            cnt_10 <= 3'b000;\n        end else begin\n            cnt_10 <= cnt_10 + 1;\n        end\n\n        // CLK_1 generation\n        if (cnt_100 == 7'b1100001) begin\n            CLK_1 <= ~CLK_1;\n            cnt_100 <= 7'b0000000;\n        end else begin\n            cnt_100 <= cnt_100 + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:13:42.790719",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6399999999999999,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T17:13:42.790701"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T17:13:42.790724",
+    "total_hdl_codes": 9
+  }
+}

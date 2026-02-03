@@ -1,0 +1,156 @@
+{
+  "design_name": "adder_pipe_64bit",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:47:14.360366",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module adder_pipe_64bit (\n    input wire clk,\n    input wire rst_n,\n    input wire i_en,\n    input wire [63:0] adda,\n    input wire [63:0] addb,\n    output reg [65:0] result,\n    output reg o_en\n);\n\nreg [63:0] sum_reg;\nreg carry;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        sum_reg <= 64'd0;\n        carry <= 1'b0;\n        o_en <= 1'b0;\n    end else begin\n        if (i_en) begin\n            sum_reg[0] <= adda[0] + addb[0];\n            carry <= sum_reg[0] > 63'hffffffff;\n            for (integer i = 1; i < 64; i = i + 1) begin\n                sum_reg[i] <= adda[i] + addb[i] + carry;\n                carry <= sum_reg[i] > 63'hffffffff;\n            end\n            result <= {carry, sum_reg};\n            o_en <= 1'b1;\n        end else begin\n            o_en <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:48:33.591932",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:47:20.429512"
+        }
+      },
+      {
+        "code": "module adder_pipe_64bit (\n    input wire clk,\n    input wire rst_n,\n    input wire i_en,\n    input wire [63:0] adda,\n    input wire [63:0] addb,\n    output reg [65:0] result,\n    output reg o_en\n);\n\nreg [63:0] a_reg;\nreg [63:0] b_reg;\nwire [64:0] sum;\nwire carry_out;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        a_reg <= 64'b0;\n        b_reg <= 64'b0;\n        result <= 65'b0;\n        o_en <= 1'b0;\n    end else begin\n        if (i_en) begin\n            a_reg <= adda;\n            b_reg <= addb;\n        end\n        sum = a_reg + b_reg + carry_out;\n        carry_out = sum[64];\n        result = {carry_out, sum[63:0]};\n        o_en <= i_en & (sum[64] | carry_out);\n    end\nend\n\nassign carry_out = (a_reg[63] & b_reg[63]) | (a_reg[63] & sum[63]) | (b_reg[63] & sum[63]);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:48:33.591935",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:47:26.007049"
+        }
+      },
+      {
+        "code": "module adder_pipe_64bit (\n    input wire clk,\n    input wire rst_n,\n    input wire i_en,\n    input wire [63:0] adda,\n    input wire [63:0] addb,\n    output reg [65:0] result,\n    output reg o_en\n);\n\nreg [63:0] adda_reg;\nreg [63:0] addb_reg;\nreg [64:0] sum1;\nreg [64:0] sum2;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        adda_reg <= 64'b0;\n        addb_reg <= 64'b0;\n        sum1 <= 65'b0;\n        sum2 <= 65'b0;\n        o_en <= 1'b0;\n    end else begin\n        if (i_en) begin\n            adda_reg <= adda;\n            addb_reg <= addb;\n            sum1 <= $signed(adda_reg) + $signed(addb_reg);\n            sum2 <= sum1[64] ? sum1 : sum1 + 1'b1;\n        end else begin\n            o_en <= 0;\n        end\n    end\nend\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        result <= 65'b0;\n    end else begin\n        if (sum2[64]) begin\n            result <= sum1 + 1'b1;\n        end else begin\n            result <= sum2;\n        end\n    end\nend\n\nassign o_en = sum2[64] ? 1 : 0;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:48:33.591936",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:48:33.591915"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module adder_pipe_64bit (\n    input wire clk,\n    input wire rst_n,\n    input wire i_en,\n    input wire [63:0] adda,\n    input wire [63:0] addb,\n    output reg [65:0] result,\n    output reg o_en\n);\n\nreg [63:0] a_reg;\nreg [63:0] b_reg;\nwire [64:0] sum;\nwire carry_out;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        a_reg <= 64'b0;\n        b_reg <= 64'b0;\n        result <= 65'b0;\n        o_en <= 1'b0;\n    end else begin\n        if (i_en) begin\n            a_reg <= adda;\n            b_reg <= addb;\n        end\n        sum = $unsigned(a_reg) + $unsigned(b_reg);\n        carry_out = sum[64];\n        result = {carry_out, sum[63:0]};\n        o_en <= i_en & (sum[64] | carry_out);\n    end\nend\n\nassign carry_out = (a_reg[63] & b_reg[63]) | (a_reg[63] & sum[63]) | (b_reg[63] & sum[63]);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:48:52.581737",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:48:39.957699"
+        }
+      },
+      {
+        "code": "module adder_pipe_64bit (\n    input wire clk,\n    input wire rst_n,\n    input wire i_en,\n    input wire [63:0] adda,\n    input wire [63:0] addb,\n    output reg [65:0] result,\n    output reg o_en\n);\n\nreg [64:0] sum_reg;\nwire carry_out;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        sum_reg <= 64'd0;\n        carry_out <= 1'b0;\n        o_en <= 1'b0;\n    end else begin\n        if (i_en) begin\n            sum_reg[0] <= adda[0] + addb[0];\n            for (integer i = 1; i < 64; i = i + 1) begin\n                sum_reg[i] <= sum_reg[i-1][63] + adda[i] + addb[i];\n            end\n            carry_out <= sum_reg[63][63];\n            result <= {carry_out, sum_reg[63:0]};\n            o_en <= 1'b1;\n        end else begin\n            o_en <= 1'b0;\n        end\n    end\nend\n\nassign carry_out = (sum_reg[63] & sum_reg[64]);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:48:52.581740",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:48:46.248676"
+        }
+      },
+      {
+        "code": "module adder_pipe_64bit (\n    input wire clk,\n    input wire rst_n,\n    input wire i_en,\n    input wire [63:0] adda,\n    input wire [63:0] addb,\n    output reg [65:0] result,\n    output reg o_en\n);\n\nreg [63:0] a_reg;\nreg [63:0] b_reg;\nreg carry_out;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        a_reg <= 64'b0;\n        b_reg <= 64'b0;\n        result <= 65'b0;\n        o_en <= 1'b0;\n    end else begin\n        if (i_en) begin\n            a_reg <= adda;\n            b_reg <= addb;\n        end\n        sum = a_reg + b_reg + carry_out;\n        carry_out = sum[64];\n        result = {carry_out, sum[63:0]};\n        o_en <= i_en & (sum[64] | carry_out);\n    end\nend\n\nassign carry_out = (a_reg[63] & b_reg[63]) | (a_reg[63] & sum[63]) | (b_reg[63] & sum[63]);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:48:52.581741",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:48:52.581723"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module adder_pipe_64bit (\n    input wire clk,\n    input wire rst_n,\n    input wire i_en,\n    input wire [63:0] adda,\n    input wire [63:0] addb,\n    output reg [65:0] result,\n    output reg o_en\n);\n\nreg [63:0] a_reg;\nreg [63:0] b_reg;\nwire [64:0] sum;\nwire carry_out;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        a_reg <= 64'b0;\n        b_reg <= 64'b0;\n        result <= 65'b0;\n        o_en <= 1'b0;\n    end else begin\n        if (i_en) begin\n            a_reg <= adda;\n            b_reg <= addb;\n        end\n        sum = a_reg + b_reg + carry_out;\n        carry_out = sum[64];\n        result <= {carry_out, sum[63:0]};\n        o_en <= i_en & (sum[64] | carry_out);\n    end\nend\n\nassign carry_out = (a_reg[63] & b_reg[63]) | (a_reg[63] & sum[63]) | (b_reg[63] & sum[63]);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:49:12.351400",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:48:58.974877"
+        }
+      },
+      {
+        "code": "module adder_pipe_64bit (\n    input wire clk,\n    input wire rst_n,\n    input wire i_en,\n    input wire [63:0] adda,\n    input wire [63:0] addb,\n    output reg [65:0] result,\n    output reg o_en\n);\n\nreg [63:0] a_reg;\nreg [63:0] b_reg;\nreg [64:0] sum;\nwire carry_out;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        a_reg <= 64'b0;\n        b_reg <= 64'b0;\n        result <= 65'b0;\n        o_en <= 1'b0;\n    end else begin\n        if (i_en) begin\n            a_reg <= adda;\n            b_reg <= addb;\n        end\n        sum = a_reg + b_reg + carry_out;\n        carry_out = sum[64];\n        result = {carry_out, sum[63:0]};\n        o_en <= i_en & (sum[64] | carry_out);\n    end\nend\n\nassign carry_out = (a_reg[63] & b_reg[63]) | (a_reg[63] & sum[63]) | (b_reg[63] & sum[63]);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:49:12.351402",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:49:05.384721"
+        }
+      },
+      {
+        "code": "module adder_pipe_64bit (\n    input wire clk,\n    input wire rst_n,\n    input wire i_en,\n    input wire [63:0] adda,\n    input wire [63:0] addb,\n    output reg [65:0] result,\n    output reg o_en\n);\n\nreg [63:0] a_reg;\nreg [63:0] b_reg;\nwire [64:0] sum1;\nwire [64:0] sum2;\nwire carry_out;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        a_reg <= 64'b0;\n        b_reg <= 64'b0;\n        result <= 65'b0;\n        o_en <= 1'b0;\n    end else begin\n        if (i_en) begin\n            a_reg <= adda;\n            b_reg <= addb;\n        end\n        sum1 = $signed(a_reg) + $signed(b_reg);\n        carry_out = sum1[64];\n        sum2 = carry_out ? sum1 + 1'b1 : sum1;\n        result = {carry_out, sum2[63:0]};\n        o_en <= i_en & (sum2[64] | carry_out);\n    end\nend\n\nassign carry_out = (a_reg[63] & b_reg[63]) | (a_reg[63] & sum1[63]) | (b_reg[63] & sum1[63]);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:49:12.351403",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:49:12.351387"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:49:12.351408",
+    "total_hdl_codes": 9
+  }
+}

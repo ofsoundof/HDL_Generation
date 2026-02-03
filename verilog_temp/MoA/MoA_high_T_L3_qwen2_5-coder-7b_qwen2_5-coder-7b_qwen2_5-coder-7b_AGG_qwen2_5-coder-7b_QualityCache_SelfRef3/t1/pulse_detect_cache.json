@@ -1,0 +1,156 @@
+{
+  "design_name": "pulse_detect",
+  "trial_num": 1,
+  "created_at": "2026-02-03T17:04:09.807352",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module pulse_detect (\n    input clk,\n    input rst_n,\n    input data_in,\n    output reg data_out\n);\n\n    typedef enum logic [1:0] {\n        IDLE,\n        RISING,\n        FALLING,\n        PULSE_END\n    } state_t;\n\n    state_t state, next_state;\n\n    always @(posedge clk or negedge rst_n) begin\n        if (~rst_n) begin\n            state <= IDLE;\n            data_out <= 0;\n        end else begin\n            state <= next_state;\n            case (state)\n                IDLE: begin\n                    if (data_in == 1'b1) begin\n                        next_state = RISING;\n                    end else begin\n                        next_state = IDLE;\n                    end\n                end\n                RISING: begin\n                    if (data_in == 1'b0) begin\n                        next_state = FALLING;\n                    end else begin\n                        next_state = RISING;\n                    end\n                end\n                FALLING: begin\n                    if (data_in == 1'b0) begin\n                        next_state = FALLING;\n                    end else begin\n                        next_state = PULSE_END;\n                    end\n                end\n                PULSE_END: begin\n                    data_out <= 1;\n                    next_state = IDLE;\n                end\n            endcase\n        end\n    end\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:04:29.440786",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:04:16.220676"
+        }
+      },
+      {
+        "code": "module pulse_detect (\n    input wire clk,\n    input wire rst_n,\n    input wire data_in,\n    output reg data_out\n);\n\nreg [1:0] state;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= 2'b00;\n        data_out <= 1'b0;\n    end else begin\n        case (state)\n            2'b00: begin\n                if (data_in == 1'b1)\n                    state <= 2'b01;\n                else\n                    state <= 2'b00;\n            end\n            2'b01: begin\n                if (data_in == 1'b0)\n                    state <= 2'b10;\n                else\n                    state <= 2'b01;\n            end\n            2'b10: begin\n                data_out <= 1'b1;\n                if (data_in == 1'b1)\n                    state <= 2'b11;\n                else\n                    state <= 2'b00;\n            end\n            2'b11: begin\n                if (data_in == 1'b0)\n                    state <= 2'b00;\n                else\n                    state <= 2'b11;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:04:29.440789",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:04:22.838206"
+        }
+      },
+      {
+        "code": "module pulse_detect (\n    input wire clk,\n    input wire rst_n,\n    input wire data_in,\n    output reg data_out\n);\n\nreg [1:0] state, next_state;\n\nparameter IDLE = 2'b00;\nparameter EDGE_1 = 2'b01;\nparameter EDGE_2 = 2'b10;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= IDLE;\n        data_out <= 0;\n    end else begin\n        state <= next_state;\n        case (state)\n            IDLE: begin\n                data_out <= 0;\n                if (data_in == 1'b1)\n                    next_state = EDGE_1;\n                else\n                    next_state = IDLE;\n            end\n            EDGE_1: begin\n                data_out <= 0;\n                next_state = EDGE_2;\n            end\n            EDGE_2: begin\n                data_out <= 1;\n                if (data_in == 1'b0)\n                    next_state = IDLE;\n                else\n                    next_state = EDGE_1;\n            end\n            default: begin\n                state <= IDLE;\n                data_out <= 0;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:04:29.440790",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:04:29.440772"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module pulse_detect (\n    input wire clk,\n    input wire rst_n,\n    input wire data_in,\n    output reg data_out\n);\n\ntypedef enum logic [1:0] {\n    IDLE,\n    RISING,\n    FALLING,\n    PULSE_END\n} state_t;\n\nstate_t state, next_state;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= IDLE;\n        data_out <= 0;\n    end else begin\n        state <= next_state;\n        case (state)\n            IDLE: begin\n                if (data_in == 1'b1) begin\n                    next_state = RISING;\n                end else begin\n                    next_state = IDLE;\n                end\n            end\n            RISING: begin\n                if (data_in == 1'b0) begin\n                    next_state = FALLING;\n                end else begin\n                    next_state = RISING;\n                end\n            end\n            FALLING: begin\n                if (data_in == 1'b0) begin\n                    next_state = FALLING;\n                end else begin\n                    next_state = PULSE_END;\n                end\n            end\n            PULSE_END: begin\n                data_out <= 1;\n                next_state = IDLE;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:04:49.570030",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:04:36.264195"
+        }
+      },
+      {
+        "code": "module pulse_detect (\n    input wire clk,\n    input wire rst_n,\n    input wire data_in,\n    output reg data_out\n);\n\ntypedef enum logic [1:0] {\n    IDLE,\n    RISING,\n    FALLING,\n    PULSE_END\n} state_t;\n\nreg [1:0] state;\nreg next_state;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= IDLE;\n        data_out <= 0;\n    end else begin\n        state <= next_state;\n        case (state)\n            IDLE: begin\n                if (data_in == 1'b1) begin\n                    next_state = RISING;\n                end else begin\n                    next_state = IDLE;\n                end\n            end\n            RISING: begin\n                if (data_in == 1'b0) begin\n                    next_state = FALLING;\n                end else begin\n                    next_state = RISING;\n                end\n            end\n            FALLING: begin\n                if (data_in == 1'b0) begin\n                    next_state = FALLING;\n                end else begin\n                    next_state = PULSE_END;\n                end\n            end\n            PULSE_END: begin\n                data_out <= 1'b1;\n                next_state = IDLE;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.74,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:04:49.570033",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:04:42.844981"
+        }
+      },
+      {
+        "code": "module pulse_detect (\n    input clk,\n    input rst_n,\n    input data_in,\n    output reg data_out\n);\n\ntypedef enum logic [1:0] {\n    IDLE,\n    RISING,\n    FALLING,\n    PULSE_END\n} state_t;\n\nstate_t state, next_state;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (~rst_n) begin\n        state <= IDLE;\n        data_out <= 0;\n    end else begin\n        state <= next_state;\n        case (state)\n            IDLE: begin\n                if (data_in == 1'b1) begin\n                    next_state = RISING;\n                end else begin\n                    next_state = IDLE;\n                end\n            end\n            RISING: begin\n                if (data_in == 1'b0) begin\n                    next_state = FALLING;\n                end else begin\n                    next_state = RISING;\n                end\n            end\n            FALLING: begin\n                if (data_in == 1'b0) begin\n                    next_state = FALLING;\n                end else begin\n                    next_state = PULSE_END;\n                end\n            end\n            PULSE_END: begin\n                data_out <= 1;\n                next_state = IDLE;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:04:49.570034",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:04:49.570017"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module pulse_detect (\n    input wire clk,\n    input wire rst_n,\n    input wire data_in,\n    output reg data_out\n);\n\n    typedef enum logic [1:0] {\n        IDLE,\n        RISING,\n        FALLING,\n        PULSE_END\n    } state_t;\n\n    state_t state, next_state;\n\n    always @(posedge clk or negedge rst_n) begin\n        if (~rst_n) begin\n            state <= IDLE;\n            data_out <= 0;\n        end else begin\n            state <= next_state;\n            case (state)\n                IDLE: begin\n                    if (data_in == 1'b1) begin\n                        next_state = RISING;\n                    end else begin\n                        next_state = IDLE;\n                    end\n                end\n                RISING: begin\n                    if (data_in == 1'b0) begin\n                        next_state = FALLING;\n                    end else begin\n                        next_state = RISING;\n                    end\n                end\n                FALLING: begin\n                    data_out <= 1;\n                    if (data_in == 1'b0) begin\n                        next_state = IDLE;\n                    end else begin\n                        next_state = FALLING;\n                    end\n                end\n                PULSE_END: begin\n                    data_out <= 1;\n                    next_state = IDLE;\n                end\n            endcase\n        end\n    end\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:05:10.045084",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:04:56.579061"
+        }
+      },
+      {
+        "code": "module pulse_detect (\n    input wire clk,\n    input wire rst_n,\n    input wire data_in,\n    output reg data_out\n);\n\nreg [1:0] state, next_state;\n\nparameter IDLE = 2'b00;\nparameter RISING = 2'b01;\nparameter FALLING = 2'b10;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= IDLE;\n        data_out <= 0;\n    end else begin\n        state <= next_state;\n        case (state)\n            IDLE: begin\n                data_out <= 0;\n                if (data_in == 1'b1)\n                    next_state = RISING;\n                else\n                    next_state = IDLE;\n            end\n            RISING: begin\n                data_out <= 0;\n                if (data_in == 1'b0)\n                    next_state = FALLING;\n                else\n                    next_state = RISING;\n            end\n            FALLING: begin\n                data_out <= 1;\n                if (data_in == 1'b0)\n                    next_state = IDLE;\n                else\n                    next_state = FALLING;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:05:10.045087",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:05:03.096320"
+        }
+      },
+      {
+        "code": "module pulse_detect (\n    input wire clk,\n    input wire rst_n,\n    input wire data_in,\n    output reg data_out\n);\n\nreg [1:0] state, next_state;\n\nparameter IDLE = 2'b00;\nparameter RISING = 2'b01;\nparameter FALLING = 2'b10;\nparameter PULSE_END = 2'b11;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= IDLE;\n        data_out <= 0;\n    end else begin\n        state <= next_state;\n        case (state)\n            IDLE: begin\n                data_out <= 0;\n                if (data_in == 1'b1)\n                    next_state = RISING;\n                else\n                    next_state = IDLE;\n            end\n            RISING: begin\n                data_out <= 0;\n                if (data_in == 1'b0)\n                    next_state = FALLING;\n                else\n                    next_state = RISING;\n            end\n            FALLING: begin\n                data_out <= 0;\n                if (data_in == 1'b0)\n                    next_state = FALLING;\n                else\n                    next_state = PULSE_END;\n            end\n            PULSE_END: begin\n                data_out <= 1;\n                if (data_in == 1'b0)\n                    next_state = IDLE;\n                else\n                    next_state = RISING;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:05:10.045088",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:05:10.045070"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T17:05:10.045093",
+    "total_hdl_codes": 9
+  }
+}

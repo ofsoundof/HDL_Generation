@@ -1,0 +1,156 @@
+{
+  "design_name": "multi_8bit",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:39:39.694311",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module multi_8bit (\n    input [7:0] A,\n    input [7:0] B,\n    output reg [15:0] product\n);\n\nalways @(*) begin\n    product = 16'd0;\n    for (integer i = 0; i < 8; i = i + 1) begin\n        if (B[i]) begin\n            product = product + (A << i);\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:39:41.575407",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:39:40.357548"
+        }
+      },
+      {
+        "code": "module multi_8bit (\n    input [7:0] A,\n    input [7:0] B,\n    output reg [15:0] product\n);\n\nalways @(*) begin\n    product = 0;\n    for (integer i = 0; i < 8; i = i + 1) begin\n        if (B[i]) begin\n            product = product + (A << i);\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:39:41.575410",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:39:40.962347"
+        }
+      },
+      {
+        "code": "module multi_8bit (\n    input [7:0] A,\n    input [7:0] B,\n    output reg [15:0] product\n);\n\ninteger i;\nalways @(*) begin\n    product = 0;\n    for (i = 0; i < 8; i = i + 1) begin\n        if (B[i]) begin\n            product = product + (A << i);\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:39:41.575412",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:39:41.575394"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module multi_8bit (\n    input [7:0] A,\n    input [7:0] B,\n    output reg [15:0] product\n);\n\nalways @(*) begin\n    product = 0;\n    for (integer i = 0; i < 8; i = i + 1) begin\n        if (B[i]) begin\n            product = product + (A << i);\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:39:43.439727",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:39:42.257798"
+        }
+      },
+      {
+        "code": "module multi_8bit (\n    input [7:0] A,\n    input [7:0] B,\n    output reg [15:0] product\n);\n\nalways @(*) begin\n    product = 0;\n    for (integer i = 0; i < 8; i = i + 1) begin\n        if (B[i]) begin\n            product = product + (A << i);\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:39:43.439729",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:39:42.862842"
+        }
+      },
+      {
+        "code": "module multi_8bit (\n    input [7:0] A,\n    input [7:0] B,\n    output reg [15:0] product\n);\n\nalways @(*) begin\n    product = 0;\n    for (integer i = 0; i < 8; i = i + 1) begin\n        if (B[i]) begin\n            product = product + (A << i);\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:39:43.439730",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:39:43.439716"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module multi_8bit (\n    input [7:0] A,\n    input [7:0] B,\n    output reg [15:0] product\n);\n\nalways @(*) begin\n    product = 16'd0;\n    for (integer i = 0; i < 8; i = i + 1) begin\n        if (B[i]) begin\n            product = product + (A << i);\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:39:45.207458",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:39:44.028750"
+        }
+      },
+      {
+        "code": "module multi_8bit (\n    input [7:0] A,\n    input [7:0] B,\n    output reg [15:0] product\n);\n\nalways @(*) begin\n    product = 0;\n    for (integer i = 0; i < 8; i = i + 1) begin\n        if (B[i]) begin\n            product = product + (A << i);\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:39:45.207461",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:39:44.632932"
+        }
+      },
+      {
+        "code": "module multi_8bit (\n    input [7:0] A,\n    input [7:0] B,\n    output reg [15:0] product\n);\n\nalways @(*) begin\n    product = 0;\n    for (integer i = 0; i < 8; i = i + 1) begin\n        if (B[i]) begin\n            product = product + (A << i);\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:39:45.207462",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:39:45.207446"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:39:45.207468",
+    "total_hdl_codes": 9
+  }
+}

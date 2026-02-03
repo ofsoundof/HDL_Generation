@@ -1,0 +1,156 @@
+{
+  "design_name": "sub_64bit",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:35:37.400333",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module sub_64bit (\n    input [63:0] A,\n    input [63:0] B,\n    output reg [63:0] result,\n    output reg overflow\n);\n\nassign {overflow, result} = $signed(A) - $signed(B);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:35:38.681790",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:35:37.846721"
+        }
+      },
+      {
+        "code": "module sub_64bit (\n    input [63:0] A,\n    input [63:0] B,\n    output reg [63:0] result,\n    output reg overflow\n);\n\nassign {overflow, result} = $signed(A) - $signed(B);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:35:38.681792",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:35:38.278610"
+        }
+      },
+      {
+        "code": "module sub_64bit (\n    input [63:0] A,\n    input [63:0] B,\n    output reg [63:0] result,\n    output reg overflow\n);\n\nassign {overflow, result} = $signed(A) - $signed(B);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:35:38.681793",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:35:38.681779"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module sub_64bit (\n    input [63:0] A,\n    input [63:0] B,\n    output reg [63:0] result,\n    output reg overflow\n);\n\nassign {overflow, result} = $signed(A) - $signed(B);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:35:42.631707",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:39.185476"
+        }
+      },
+      {
+        "code": "module sub_64bit (\n    input [63:0] A,\n    input [63:0] B,\n    output reg [63:0] result,\n    output reg overflow\n);\n\nassign {overflow, result} = $signed(A) - $signed(B);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:35:42.631709",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:39.618563"
+        }
+      },
+      {
+        "code": "module sub_64bit (\n    input [63:0] A,\n    input [63:0] B,\n    output reg [63:0] result,\n    output reg overflow\n);\n\nreg [63:0] signed_A, signed_B;\n\nassign signed_A = $signed(A);\nassign signed_B = $signed(B);\n\nassign {overflow, result} = signed_A - signed_B;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:35:42.631710",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:42.631693"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module sub_64bit (\n    input [63:0] A,\n    input [63:0] B,\n    output reg [63:0] result,\n    output reg overflow\n);\n\nreg [63:0] _result;\n\nassign _result = $signed(A) - $signed(B);\nassign result = _result;\nassign overflow = (A[63] != B[63]) && (_result[63] != A[63]);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:35:45.467810",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:44.529496"
+        }
+      },
+      {
+        "code": "module sub_64bit (\n    input [63:0] A,\n    input [63:0] B,\n    output reg [63:0] result,\n    output reg overflow\n);\n\nassign {overflow, result} = $signed(A) - $signed(B);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:35:45.467812",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:45.032803"
+        }
+      },
+      {
+        "code": "module sub_64bit (\n    input [63:0] A,\n    input [63:0] B,\n    output reg [63:0] result,\n    output reg overflow\n);\n\nassign {overflow, result} = $signed(A) - $signed(B);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:35:45.467813",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:45.467798"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:35:45.467818",
+    "total_hdl_codes": 9
+  }
+}

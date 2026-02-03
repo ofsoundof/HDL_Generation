@@ -1,0 +1,156 @@
+{
+  "design_name": "multi_16bit",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:41:38.414343",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module multi_16bit (\n    input wire clk,\n    input wire rst_n,\n    input wire start,\n    input wire [15:0] ain,\n    input wire [15:0] bin,\n    output reg [31:0] yout,\n    output reg done\n);\n\n    reg [4:0] i;\n    reg [15:0] areg, breg;\n    reg [31:0] yout_r;\n    reg done_r;\n\n    always @(posedge clk or negedge rst_n) begin\n        if (!rst_n) begin\n            i <= 5'b00000;\n            areg <= 16'b0000000000000000;\n            breg <= 16'b0000000000000000;\n            yout_r <= 32'b0000000000000000000000000000000\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:41:57.110457",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:41:43.441007"
+        }
+      },
+      {
+        "code": "module multi_16bit (\n    input wire clk,\n    input wire rst_n,\n    input wire start,\n    input wire [15:0] ain,\n    input wire [15:0] bin,\n    output reg [31:0] yout,\n    output reg done\n);\n\nreg [4:0] i;\nreg [15:0] areg, breg;\nreg [31:0] yout_r;\nwire [31:0] shifted_breg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        i <= 0;\n        areg <= 0;\n        breg <= 0;\n        yout_r <= 0;\n        done <= 0;\n    end else begin\n        if (start) begin\n            if (i == 0) begin\n                areg <= ain;\n                breg <= bin;\n            end else if (i < 17 && areg[i-1] == 1) begin\n                shifted_breg <= breg << (i-1);\n                yout_r <= yout_r + shifted_breg;\n            end\n        end\n        i <= (start && i < 17) ? i + 1 : 0;\n    end\nend\n\nassign done = (i == 16);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        yout <= 0;\n    else\n        yout <= yout_r;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:41:57.110459",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:41:49.864551"
+        }
+      },
+      {
+        "code": "module multi_16bit (\n    input wire clk,\n    input wire rst_n,\n    input wire start,\n    input wire [15:0] ain,\n    input wire [15:0] bin,\n    output reg [31:0] yout,\n    output reg done\n);\n\nreg [4:0] i;\nreg [15:0] areg, breg;\nreg [31:0] yout_r;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        i <= 0;\n        areg <= 0;\n        breg <= 0;\n        yout_r <= 0;\n        done <= 0;\n    end else begin\n        if (start) begin\n            if (i == 0) begin\n                areg <= ain;\n                breg <= bin;\n            end else if (i < 17) begin\n                if (areg[i-1]) begin\n                    yout_r <= yout_r + (breg << (i-1));\n                end\n                i <= i + 1;\n            end else begin\n                done <= 1;\n            end\n        end else begin\n            i <= 0;\n            done <= 0;\n        end\n    end\nend\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        done <= 0;\n    end else begin\n        if (i == 17) begin\n            done <= 0;\n        end\n    end\nend\n\nassign yout = yout_r;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:41:57.110460",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:41:57.110442"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module multi_16bit (\n    input wire clk,\n    input wire rst_n,\n    input wire start,\n    input wire [15:0] ain,\n    input wire [15:0] bin,\n    output reg [31:0] yout,\n    output reg done\n);\n\nreg [4:0] i;\nreg [15:0] areg, breg;\nreg [31:0] yout_r;\nreg done_r;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        i <= 0;\n        areg <= 0;\n        breg <= 0;\n        yout_r <= 0;\n        done_r <= 0;\n    end else begin\n        if (start) begin\n            if (i == 0) begin\n                areg <= ain;\n                breg <= bin;\n            end else if (i < 17 && areg[i-1] == 1) begin\n                yout_r <= yout_r + (breg << i);\n            end\n            i <= i + 1;\n        end else begin\n            i <= 0;\n        end\n    end\nend\n\nassign done = done_r;\nassign yout = yout_r;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:42:10.452579",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:42:00.283518"
+        }
+      },
+      {
+        "code": "module multi_16bit (\n    input wire clk,\n    input wire rst_n,\n    input wire start,\n    input wire [15:0] ain,\n    input wire [15:0] bin,\n    output reg [31:0] yout,\n    output reg done\n);\n\nreg [4:0] i;\nreg [15:0] areg, breg;\nreg [31:0] yout_r;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        i <= 0;\n        areg <= 0;\n        breg <= 0;\n        yout_r <= 0;\n        done <= 0;\n    end else begin\n        if (start) begin\n            if (i == 0) begin\n                areg <= ain;\n                breg <= bin;\n            end else if (i < 17 && areg[i-1] == 1'b1) begin\n                yout_r <= yout_r + (breg << (i-1));\n            end\n            i <= i + 1;\n        end else begin\n            i <= 0;\n        end\n    end\nend\n\nassign done = (i == 16);\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        yout <= 32'b0;\n    else\n        yout <= yout_r;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:42:10.452582",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:42:06.972835"
+        }
+      },
+      {
+        "code": "module multi_16bit (\n    input wire clk,\n    input wire rst_n,\n    input wire start,\n    input wire [15:0] ain,\n    input wire [15:0] bin,\n    output reg [31:0] yout,\n    output reg done\n);\n\nreg [4:0] i;\nreg [15:0] areg, breg;\nreg [31:0] yout_r;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        i <= 0;\n        areg <= 0;\n        breg <= 0;\n        yout_r <= 0;\n        done <= 0;\n    end else begin\n        if (start) begin\n            if (i == 0) begin\n                areg <= ain;\n                breg <= bin;\n            end else if (i < 17 && areg[i-1]) begin\n                yout_r <= yout_r + (breg << (i-1));\n            end\n        end else begin\n            i <= 0;\n        end\n    end\nend\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        done <= 0;\n    else\n        done <= (i == 16);\nend\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        yout <= 0;\n    else\n        yout <= yout_r;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:42:10.452583",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:42:10.452564"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module multi_16bit (\n    input wire clk,\n    input wire rst_n,\n    input wire start,\n    input wire [15:0] ain,\n    input wire [15:0] bin,\n    output reg [31:0] yout,\n    output reg done\n);\n\nreg [4:0] i;\nreg [15:0] areg, breg;\nreg [31:0] yout_r;\nreg done_r;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        i <= 0;\n        areg <= 0;\n        breg <= 0;\n        yout_r <= 0;\n        done_r <= 0;\n    end else begin\n        if (start) begin\n            if (i == 0) begin\n                areg <= ain;\n                breg <= bin;\n            end else if (i < 17 && areg[i-1]) begin\n                yout_r <= yout_r + (breg << (i-1));\n            end\n            i <= i + 1;\n        end else begin\n            i <= 0;\n        end\n    end\nend\n\nassign done = done_r;\nassign yout = yout_r;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:42:20.424362",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:42:12.072840"
+        }
+      },
+      {
+        "code": "module multi_16bit (\n    input wire clk,\n    input wire rst_n,\n    input wire start,\n    input wire [15:0] ain,\n    input wire [15:0] bin,\n    output reg [31:0] yout,\n    output reg done\n);\n\nreg [4:0] i;\nreg [15:0] areg, breg;\nreg [31:0] yout_r;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        i <= 0;\n        areg <= 0;\n        breg <= 0;\n        yout_r <= 0;\n        done <= 0;\n    end else begin\n        if (start && i < 17) begin\n            if (i == 0) begin\n                areg <= ain;\n                breg <= bin;\n            end else if (areg[i-1] == 1) begin\n                yout_r <= yout_r + (breg << (i-1));\n            end\n            i <= i + 1;\n        end else if (!start) begin\n            i <= 0;\n        end\n    end\nend\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        done <= 0;\n    else\n        done <= (i == 16);\nend\n\nassign yout = yout_r;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:42:20.424365",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:42:18.706392"
+        }
+      },
+      {
+        "code": "module multi_16bit (\n    input wire clk,\n    input wire rst_n,\n    input wire start,\n    input wire [15:0] ain,\n    input wire [15:0] bin,\n    output reg [31:0] yout,\n    output reg done\n);\n\nreg [4:0] i;\nreg [15:0] areg, breg;\nreg [31:0] yout_r;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        i <= 0;\n        areg <= 0;\n        breg <= 0;\n        yout_r <= 0;\n        done <= 0;\n    end else begin\n        if (start) begin\n            if (i == 0) begin\n                areg <= ain;\n                breg <= bin;\n            end else if (i < 17 && areg[i-1]) begin\n                yout_r <= yout_r + (breg << (i-1));\n            end\n        end else begin\n            i <= 0;\n        end\n    end\nend\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        done <= 0;\n    else\n        done <= (i == 16);\nend\n\nassign yout = yout_r;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:42:20.424366",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:42:20.424348"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:42:20.424373",
+    "total_hdl_codes": 9
+  }
+}

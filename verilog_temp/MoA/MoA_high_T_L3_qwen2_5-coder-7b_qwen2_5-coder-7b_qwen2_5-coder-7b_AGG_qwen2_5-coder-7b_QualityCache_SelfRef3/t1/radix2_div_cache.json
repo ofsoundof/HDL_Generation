@@ -1,0 +1,156 @@
+{
+  "design_name": "radix2_div",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:33:29.106372",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module radix2_div (\n    input  clk,\n    input  rst,\n    input  sign,\n    input  [7:0] dividend,\n    input  [7:0] divisor,\n    input  opn_valid,\n    output reg res_valid,\n    output [15:0] result\n);\n\nreg [7:0] SR;\nreg [7:0] NEG_DIVISOR;\nreg [2:0] cnt;\nreg start_cnt;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        res_valid <= 0;\n        SR <= 0;\n        NEG_DIVISOR <= 0;\n        cnt <= 0;\n        start_cnt <= 0;\n        result <= 0;\n    end else begin\n        if (opn_valid && !res_valid) begin\n            SR <= (sign == 1'b1) ? {1'b0, dividend} : {1'b0, dividend};\n            NEG_DIVISOR <= (sign == 1'b1) ? {1'b1, ~divisor + 1} : {1'b0, divisor};\n            cnt <= 3'd1;\n            start_cnt <= 1'b1;\n        end else if (start_cnt && cnt < 8'd8) begin\n            SR[7:1] <= SR[6:0];\n            SR[0] <= SR[7] & ~SR[6];\n            if ((SR[7:6] - NEG_DIVISOR[7:6]) >= 0) begin\n                SR[7] <= 1'b1;\n                SR[6:0] <= SR[5:0] - NEG_DIVISOR[5:0];\n            end else begin\n                SR[7] <= 1'b0;\n                SR[6:0] <= SR[5:0];\n            end\n            cnt <= cnt + 1;\n        end\n\n        if (cnt == 8'd8) begin\n            start_cnt <= 1'b0;\n            res_valid <= 1'b1;\n            result[7:0] <= SR[7:0];\n            result[15:8] <= SR[15:8];\n        end else if (!opn_valid) begin\n            res_valid <= 0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:34:00.357878",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:33:39.112977"
+        }
+      },
+      {
+        "code": "module radix2_div (\n    input clk,\n    input rst,\n    input sign,\n    input [7:0] dividend,\n    input [7:0] divisor,\n    input opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n\nreg [7:0] abs_dividend;\nreg [7:0] abs_divisor;\nreg [7:0] remainder;\nreg [7:0] quotient;\nreg [8:0] SR;\nreg [2:0] cnt;\nreg start_cnt;\nreg [7:0] NEG_DIVISOR;\nreg [15:0] tmp_result;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        res_valid <= 0;\n        result <= 0;\n        abs_dividend <= 0;\n        abs_divisor <= 0;\n        remainder <= 0;\n        quotient <= 0;\n        SR <= 0;\n        cnt <= 0;\n        start_cnt <= 0;\n        NEG_DIVISOR <= 0;\n        tmp_result <= 0;\n    end else begin\n        if (opn_valid && !res_valid) begin\n            abs_dividend <= sign ? (dividend < 0 ? -dividend : dividend) : dividend;\n            abs_divisor <= sign ? (divisor < 0 ? -divisor : divisor) : divisor;\n            remainder <= abs_dividend << 1;\n            quotient <= 0;\n            SR <= abs_dividend << 1;\n            cnt <= 1;\n            start_cnt <= 1;\n            NEG_DIVISOR <= ~abs_divisor + 1;\n        end else if (start_cnt) begin\n            if (cnt == 8) begin\n                res_valid <= 1;\n                tmp_result[7:0] <= remainder;\n                tmp_result[15:8] <= quotient;\n                result <= tmp_result;\n                cnt <= 0;\n                start_cnt <= 0;\n                res_valid <= 0;\n            end else begin\n                if (SR < NEG_DIVISOR) begin\n                    SR[7:0] <= SR + abs_divisor;\n                    quotient <= quotient + 1 << (8 - cnt);\n                end else begin\n                    SR[7:0] <= SR - abs_divisor;\n                    quotient <= quotient - 1 << (8 - cnt);\n                end\n                SR[8] <= SR[7];\n                cnt <= cnt + 1;\n            end\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.84,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:34:00.357881",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:33:50.251192"
+        }
+      },
+      {
+        "code": "module radix2_div (\n    input wire clk,\n    input wire rst,\n    input wire sign,\n    input wire [7:0] dividend,\n    input wire [7:0] divisor,\n    input wire opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n\n    reg [7:0] abs_dividend;\n    reg [7:0] abs_divisor;\n    reg [15:0] SR;\n    reg [2:0] cnt;\n    reg start_cnt;\n    wire [8:0] sub_result;\n\n    assign abs_dividend = sign ? (dividend[7] ? ~dividend + 1 : dividend) : dividend;\n    assign abs_divisor = divisor[7] ? ~divisor + 1 : divisor;\n\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            SR <= 16'b0;\n            cnt <= 3'b0;\n            start_cnt <= 1'b0;\n            res_valid <= 1'b0;\n        end else if (opn_valid && !res_valid) begin\n            SR[15:8] <= abs_dividend;\n            SR[7:0] <= 8'b0;\n            cnt <= 3'b0;\n            start_cnt <= 1'b1;\n            res_valid <= 1'b0;\n        end else if (start_cnt) begin\n            sub_result = $signed(SR) - $signed(abs_divisor << 1);\n            if (sub_result[8]) begin\n                SR[15:9] <= SR[15:9];\n                SR[7:0] <= SR[7:0] | 1;\n            end else begin\n                SR[15:9] <= $signed(sub_result) >> 1;\n                SR[7:0] <= SR[7:0] & ~1;\n            end\n            if (cnt == 3'b100) begin\n                cnt <= 3'b0;\n                start_cnt <= 1'b0;\n                result <= {SR[15:8], SR[7:0]};\n                res_valid <= 1'b1;\n            end else begin\n                cnt <= cnt + 1;\n            end\n        end\n    end\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:34:00.357882",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:34:00.357864"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module radix2_div (\n    input clk,\n    input rst,\n    input sign,\n    input [7:0] dividend,\n    input [7:0] divisor,\n    input opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n\nreg [7:0] abs_dividend;\nreg [7:0] abs_divisor;\nreg [8:0] SR;\nreg [2:0] cnt;\nreg start_cnt;\nreg [7:0] NEG_DIVISOR;\nreg [16:0] tmp_result;\n\nassign abs_dividend = sign ? (dividend[7] ? ~dividend + 1 : dividend) : dividend;\nassign abs_divisor = divisor[7] ? ~divisor + 1 : divisor;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        SR <= 0;\n        cnt <= 0;\n        start_cnt <= 0;\n        res_valid <= 0;\n        tmp_result <= 0;\n    end else begin\n        if (opn_valid && !res_valid) begin\n            SR <= {1'b0, abs_dividend} << 1;\n            NEG_DIVISOR <= ~abs_divisor + 1;\n            cnt <= 3'd1;\n            start_cnt <= 1'b1;\n            tmp_result[15:8] <= dividend;\n        end else if (start_cnt && cnt < 8) begin\n            SR[7:0] <= {SR[6:0], 1'b0};\n            if ((SR - $signed(NEG_DIVISOR << 1))[8]) begin\n                tmp_result[cnt + 2] <= 1;\n            end else begin\n                tmp_result[cnt + 2] <= 0;\n                SR[7:0] <= SR[7:0] + abs_divisor;\n            end\n            cnt <= cnt + 1;\n        end\n\n        if (cnt == 8) begin\n            start_cnt <= 1'b0;\n            res_valid <= 1'b1;\n            result <= {tmp_result[15:8], tmp_result[7:0]};\n        end else if (!opn_valid) begin\n            res_valid <= 0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:34:30.761445",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.84,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:34:10.616441"
+        }
+      },
+      {
+        "code": "module radix2_div (\n    input clk,\n    input rst,\n    input sign,\n    input [7:0] dividend,\n    input [7:0] divisor,\n    input opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n\nreg [7:0] abs_dividend;\nreg [7:0] abs_divisor;\nreg [8:0] SR;\nreg [2:0] cnt;\nreg start_cnt;\nreg [7:0] NEG_DIVISOR;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        res_valid <= 0;\n        result <= 0;\n        abs_dividend <= 0;\n        abs_divisor <= 0;\n        SR <= 0;\n        cnt <= 0;\n        start_cnt <= 0;\n        NEG_DIVISOR <= 0;\n    end else begin\n        if (opn_valid && !res_valid) begin\n            abs_dividend <= sign ? (dividend < 0 ? -dividend : dividend) : dividend;\n            abs_divisor <= sign ? (divisor < 0 ? -divisor : divisor) : divisor;\n            SR <= abs_dividend << 1;\n            cnt <= 1;\n            start_cnt <= 1;\n            NEG_DIVISOR <= ~abs_divisor + 1;\n        end else if (start_cnt && cnt < 8) begin\n            SR[7:0] <= SR[6:0];\n            SR[8] <= SR[7];\n            if ((SR >> 1) >= NEG_DIVISOR) begin\n                SR[7:0] <= SR[6:0] - abs_divisor;\n                cnt <= cnt + 1;\n            end else begin\n                res_valid <= 1;\n                result[15:8] <= SR[7:0];\n                result[7:0] <= cnt;\n                start_cnt <= 0;\n                cnt <= 0;\n            end\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.84,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:34:30.761447",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.84,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:34:19.885476"
+        }
+      },
+      {
+        "code": "module radix2_div (\n    input clk,\n    input rst,\n    input sign,\n    input [7:0] dividend,\n    input [7:0] divisor,\n    input opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n\nreg [7:0] abs_dividend;\nreg [7:0] abs_divisor;\nreg [8:0] SR;\nreg [2:0] cnt;\nreg start_cnt;\nreg [7:0] NEG_DIVISOR;\nreg [7:0] remainder;\nreg [7:0] quotient;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        res_valid <= 0;\n        result <= 0;\n        abs_dividend <= 0;\n        abs_divisor <= 0;\n        SR <= 0;\n        cnt <= 0;\n        start_cnt <= 0;\n        NEG_DIVISOR <= 0;\n        remainder <= 0;\n        quotient <= 0;\n    end else begin\n        if (opn_valid && !res_valid) begin\n            abs_dividend <= sign ? (dividend < 0 ? -dividend : dividend) : dividend;\n            abs_divisor <= sign ? (divisor < 0 ? -divisor : divisor) : divisor;\n            remainder <= abs_dividend << 1;\n            quotient <= 0;\n            SR <= abs_dividend << 1;\n            cnt <= 1;\n            start_cnt <= 1;\n            NEG_DIVISOR <= ~abs_divisor + 1;\n        end else if (start_cnt) begin\n            if (cnt == 8) begin\n                res_valid <= 1;\n                result[7:0] <= remainder;\n                result[15:8] <= quotient;\n                cnt <= 0;\n                start_cnt <= 0;\n                res_valid <= 0;\n            end else begin\n                if (SR < NEG_DIVISOR) begin\n                    SR <= SR + abs_divisor << 1;\n                    quotient <= quotient + 1 << (7 - cnt);\n                end else begin\n                    SR <= SR - abs_divisor << 1;\n                    quotient <= quotient - 1 << (7 - cnt);\n                end\n                remainder <= {SR[6:0], SR[7] & ~SR[6]};\n                cnt <= cnt + 1;\n            end\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.84,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:34:30.761448",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.84,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:34:30.761431"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module radix2_div (\n    input clk,\n    input rst,\n    input sign,\n    input [7:0] dividend,\n    input [7:0] divisor,\n    input opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n\nreg [7:0] abs_dividend;\nreg [7:0] abs_divisor;\nreg [8:0] SR;\nreg [2:0] cnt;\nreg start_cnt;\nreg [7:0] NEG_DIVISOR;\nreg [7:0] remainder;\nreg [7:0] quotient;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        res_valid <= 0;\n        result <= 0;\n        abs_dividend <= 0;\n        abs_divisor <= 0;\n        SR <= 0;\n        cnt <= 0;\n        start_cnt <= 0;\n        NEG_DIVISOR <= 0;\n        remainder <= 0;\n        quotient <= 0;\n    end else begin\n        if (opn_valid && !res_valid) begin\n            abs_dividend <= sign ? (dividend < 0 ? -dividend : dividend) : dividend;\n            abs_divisor <= sign ? (divisor < 0 ? -divisor : divisor) : divisor;\n            remainder <= abs_dividend << 1;\n            quotient <= 0;\n            SR <= abs_dividend << 1;\n            cnt <= 1;\n            start_cnt <= 1;\n            NEG_DIVISOR <= ~abs_divisor + 1;\n        end else if (start_cnt && cnt < 8) begin\n            SR[7:0] <= SR >> 1;\n            remainder <= SR[7];\n            SR[8] <= SR[7];\n            if ((SR >> 1) >= NEG_DIVISOR) begin\n                SR[7:0] <= SR >> 1 - abs_divisor;\n                quotient <= quotient + 1 << (7 - cnt);\n            end else begin\n                res_valid <= 1;\n                result[7:0] <= remainder;\n                result[15:8] <= quotient;\n                start_cnt <= 0;\n                cnt <= 0;\n                res_valid <= 0;\n            end\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.84,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:35:01.595806",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.84,
+            0.84,
+            0.84
+          ],
+          "generation_time": "2026-02-03T16:34:41.121674"
+        }
+      },
+      {
+        "code": "module radix2_div (\n    input clk,\n    input rst,\n    input sign,\n    input [7:0] dividend,\n    input [7:0] divisor,\n    input opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n\nreg [7:0] abs_dividend;\nreg [7:0] abs_divisor;\nreg [8:0] SR;\nreg [2:0] cnt;\nreg start_cnt;\nreg [7:0] NEG_DIVISOR;\nreg [7:0] remainder;\nreg [7:0] quotient;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        res_valid <= 0;\n        result <= 0;\n        abs_dividend <= 0;\n        abs_divisor <= 0;\n        SR <= 0;\n        cnt <= 0;\n        start_cnt <= 0;\n        NEG_DIVISOR <= 0;\n        remainder <= 0;\n        quotient <= 0;\n    end else begin\n        if (opn_valid && !res_valid) begin\n            abs_dividend <= sign ? (dividend < 0 ? -dividend : dividend) : dividend;\n            abs_divisor <= sign ? (divisor < 0 ? -divisor : divisor) : divisor;\n            SR <= abs_dividend << 1;\n            cnt <= 1;\n            start_cnt <= 1;\n            NEG_DIVISOR <= ~abs_divisor + 1;\n        end else if (start_cnt) begin\n            if (cnt == 8) begin\n                res_valid <= 1;\n                result[7:0] <= remainder;\n                result[15:8] <= quotient;\n                cnt <= 0;\n                start_cnt <= 0;\n                res_valid <= 0;\n            end else begin\n                if (SR < NEG_DIVISOR) begin\n                    SR <= SR + abs_divisor << 1;\n                    quotient <= quotient + 1 << (7 - cnt);\n                end else begin\n                    SR <= SR - abs_divisor << 1;\n                    quotient <= quotient - 1 << (7 - cnt);\n                end\n                remainder <= {SR[6:0], SR[7] & ~SR[6]};\n                cnt <= cnt + 1;\n            end\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.84,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:35:01.595809",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.84,
+            0.84,
+            0.84
+          ],
+          "generation_time": "2026-02-03T16:34:51.278465"
+        }
+      },
+      {
+        "code": "module radix2_div (\n    input clk,\n    input rst,\n    input sign,\n    input [7:0] dividend,\n    input [7:0] divisor,\n    input opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n\nreg [7:0] abs_dividend;\nreg [7:0] abs_divisor;\nreg [8:0] SR;\nreg [2:0] cnt;\nreg start_cnt;\nreg [7:0] NEG_DIVISOR;\n\nalways @(posedge clk or posedge rst) begin\n    if (rst) begin\n        res_valid <= 0;\n        result <= 0;\n        abs_dividend <= 0;\n        abs_divisor <= 0;\n        SR <= 0;\n        cnt <= 0;\n        start_cnt <= 0;\n        NEG_DIVISOR <= 0;\n    end else begin\n        if (opn_valid && !res_valid) begin\n            abs_dividend <= sign ? (dividend < 0 ? -dividend : dividend) : dividend;\n            abs_divisor <= sign ? (divisor < 0 ? -divisor : divisor) : divisor;\n            SR <= abs_dividend << 1;\n            cnt <= 1;\n            start_cnt <= 1;\n            NEG_DIVISOR <= ~abs_divisor + 1;\n        end else if (start_cnt && cnt < 8) begin\n            SR[7:0] <= SR >> 1;\n            SR[8] <= 0;\n            if ((SR >> 1) >= NEG_DIVISOR) begin\n                SR <= SR - abs_divisor << 1;\n                quotient <= quotient + 1 << (7 - cnt);\n            end else begin\n                res_valid <= 1;\n                result[15:8] <= remainder;\n                result[7:0] <= cnt;\n                start_cnt <= 0;\n                cnt <= 0;\n            end\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:35:01.595810",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.84,
+            0.84,
+            0.84
+          ],
+          "generation_time": "2026-02-03T16:35:01.595791"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:35:01.595815",
+    "total_hdl_codes": 9
+  }
+}

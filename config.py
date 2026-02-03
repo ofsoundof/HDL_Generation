@@ -124,7 +124,7 @@ class Config:
     }
     
     # Evaluation settings
-    N_SAMPLES = 10
+    N_SAMPLES = 1
     K_VALUES = [1, 3] 
     
     @classmethod

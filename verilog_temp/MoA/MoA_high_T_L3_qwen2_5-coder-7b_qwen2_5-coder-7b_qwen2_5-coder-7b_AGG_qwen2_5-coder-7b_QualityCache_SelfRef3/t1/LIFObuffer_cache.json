@@ -1,0 +1,156 @@
+{
+  "design_name": "LIFObuffer",
+  "trial_num": 1,
+  "created_at": "2026-02-03T17:19:08.893383",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module LIFObuffer (\n    input [3:0] dataIn,\n    input RW,\n    input EN,\n    input Rst,\n    input Clk,\n    output reg [3:0] dataOut,\n    output reg EMPTY,\n    output reg FULL\n);\n\nreg [2:0] SP;\nreg [15:0] stack_mem;\n\nalways @(posedge Clk) begin\n    if (Rst) begin\n        SP <= 4'd4;\n        stack_mem <= 16'b0;\n        dataOut <= 4'b0;\n        EMPTY <= 1'b1;\n        FULL <= 1'b0;\n    end else if (EN) begin\n        if (!FULL && !RW) begin\n            stack_mem[SP] <= dataIn;\n            SP <= SP - 1;\n            FULL <= (SP == 3'b0);\n            EMPTY <= (SP == 4'd4);\n        end else if (!EMPTY && RW) begin\n            dataOut <= stack_mem[SP];\n            stack_mem[SP] <= 4'b0;\n            SP <= SP + 1;\n            EMPTY <= (SP == 4'd4);\n            FULL <= (SP == 3'b0);\n        end\n    end else begin\n        dataOut <= stack_mem[SP];\n        EMPTY <= (SP == 4'd4);\n        FULL <= (SP == 3'b0);\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.59,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:19:28.312462",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:19:15.538110"
+        }
+      },
+      {
+        "code": "module LIFObuffer(\n    input [3:0] dataIn,\n    input RW,\n    input EN,\n    input Rst,\n    input Clk,\n    output EMPTY,\n    output FULL,\n    output reg [3:0] dataOut\n);\n\nreg [1:0] SP;\nreg [15:0] stack_mem;\n\nalways @(posedge Clk) begin\n    if (Rst) begin\n        SP <= 2'd4;\n        stack_mem <= 16'd0;\n    end else if (EN) begin\n        if (!FULL && !RW) begin\n            stack_mem[SP*4 +: 4] <= dataIn;\n            SP <= SP - 1;\n        end else if (!EMPTY && RW) begin\n            dataOut <= stack_mem[SP*4 +: 4];\n            stack_mem[SP*4 +: 4] <= 4'd0;\n            SP <= SP + 1;\n        end\n    end\nend\n\nassign EMPTY = (SP == 2'd4);\nassign FULL = (SP == 2'd0);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:19:28.312464",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:19:20.980760"
+        }
+      },
+      {
+        "code": "module LIFObuffer (\n    input wire [3:0] dataIn,\n    input wire RW,\n    input wire EN,\n    input wire Rst,\n    input wire Clk,\n    output reg [3:0] dataOut,\n    output reg EMPTY,\n    output reg FULL\n);\n\nreg [3:0] stack_mem [4:0];\nreg [1:0] SP;\n\nalways @(posedge Clk) begin\n    if (Rst) begin\n        stack_mem <= 5'b00000;\n        SP <= 2'b100;\n        EMPTY <= 1'b1;\n        FULL <= 1'b0;\n    end else if (EN) begin\n        if (!RW && !FULL) begin\n            stack_mem[SP] <= dataIn;\n            SP <= SP - 1;\n            if (SP == 4'b100)\n                EMPTY <= 1'b1;\n            FULL <= 1'b0;\n        end else if (RW && !EMPTY) begin\n            dataOut <= stack_mem[SP];\n            stack_mem[SP] <= 4'b0000;\n            SP <= SP + 1;\n            if (SP == 2'b100)\n                EMPTY <= 1'b0;\n            FULL <= 1'b1;\n        end else begin\n            EMPTY <= SP == 4'b100;\n            FULL <= SP == 2'b111;\n        end\n    end else begin\n        EMPTY <= SP == 4'b100;\n        FULL <= SP == 2'b111;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:19:28.312465",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:19:28.312448"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module LIFObuffer(\n    input [3:0] dataIn,\n    input RW,\n    input EN,\n    input Rst,\n    input Clk,\n    output reg [3:0] dataOut,\n    output EMPTY,\n    output FULL\n);\n\nreg [1:0] SP;\nreg [15:0] stack_mem;\n\nalways @(posedge Clk) begin\n    if (Rst) begin\n        SP <= 2'd4;\n        stack_mem <= {16{4'b0}};\n        dataOut <= 4'b0;\n    end else if (EN) begin\n        if (!FULL && !RW) begin\n            stack_mem[SP*4 +: 4] <= dataIn;\n            SP <= SP - 1;\n        end else if (!EMPTY && RW) begin\n            dataOut <= stack_mem[SP*4 +: 4];\n            stack_mem[SP*4 +: 4] <= 4'b0;\n            SP <= SP + 1;\n        end\n    end\nend\n\nassign EMPTY = (SP == 2'd4);\nassign FULL = (SP == 2'd0);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.7999999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:19:49.087476",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.6,
+            0.59
+          ],
+          "generation_time": "2026-02-03T17:19:33.882445"
+        }
+      },
+      {
+        "code": "module LIFObuffer(\n    input [3:0] dataIn,\n    input RW,\n    input EN,\n    input Rst,\n    input Clk,\n    output EMPTY,\n    output FULL,\n    output reg [3:0] dataOut\n);\n\nreg [1:0] SP;\nreg [15:0] stack_mem;\n\nalways @(posedge Clk) begin\n    if (Rst) begin\n        SP <= 2'd4;\n        stack_mem <= 16'd0;\n        dataOut <= 4'b0;\n        EMPTY <= 1'b1;\n        FULL <= 1'b0;\n    end else if (EN) begin\n        if (!FULL && !RW) begin\n            stack_mem[SP*4 +: 4] <= dataIn;\n            SP <= SP - 1;\n            FULL <= (SP == 2'd0);\n            EMPTY <= (SP == 2'd4);\n        end else if (!EMPTY && RW) begin\n            dataOut <= stack_mem[SP*4 +: 4];\n            stack_mem[SP*4 +: 4] <= 4'b0;\n            SP <= SP + 1;\n            EMPTY <= (SP == 2'd4);\n            FULL <= (SP == 2'd0);\n        end\n    end else begin\n        dataOut <= stack_mem[SP];\n        EMPTY <= (SP == 2'd4);\n        FULL <= (SP == 2'd0);\n    end\nend\n\nassign EMPTY = (SP == 2'd4);\nassign FULL = (SP == 2'd0);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:19:49.087478",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.6,
+            0.59
+          ],
+          "generation_time": "2026-02-03T17:19:41.447523"
+        }
+      },
+      {
+        "code": "module LIFObuffer (\n    input [3:0] dataIn,\n    input RW,\n    input EN,\n    input Rst,\n    input Clk,\n    output reg [3:0] dataOut,\n    output reg EMPTY,\n    output reg FULL\n);\n\nreg [1:0] SP;\nreg [15:0] stack_mem;\n\nalways @(posedge Clk) begin\n    if (Rst) begin\n        SP <= 2'd4;\n        stack_mem <= 16'd0;\n        dataOut <= 4'b0;\n        EMPTY <= 1'b1;\n        FULL <= 1'b0;\n    end else if (EN) begin\n        if (!FULL && !RW) begin\n            stack_mem[SP*4 +: 4] <= dataIn;\n            SP <= SP - 1;\n            FULL <= (SP == 2'd0);\n            EMPTY <= (SP == 4'd4);\n        end else if (!EMPTY && RW) begin\n            dataOut <= stack_mem[SP*4 +: 4];\n            stack_mem[SP*4 +: 4] <= 4'b0;\n            SP <= SP + 1;\n            EMPTY <= (SP == 4'd4);\n            FULL <= (SP == 2'd0);\n        end\n    end else begin\n        dataOut <= stack_mem[SP];\n        EMPTY <= (SP == 4'd4);\n        FULL <= (SP == 2'd0);\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:19:49.087479",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.6,
+            0.59
+          ],
+          "generation_time": "2026-02-03T17:19:49.087461"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module LIFObuffer(\n    input [3:0] dataIn,\n    input RW,\n    input EN,\n    input Rst,\n    input Clk,\n    output reg [3:0] dataOut,\n    output reg EMPTY,\n    output reg FULL\n);\n\nreg [1:0] SP;\nreg [15:0] stack_mem;\n\nalways @(posedge Clk) begin\n    if (Rst) begin\n        SP <= 2'd4;\n        stack_mem <= {16{4'b0}};\n        dataOut <= 4'b0;\n        EMPTY <= 1'b1;\n        FULL <= 1'b0;\n    end else if (EN) begin\n        if (!FULL && !RW) begin\n            stack_mem[SP*4 +: 4] <= dataIn;\n            SP <= SP - 1;\n            FULL <= (SP == 2'd0);\n            EMPTY <= (SP == 4'd4);\n        end else if (!EMPTY && RW) begin\n            dataOut <= stack_mem[SP*4 +: 4];\n            stack_mem[SP*4 +: 4] <= 4'b0;\n            SP <= SP + 1;\n            EMPTY <= (SP == 4'd4);\n            FULL <= (SP == 2'd0);\n        end\n    end else begin\n        dataOut <= stack_mem[SP];\n        EMPTY <= (SP == 4'd4);\n        FULL <= (SP == 2'd0);\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.7899999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:20:09.770638",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.7999999999999999,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T17:19:55.789713"
+        }
+      },
+      {
+        "code": "module LIFObuffer(\n    input [3:0] dataIn,\n    input RW,\n    input EN,\n    input Rst,\n    input Clk,\n    output reg [3:0] dataOut,\n    output reg EMPTY,\n    output reg FULL\n);\n\nreg [1:0] SP;\nreg [15:0] stack_mem;\n\nalways @(posedge Clk) begin\n    if (Rst) begin\n        SP <= 2'd4;\n        stack_mem <= {16{4'b0}};\n        dataOut <= 4'b0;\n        EMPTY <= 1'b1;\n        FULL <= 1'b0;\n    end else if (EN) begin\n        if (!FULL && !RW) begin\n            stack_mem[SP*4 +: 4] <= dataIn;\n            SP <= SP - 1;\n            FULL <= (SP == 2'd0);\n            EMPTY <= (SP == 4'd4);\n        end else if (!EMPTY && RW) begin\n            dataOut <= stack_mem[SP*4 +: 4];\n            stack_mem[SP*4 +: 4] <= 4'b0;\n            SP <= SP + 1;\n            EMPTY <= (SP == 4'd4);\n            FULL <= (SP == 2'd0);\n        end\n    end else begin\n        dataOut <= stack_mem[SP];\n        EMPTY <= (SP == 4'd4);\n        FULL <= (SP == 2'd0);\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.7899999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:20:09.770641",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.7999999999999999,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T17:20:02.813200"
+        }
+      },
+      {
+        "code": "module LIFObuffer(\n    input [3:0] dataIn,\n    input RW,\n    input EN,\n    input Rst,\n    input Clk,\n    output reg [3:0] dataOut,\n    output reg EMPTY,\n    output reg FULL\n);\n\nreg [1:0] SP;\nreg [15:0] stack_mem;\n\nalways @(posedge Clk) begin\n    if (Rst) begin\n        SP <= 2'd4;\n        stack_mem <= {16{4'b0}};\n        dataOut <= 4'b0;\n        EMPTY <= 1'b1;\n        FULL <= 1'b0;\n    end else if (EN) begin\n        if (!FULL && !RW) begin\n            stack_mem[SP*4 +: 4] <= dataIn;\n            SP <= SP - 1;\n            FULL <= (SP == 2'd0);\n            EMPTY <= (SP == 4'd4);\n        end else if (!EMPTY && RW) begin\n            dataOut <= stack_mem[SP*4 +: 4];\n            stack_mem[SP*4 +: 4] <= 4'b0;\n            SP <= SP + 1;\n            EMPTY <= (SP == 4'd4);\n            FULL <= (SP == 2'd0);\n        end\n    end else begin\n        dataOut <= stack_mem[SP];\n        EMPTY <= (SP == 4'd4);\n        FULL <= (SP == 2'd0);\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.7899999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:20:09.770642",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.85,
+            0.7999999999999999,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T17:20:09.770625"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T17:20:09.770647",
+    "total_hdl_codes": 9
+  }
+}

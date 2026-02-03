@@ -1,0 +1,11 @@
+{
+  "design_name": "radix2_div",
+  "trial_num": 10,
+  "created_at": "2026-02-03T16:27:59.184289",
+  "total_layers": 0,
+  "layer_outputs": {},
+  "metadata": {
+    "last_updated": "2026-02-03T16:27:59.184319",
+    "total_hdl_codes": 0
+  }
+}

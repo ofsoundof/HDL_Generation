@@ -1,0 +1,156 @@
+{
+  "design_name": "div_16bit",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:32:35.163310",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(*) begin\n    a_reg = A;\n    b_reg = B;\nend\n\nalways @(*) begin\n    if (b_reg == 0)\n        result = 16'hFFFF;\n    else begin\n        reg [15:0] quotient;\n        reg [15:0] remainder;\n        quotient = 16'b0;\n        remainder = a_reg;\n\n        for (int i = 15; i >= 8; i--) begin\n            if (remainder[i:i+7] >= b_reg)\n                begin\n                    remainder[i:i-7] = remainder[i:i-7] - b_reg;\n                    quotient[i] = 1'b1;\n                end\n        end\n\n        result = quotient;\n        odd = remainder << 8;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:32:47.709283",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:32:40.697279"
+        }
+      },
+      {
+        "code": "module div_16bit(\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(A or B) begin\n    a_reg <= A;\n    b_reg <= B;\nend\n\nalways @(A or B) begin\n    if (b_reg == 0) begin\n        result = 16'b0;\n        odd = a_reg;\n    end else begin\n        reg [23:0] q, r;\n        q = 24'b0;\n        r = {8'b0, a_reg};\n        for (integer i = 7; i >= 0; i--) begin\n            if (r[i + 7:8] >= b_reg) begin\n                r[i + 7:8] = r[i + 7:8] - b_reg;\n                q[i] = 1'b1;\n            end\n        end\n        result = {q[15:8], q[7:0]};\n        odd = r[15:0];\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:32:47.709286",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:32:46.526660"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nalways @(A or B) begin\n    reg [15:0] a_reg;\n    reg [7:0] b_reg;\n    reg [15:0] quotient;\n    reg [15:0] remainder;\n\n    a_reg = A;\n    b_reg = B;\n\n    quotient = 0;\n    remainder = 0;\n\n    for (int i = 15; i >= 0; i--) begin\n        remainder = {remainder[7:0], a_reg[15]};\n        a_reg = a_reg << 1;\n        if (remainder >= b_reg) begin\n            quotient[i] = 1;\n            remainder = remainder - b_reg;\n        end\n    end\n\n    result = quotient;\n    odd = remainder;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:32:47.709287",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:32:47.709269"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(A or B) begin\n    a_reg <= A;\n    b_reg <= B;\nend\n\nalways @(A or B) begin\n    if (b_reg == 0) begin\n        result = 16'b0;\n        odd = a_reg;\n    } else begin\n        reg [23:0] q, r;\n        q = 24'b0;\n        r = {8'b0, a_reg};\n        for (integer i = 7; i >= 0; i--) begin\n            if (r[i + 7:8] >= b_reg) begin\n                r[i + 7:8] = r[i + 7:8] - b_reg;\n                q[i] = 1'b1;\n            end\n        end\n        result = {q[15:8], q[7:0]};\n        odd = r[15:0];\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:33:04.552395",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:32:53.630106"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(*) begin\n    a_reg = A;\n    b_reg = B;\nend\n\nalways @(*) begin\n    if (b_reg == 0) begin\n        result = 16'bFFFF;\n        odd = 16'b0;\n    end else begin\n        reg [15:0] quotient;\n        reg [15:0] remainder;\n        quotient = 16'b0;\n        remainder = a_reg;\n\n        for (int i = 15; i >= 8; i--) begin\n            if (remainder[i:i+7] >= b_reg)\n                begin\n                    remainder[i:i-7] = remainder[i:i-7] - b_reg;\n                    quotient[i] = 1'b1;\n                end\n        end\n\n        result = {quotient[7:0], quotient[15:8]};\n        odd = remainder << 8;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:33:04.552398",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:32:59.352756"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nalways @(A or B) begin\n    if (B == 0) begin\n        result = 16'bFFFF;\n        odd = A;\n    end else begin\n        reg [23:0] q, r;\n        q = 24'b0;\n        r = {8'b0, A};\n        for (integer i = 7; i >= 0; i--) begin\n            if (r[i + 7:8] >= B) begin\n                r[i + 7:8] = r[i + 7:8] - B;\n                q[i] = 1'b1;\n            end\n        end\n        result = {q[15:8], q[7:0]};\n        odd = r[15:0];\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:33:04.552399",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:33:04.552382"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(A or B) begin\n    a_reg <= A;\n    b_reg <= B;\nend\n\nalways @(A or B) begin\n    if (b_reg == 0) begin\n        result = 16'b0;\n        odd = a_reg;\n    end else begin\n        reg [23:0] q, r;\n        q = 24'b0;\n        r = {8'b0, a_reg};\n        for (integer i = 7; i >= 0; i--) begin\n            if (r[i + 7:8] >= b_reg) begin\n                r[i + 7:8] = r[i + 7:8] - b_reg;\n                q[i] = 1'b1;\n            end\n        end\n        result = {q[15:8], q[7:0]};\n        odd = r[15:0];\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:33:21.651352",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:33:10.504628"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(A or B) begin\n    a_reg = A;\n    b_reg = B;\nend\n\nalways @(*) begin\n    if (b_reg == 0)\n        result = 16'hFFFF;\n    else begin\n        reg [15:0] quotient;\n        reg [15:0] remainder;\n        quotient = 16'b0;\n        remainder = a_reg;\n\n        for (int i = 15; i >= 8; i--) begin\n            if (remainder[i:i+7] >= b_reg) begin\n                remainder[i:i-7] = remainder[i:i-7] - b_reg;\n                quotient[i] = 1'b1;\n            end\n        end\n\n        result = quotient;\n        odd = remainder << 8;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:33:21.651355",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:33:15.882235"
+        }
+      },
+      {
+        "code": "module div_16bit(\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(A or B) begin\n    a_reg = A;\n    b_reg = B;\nend\n\nalways @(*) begin\n    if (b_reg == 0)\n        result = 16'hFFFF;\n    else begin\n        reg [15:0] quotient;\n        reg [15:0] remainder;\n        quotient = 16'b0;\n        remainder = a_reg;\n\n        for (int i = 15; i >= 8; i--) begin\n            if (remainder[i:i+7] >= b_reg)\n                begin\n                    remainder[i:i-7] = remainder[i:i-7] - b_reg;\n                    quotient[i] = 1'b1;\n                end\n        end\n\n        result = quotient;\n        odd = {remainder << 8, a_reg[7:0]};\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:33:21.651356",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:33:21.651338"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:33:21.651361",
+    "total_hdl_codes": 9
+  }
+}

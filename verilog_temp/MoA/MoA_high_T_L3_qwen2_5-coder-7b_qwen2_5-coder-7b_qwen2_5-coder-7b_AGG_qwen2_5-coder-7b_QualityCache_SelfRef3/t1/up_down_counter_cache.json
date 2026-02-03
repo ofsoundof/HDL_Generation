@@ -1,0 +1,156 @@
+{
+  "design_name": "up_down_counter",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:52:24.896289",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module up_down_counter (\n    input clk,\n    input reset,\n    input up_down,\n    output reg [15:0] count\n);\n\nalways @(posedge clk) begin\n    if (reset)\n        count <= 16'b0;\n    else if (up_down)\n        count <= count + 1;\n    else\n        count <= count - 1;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:52:27.608887",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:52:25.468536"
+        }
+      },
+      {
+        "code": "module up_down_counter (\n    input wire clk,\n    input wire reset,\n    input wire up_down,\n    output reg [15:0] count\n);\n\nalways @(posedge clk) begin\n    if (reset)\n        count <= 16'b0;\n    else if (up_down)\n        count <= (count == 16'hFFFF) ? 16'b0 : count + 16'b1; // Fix overflow condition\n    else\n        count <= (count == 16'h0000) ? 16'hFFFF : count - 16'b1; // Fix underflow condition\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:52:27.608889",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:52:26.993729"
+        }
+      },
+      {
+        "code": "module up_down_counter (\n    input clk,\n    input reset,\n    input up_down,\n    output reg [15:0] count\n);\n\nalways @(posedge clk or posedge reset) begin\n    if (reset)\n        count <= 16'b0;\n    else begin\n        if (up_down)\n            count <= count + 1;\n        else\n            count <= count - 1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:52:27.608890",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:52:27.608873"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module up_down_counter (\n    input clk,\n    input reset,\n    input up_down,\n    output reg [15:0] count\n);\n\nalways @(posedge clk) begin\n    if (reset)\n        count <= 16'b0;\n    else if (up_down)\n        count <= (count == 16'hFFFF) ? 16'b0 : count + 16'b1; // Fix overflow condition\n    else\n        count <= (count == 16'h0000) ? 16'hFFFF : count - 16'b1; // Fix underflow condition\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:52:30.038802",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:52:28.462566"
+        }
+      },
+      {
+        "code": "module up_down_counter (\n    input clk,\n    input reset,\n    input up_down,\n    output reg [15:0] count\n);\n\nalways @(posedge clk or posedge reset) begin\n    if (reset)\n        count <= 16'b0;\n    else begin\n        if (up_down && count < 16'hFFFF)\n            count <= count + 1;\n        else if (!up_down && count > 16'h0000)\n            count <= count - 1;\n        else if (up_down) // Fix overflow condition\n            count <= 16'b0;\n        else // Fix underflow condition\n            count <= 16'hFFFF;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:52:30.038804",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:52:29.326578"
+        }
+      },
+      {
+        "code": "module up_down_counter (\n    input clk,\n    input reset,\n    input up_down,\n    output reg [15:0] count\n);\n\nalways @(posedge clk or posedge reset) begin\n    if (reset)\n        count <= 16'b0;\n    else begin\n        if (up_down)\n            count <= (count == 16'hFFFF) ? 16'b0 : count + 1;\n        else\n            count <= (count == 16'h0000) ? 16'hFFFF : count - 1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:52:30.038806",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:52:30.038791"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module up_down_counter (\n    input clk,\n    input reset,\n    input up_down,\n    output reg [15:0] count\n);\n\nalways @(posedge clk or posedge reset) begin\n    if (reset)\n        count <= 16'b0;\n    else begin\n        if (up_down && count != 16'hFFFF) \n            count <= count + 1;\n        else if (!up_down && count != 16'h0000) \n            count <= count - 1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:52:34.355857",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:52:32.835339"
+        }
+      },
+      {
+        "code": "module up_down_counter (\n    input clk,\n    input reset,\n    input up_down,\n    output reg [15:0] count\n);\n\nalways @(posedge clk) begin\n    if (reset)\n        count <= 16'b0;\n    else if (up_down)\n        count <= (count == 16'hFFFF) ? 16'b0 : count + 1;\n    else\n        count <= (count == 16'h0000) ? 16'hFFFF : count - 1;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:52:34.355860",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:52:33.608852"
+        }
+      },
+      {
+        "code": "module up_down_counter (\n    input clk,\n    input reset,\n    input up_down,\n    output reg [15:0] count\n);\n\nalways @(posedge clk) begin\n    if (reset)\n        count <= 16'b0;\n    else if (up_down)\n        count <= (count == 16'hFFFF) ? 16'b0 : count + 1; // Fix overflow condition\n    else\n        count <= (count == 16'h0000) ? 16'hFFFF : count - 1; // Fix underflow condition\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:52:34.355861",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:52:34.355845"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:52:34.355867",
+    "total_hdl_codes": 9
+  }
+}

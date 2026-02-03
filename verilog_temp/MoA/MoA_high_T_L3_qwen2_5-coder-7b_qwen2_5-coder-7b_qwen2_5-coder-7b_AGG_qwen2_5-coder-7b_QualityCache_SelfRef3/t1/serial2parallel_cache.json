@@ -1,0 +1,156 @@
+{
+  "design_name": "serial2parallel",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:58:39.203379",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module serial2parallel (\n    input wire clk,\n    input wire rst_n,\n    input wire din_serial,\n    input wire din_valid,\n    output reg [7:0] dout_parallel,\n    output reg dout_valid\n);\n\nreg [3:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0;\n        dout_parallel <= 8'b0;\n        dout_valid <= 1'b0;\n    end else begin\n        if (din_valid && !cnt[3]) begin\n            dout_parallel[cnt] <= din_serial;\n            cnt <= cnt + 1;\n        end\n        if (cnt == 4'b1111) begin\n            dout_valid <= 1'b1;\n        end else begin\n            dout_valid <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:01:23.865725",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:59:43.597904"
+        }
+      },
+      {
+        "code": "module serial2parallel (\n    input wire clk,\n    input wire rst_n,\n    input wire din_serial,\n    input wire din_valid,\n    output reg [7:0] dout_parallel,\n    output reg dout_valid\n);\n\nreg [3:0] cnt;\nreg [7:0] shift_reg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0000;\n        shift_reg <= 8'b00000000;\n        dout_parallel <= 8'b00000000;\n        dout_valid <= 1'b0;\n    end else begin\n        if (din_valid && cnt < 4'b1000) begin\n            shift_reg <= {shift_reg[6:0], din_serial};\n            cnt <= cnt + 1;\n        end\n        if (cnt == 4'b1000) begin\n            dout_parallel <= shift_reg;\n            dout_valid <= 1'b1;\n        end else begin\n            dout_valid <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.5399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:01:23.865728",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:00:48.931773"
+        }
+      },
+      {
+        "code": "module serial2parallel (\n    input wire clk,\n    input wire rst_n,\n    input wire din_serial,\n    input wire din_valid,\n    output reg [7:0] dout_parallel,\n    output reg dout_valid\n);\n    parameter COUNTER_WIDTH = 4;\n    reg [COUNTER_WIDTH-1:0] cnt;\n\n    always @(posedge clk or negedge rst_n) begin\n        if (!rst_n) begin\n            cnt <= 0;\n            dout_parallel <= 8'b0;\n            dout_valid <= 0;\n        end else begin\n            if (din_valid && din_serial) begin\n                cnt <= cnt + 1;\n            end\n\n            if (cnt == COUNTER_WIDTH-1) begin\n                dout_parallel <= {din_serial, dout_parallel[7:1]};\n                cnt <= 0;\n            end\n\n            if (cnt == COUNTER_WIDTH-1) begin\n                dout_valid <= 1;\n            end else begin\n                dout_valid <= 0;\n            end\n        end\n    end\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6499999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:01:23.865729",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:01:23.865712"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module serial2parallel (\n    input wire clk,\n    input wire rst_n,\n    input wire din_serial,\n    input wire din_valid,\n    output reg [7:0] dout_parallel,\n    output reg dout_valid\n);\n\nreg [3:0] cnt;\nreg [7:0] shift_reg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0;\n        shift_reg <= 8'b0;\n        dout_parallel <= 8'b0;\n        dout_valid <= 1'b0;\n    end else begin\n        if (din_valid) begin\n            shift_reg <= {shift_reg[6:0], din_serial};\n            cnt <= cnt + 1;\n        end\n\n        if (cnt == 4'b1000) begin\n            dout_parallel <= shift_reg;\n            dout_valid <= 1'b1;\n            cnt <= 4'b0;\n        end else begin\n            dout_valid <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:03:34.946487",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6499999999999999,
+            0.6399999999999999,
+            0.5399999999999999
+          ],
+          "generation_time": "2026-02-03T17:01:25.178493"
+        }
+      },
+      {
+        "code": "module serial2parallel (\n    input wire clk,\n    input wire rst_n,\n    input wire din_serial,\n    input wire din_valid,\n    output reg [7:0] dout_parallel,\n    output reg dout_valid\n);\n\nreg [3:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0;\n        dout_parallel <= 8'b0;\n        dout_valid <= 1'b0;\n    end else begin\n        if (din_valid && !cnt[3]) begin\n            dout_parallel[cnt] <= din_serial;\n            cnt <= cnt + 1;\n        end\n        if (cnt == 4'b1111) begin\n            dout_valid <= 1'b1;\n        end else begin\n            dout_valid <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:03:34.946490",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6499999999999999,
+            0.6399999999999999,
+            0.5399999999999999
+          ],
+          "generation_time": "2026-02-03T17:03:29.527746"
+        }
+      },
+      {
+        "code": "module serial2parallel (\n    input wire clk,\n    input wire rst_n,\n    input wire din_serial,\n    input wire din_valid,\n    output reg [7:0] dout_parallel,\n    output reg dout_valid\n);\n\nreg [3:0] cnt;\nreg [7:0] shift_reg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0000;\n        shift_reg <= 8'b00000000;\n        dout_parallel <= 8'b00000000;\n        dout_valid <= 1'b0;\n    end else begin\n        if (din_valid && cnt < 4'b1000) begin\n            shift_reg <= {shift_reg[6:0], din_serial};\n            cnt <= cnt + 1;\n        end\n        if (cnt == 4'b1000) begin\n            dout_parallel <= shift_reg;\n            dout_valid <= 1'b1;\n            cnt <= 4'b0000; // Reset counter after 8 bits\n        end else begin\n            dout_valid <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:03:34.946491",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6499999999999999,
+            0.6399999999999999,
+            0.5399999999999999
+          ],
+          "generation_time": "2026-02-03T17:03:34.946472"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module serial2parallel (\n    input wire clk,\n    input wire rst_n,\n    input wire din_serial,\n    input wire din_valid,\n    output reg [7:0] dout_parallel,\n    output reg dout_valid\n);\n\nreg [3:0] cnt;\nreg [7:0] shift_reg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0000;\n        shift_reg <= 8'b00000000;\n        dout_parallel <= 8'b00000000;\n        dout_valid <= 1'b0;\n    end else begin\n        if (din_valid && cnt < 4'b1000) begin\n            shift_reg <= {shift_reg[6:0], din_serial};\n            cnt <= cnt + 1;\n        end\n\n        if (cnt == 4'b1000) begin\n            dout_parallel <= shift_reg;\n            dout_valid <= 1'b1;\n            cnt <= 4'b0000; // Reset counter after 8 bits\n        end else begin\n            dout_valid <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:03:38.885659",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            0.6499999999999999
+          ],
+          "generation_time": "2026-02-03T17:03:36.445685"
+        }
+      },
+      {
+        "code": "module serial2parallel (\n    input wire clk,\n    input wire rst_n,\n    input wire din_serial,\n    input wire din_valid,\n    output reg [7:0] dout_parallel,\n    output reg dout_valid\n);\n\nreg [3:0] cnt;\nreg [7:0] shift_reg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0;\n        shift_reg <= 8'b0;\n        dout_parallel <= 8'b0;\n        dout_valid <= 1'b0;\n    end else begin\n        if (din_valid) begin\n            shift_reg <= {shift_reg[6:0], din_serial};\n            cnt <= cnt + 1;\n        end\n\n        if (cnt == 4'b1000) begin\n            dout_parallel <= shift_reg;\n            dout_valid <= 1'b1;\n            cnt <= 4'b0;\n        end else begin\n            dout_valid <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:03:38.885662",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            0.6499999999999999
+          ],
+          "generation_time": "2026-02-03T17:03:37.643223"
+        }
+      },
+      {
+        "code": "module serial2parallel (\n    input wire clk,\n    input wire rst_n,\n    input wire din_serial,\n    input wire din_valid,\n    output reg [7:0] dout_parallel,\n    output reg dout_valid\n);\n\nreg [3:0] cnt;\nreg [7:0] shift_reg;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 4'b0;\n        shift_reg <= 8'b0;\n        dout_parallel <= 8'b0;\n        dout_valid <= 1'b0;\n    end else begin\n        if (din_valid && cnt < 4'b1000) begin\n            shift_reg <= {shift_reg[6:0], din_serial};\n            cnt <= cnt + 1;\n        end\n        if (cnt == 4'b1000) begin\n            dout_parallel <= shift_reg;\n            dout_valid <= 1'b1;\n            cnt <= 4'b0;\n        end else begin\n            dout_valid <= 1'b0;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:03:38.885663",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            0.6499999999999999
+          ],
+          "generation_time": "2026-02-03T17:03:38.885647"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T17:03:38.885670",
+    "total_hdl_codes": 9
+  }
+}

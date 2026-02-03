@@ -1,0 +1,156 @@
+{
+  "design_name": "instr_reg",
+  "trial_num": 1,
+  "created_at": "2026-02-03T17:09:28.860330",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module instr_reg (\n    input wire clk,\n    input wire rst,\n    input wire [1:0] fetch,\n    input wire [7:0] data,\n    output reg [2:0] ins,\n    output reg [4:0] ad1,\n    output reg [7:0] ad2\n);\n\nreg [7:0] ins_p1;\nreg [7:0] ins_p2;\n\nalways @(posedge clk or negedge rst) begin\n    if (!rst) begin\n        ins_p1 <= 8'b00000000;\n        ins_p2 <= 8'b00000000;\n    end else begin\n        case (fetch)\n            2'b01: ins_p1 <= data;\n            2'b10: ins_p2 <= data;\n            default: ;\n        endcase\n    end\nend\n\nalways @(*) begin\n    if (fetch == 2'b01) begin\n        ins = ins_p1[2:0];\n        ad1 = ins_p1[4:0];\n        ad2 = ins_p2;\n    end else if (fetch == 2'b10) begin\n        ins = ins_p2[2:0];\n        ad1 = ins_p2[4:0];\n        ad2 = ins_p1;\n    end else begin\n        ins = 3'b000;\n        ad1 = 5'b00000;\n        ad2 = (fetch == 2'b01) ? ins_p2 : ins_p1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:09:47.350893",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:09:36.304169"
+        }
+      },
+      {
+        "code": "module instr_reg (\n    input wire clk,\n    input wire rst,\n    input wire [1:0] fetch,\n    input wire [7:0] data,\n    output reg [2:0] ins,\n    output reg [4:0] ad1,\n    output reg [7:0] ad2\n);\n\nreg [7:0] ins_p1;\nreg [7:0] ins_p2;\n\nalways @(posedge clk or negedge rst) begin\n    if (!rst) begin\n        ins_p1 <= 8'b0;\n        ins_p2 <= 8'b0;\n    end else begin\n        case (fetch)\n            2'b01: ins_p1 <= data;\n            2'b10: ins_p2 <= data;\n            default: ;\n        endcase\n    end\nend\n\nassign ins = fetch == 2'b01 ? ins_p1[2:0] : ins_p2[2:0];\nassign ad1 = fetch == 2'b01 ? ins_p1[4:0] : ins_p2[4:0];\nassign ad2 = fetch == 2'b01 ? ins_p2 : ins_p1;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:09:47.350896",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:09:41.890046"
+        }
+      },
+      {
+        "code": "module instr_reg (\n    input clk,\n    input rst,\n    input [1:0] fetch,\n    input [7:0] data,\n    output reg [2:0] ins,\n    output reg [4:0] ad1,\n    output reg [7:0] ad2\n);\n\nreg [7:0] ins_p1;\nreg [7:0] ins_p2;\n\nalways @(posedge clk or negedge rst) begin\n    if (!rst) begin\n        ins_p1 <= 8'd0;\n        ins_p2 <= 8'd0;\n    end else begin\n        case (fetch)\n            2'b01: ins_p1 <= data;\n            2'b10: ins_p2 <= data;\n            default: ;\n        endcase\n    end\nend\n\nassign ins = fetch == 2'b01 ? ins_p1[2:0] : ins_p2[2:0];\nassign ad1 = fetch == 2'b01 ? ins_p1[4:0] : ins_p2[4:0];\nassign ad2 = fetch == 2'b01 ? ins_p2 : ins_p1;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:09:47.350897",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:09:47.350880"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module instr_reg (\n    input wire clk,\n    input wire rst,\n    input wire [1:0] fetch,\n    input wire [7:0] data,\n    output reg [2:0] ins,\n    output reg [4:0] ad1,\n    output reg [7:0] ad2\n);\n\nreg [7:0] ins_p1;\nreg [7:0] ins_p2;\n\nalways @(posedge clk or negedge rst) begin\n    if (!rst) begin\n        ins_p1 <= 8'b0;\n        ins_p2 <= 8'b0;\n    end else begin\n        case (fetch)\n            2'b01: ins_p1 <= data;\n            2'b10: ins_p2 <= data;\n            default: ;\n        endcase\n    end\nend\n\nassign ins = fetch == 2'b01 ? ins_p1[2:0] : ins_p2[2:0];\nassign ad1 = fetch == 2'b01 ? ins_p1[4:0] : ins_p2[4:0];\nassign ad2 = fetch == 2'b01 ? ins_p2 : ins_p1;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:10:07.668900",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:09:52.948899"
+        }
+      },
+      {
+        "code": "module instr_reg (\n    input wire clk,\n    input wire rst,\n    input wire [1:0] fetch,\n    input wire [7:0] data,\n    output reg [2:0] ins,\n    output reg [4:0] ad1,\n    output reg [7:0] ad2\n);\n\nreg [7:0] ins_p1;\nreg [7:0] ins_p2;\n\nalways @(posedge clk or negedge rst) begin\n    if (!rst) begin\n        ins_p1 <= 8'b0;\n        ins_p2 <= 8'b0;\n    end else begin\n        case (fetch)\n            2'b01: ins_p1 <= data;\n            2'b10: ins_p2 <= data;\n            default: ;\n        endcase\n    end\nend\n\nalways @(*) begin\n    if (fetch == 2'b01) begin\n        ins = ins_p1[2:0];\n        ad1 = ins_p1[4:0];\n        ad2 = ins_p2;\n    end else if (fetch == 2'b10) begin\n        ins = ins_p2[2:0];\n        ad1 = ins_p2[4:0];\n        ad2 = ins_p1;\n    end else begin\n        ins = 3'b000;\n        ad1 = 5'b00000;\n        ad2 = (fetch == 2'b01) ? ins_p2 : ins_p1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:10:07.668903",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:10:00.335112"
+        }
+      },
+      {
+        "code": "module instr_reg (\n    input wire clk,\n    input wire rst,\n    input wire [1:0] fetch,\n    input wire [7:0] data,\n    output reg [2:0] ins,\n    output reg [4:0] ad1,\n    output reg [7:0] ad2\n);\n\nreg [7:0] ins_p1;\nreg [7:0] ins_p2;\n\nalways @(posedge clk or negedge rst) begin\n    if (!rst) begin\n        ins_p1 <= 8'b0;\n        ins_p2 <= 8'b0;\n    end else begin\n        case (fetch)\n            2'b01: ins_p1 <= data;\n            2'b10: ins_p2 <= data;\n            default: ;\n        endcase\n    end\nend\n\nalways @(*) begin\n    if (fetch == 2'b01) begin\n        ins = ins_p1[2:0];\n        ad1 = ins_p1[4:0];\n        ad2 = ins_p2;\n    end else if (fetch == 2'b10) begin\n        ins = ins_p2[2:0];\n        ad1 = ins_p2[4:0];\n        ad2 = ins_p1;\n    end else begin\n        ins = 3'b000;\n        ad1 = 5'b00000;\n        ad2 = (fetch == 2'b01) ? ins_p2 : ins_p1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:10:07.668904",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:10:07.668886"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module instr_reg (\n    input wire clk,\n    input wire rst,\n    input wire [1:0] fetch,\n    input wire [7:0] data,\n    output reg [2:0] ins,\n    output reg [4:0] ad1,\n    output reg [7:0] ad2\n);\n\nreg [7:0] ins_p1;\nreg [7:0] ins_p2;\n\nalways @(posedge clk or negedge rst) begin\n    if (!rst) begin\n        ins_p1 <= 8'b00000000;\n        ins_p2 <= 8'b00000000;\n    end else begin\n        case (fetch)\n            2'b01: ins_p1 <= data;\n            2'b10: ins_p2 <= data;\n            default: ;\n        endcase\n    end\nend\n\nalways @(*) begin\n    if (fetch == 2'b01) begin\n        ins = ins_p1[2:0];\n        ad1 = ins_p1[4:0];\n        ad2 = ins_p2;\n    end else if (fetch == 2'b10) begin\n        ins = ins_p2[2:0];\n        ad1 = ins_p2[4:0];\n        ad2 = ins_p1;\n    end else begin\n        ins = 3'b000;\n        ad1 = 5'b00000;\n        ad2 = (fetch == 2'b01) ? ins_p2 : ins_p1;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:10:26.283784",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:10:14.989565"
+        }
+      },
+      {
+        "code": "module instr_reg (\n    input wire clk,\n    input wire rst,\n    input wire [1:0] fetch,\n    input wire [7:0] data,\n    output reg [2:0] ins,\n    output reg [4:0] ad1,\n    output reg [7:0] ad2\n);\n\nreg [7:0] ins_p1;\nreg [7:0] ins_p2;\n\nalways @(posedge clk or negedge rst) begin\n    if (!rst) begin\n        ins_p1 <= 8'b0;\n        ins_p2 <= 8'b0;\n    end else begin\n        case (fetch)\n            2'b01: ins_p1 <= data;\n            2'b10: ins_p2 <= data;\n            default: ;\n        endcase\n    end\nend\n\nassign ins = fetch == 2'b01 ? ins_p1[2:0] : ins_p2[2:0];\nassign ad1 = fetch == 2'b01 ? ins_p1[4:0] : ins_p2[4:0];\nassign ad2 = fetch == 2'b01 ? ins_p2 : ins_p1;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:10:26.283787",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:10:20.605290"
+        }
+      },
+      {
+        "code": "module instr_reg (\n    input wire clk,\n    input wire rst,\n    input wire [1:0] fetch,\n    input wire [7:0] data,\n    output reg [2:0] ins,\n    output reg [4:0] ad1,\n    output reg [7:0] ad2\n);\n\nreg [7:0] ins_p1;\nreg [7:0] ins_p2;\n\nalways @(posedge clk or negedge rst) begin\n    if (!rst) begin\n        ins_p1 <= 8'b0;\n        ins_p2 <= 8'b0;\n    end else begin\n        case (fetch)\n            2'b01: ins_p1 <= data;\n            2'b10: ins_p2 <= data;\n            default: ;\n        endcase\n    end\nend\n\nassign ins = fetch == 2'b01 ? ins_p1[2:0] : ins_p2[2:0];\nassign ad1 = fetch == 2'b01 ? ins_p1[4:0] : ins_p2[4:0];\nassign ad2 = fetch == 2'b01 ? ins_p2 : ins_p1;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:10:26.283788",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T17:10:26.283770"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T17:10:26.283793",
+    "total_hdl_codes": 9
+  }
+}

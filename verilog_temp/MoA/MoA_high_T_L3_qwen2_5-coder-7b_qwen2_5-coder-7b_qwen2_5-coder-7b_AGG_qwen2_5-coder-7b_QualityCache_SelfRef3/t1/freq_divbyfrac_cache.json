@@ -1,0 +1,156 @@
+{
+  "design_name": "freq_divbyfrac",
+  "trial_num": 1,
+  "created_at": "2026-02-03T17:10:42.585334",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module freq_divbyfrac (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [2:0] counter;\nreg phase_shift;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        counter <= 3'b000;\n        phase_shift <= 1'b0;\n        clk_div <= 1'b0;\n    end else begin\n        case (counter)\n            3'b000: begin\n                clk_div <= 1'b1;\n                phase_shift <= 1'b0;\n            end\n            3'b001: begin\n                clk_div <= 1'b0;\n                phase_shift <= 1'b0;\n            end\n            3'b010: begin\n                clk_div <= 1'b1;\n                phase_shift <= 1'b1;\n            end\n            3'b011: begin\n                clk_div <= 1'b0;\n                phase_shift <= 1'b1;\n            end\n            3'b100: begin\n                clk_div <= 1'b1;\n                phase_shift <= 1'b0;\n            end\n            3'b101: begin\n                clk_div <= 1'b0;\n                phase_shift <= 1'b0;\n            end\n            3'b110: begin\n                clk_div <= 1'b1;\n                phase_shift <= 1'b0;\n            end\n            default: begin\n                counter <= 3'b000;\n            end\n        endcase\n        if (counter == 3'b110) begin\n            counter <= 3'b000;\n        end else begin\n            counter <= counter + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:10:58.968795",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:10:49.709517"
+        }
+      },
+      {
+        "code": "module freq_divbyfrac (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\n    localparam MUL2_DIV_CLK = 7;\n    localparam DIV_1 = 4;\n    localparam DIV_2 = 3;\n\n    reg [2:0] counter;\n    reg div_flag;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        counter <= 0;\n        div_flag <= 0;\n        clk_div <= 0;\n    end else begin\n        case (counter)\n            0: begin\n                counter <= DIV_1 - 1;\n                div_flag <= 1;\n                clk_div <= 1;\n            end\n            default: begin\n                if (div_flag) begin\n                    counter <= counter - 1;\n                    if (counter == 0) begin\n                        div_flag <= 0;\n                        clk_div <= 0;\n                    end\n                end else begin\n                    counter <= counter - 1;\n                    if (counter == 0) begin\n                        counter <= DIV_2 - 1;\n                        div_flag <= 1;\n                        clk_div <= 1;\n                    end\n                end\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:10:58.968798",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:10:55.534902"
+        }
+      },
+      {
+        "code": "module freq_divbyfrac(\n    input clk,\n    input rst_n,\n    output reg clk_div\n);\n\nreg [2:0] cnt;\nwire even_cnt, odd_cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 3'd0;\n        clk_div <= 1'b0;\n    end else begin\n        if (cnt == 3'd6)\n            cnt <= 3'd0;\n        else\n            cnt <= cnt + 1;\n\n        even_cnt = (cnt < 3'd4);\n        odd_cnt = (cnt >= 3'd4);\n\n        clk_div <= even_cnt || odd_cnt;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T17:10:58.968799",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T17:10:58.968782"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module freq_divbyfrac (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nlocalparam MUL2_DIV_CLK = 7;\nlocalparam DIV_1 = 4;\nlocalparam DIV_2 = 3;\n\nreg [2:0] counter;\nreg phase_shift;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        counter <= 3'b000;\n        phase_shift <= 1'b0;\n        clk_div <= 1'b0;\n    end else begin\n        case (counter)\n            3'b000: begin\n                clk_div <= 1'b1;\n                phase_shift <= 1'b0;\n            end\n            3'b001: begin\n                clk_div <= 1'b0;\n                phase_shift <= 1'b0;\n            end\n            3'b010: begin\n                clk_div <= 1'b1;\n                phase_shift <= 1'b1;\n            end\n            3'b011: begin\n                clk_div <= 1'b0;\n                phase_shift <= 1'b1;\n            end\n            3'b100: begin\n                clk_div <= 1'b1;\n                phase_shift <= 1'b0;\n            end\n            3'b101: begin\n                clk_div <= 1'b0;\n                phase_shift <= 1'b0;\n            end\n            3'b110: begin\n                clk_div <= 1'b1;\n                phase_shift <= 1'b0;\n            end\n            default: begin\n                counter <= 3'b000;\n            end\n        endcase\n        if (counter == 3'b110) begin\n            counter <= 3'b000;\n        end else begin\n            counter <= counter + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:11:21.052612",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6399999999999999,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:11:07.185878"
+        }
+      },
+      {
+        "code": "module freq_divbyfrac (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nlocalparam MUL2_DIV_CLK = 7;\nreg [2:0] counter;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        counter <= 3'b000;\n        clk_div <= 1'b0;\n    end else begin\n        case (counter)\n            3'b000: begin\n                clk_div <= 1'b1;\n            end\n            3'b001: begin\n                clk_div <= 1'b0;\n            end\n            3'b010: begin\n                clk_div <= 1'b1;\n            end\n            3'b011: begin\n                clk_div <= 1'b0;\n            end\n            3'b100: begin\n                clk_div <= 1'b1;\n            end\n            3'b101: begin\n                clk_div <= 1'b0;\n            end\n            3'b110: begin\n                clk_div <= 1'b1;\n            end\n            default: begin\n                counter <= 3'b000;\n            end\n        endcase\n        if (counter == MUL2_DIV_CLK - 1) begin\n            counter <= 3'b000;\n        end else begin\n            counter <= counter + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:11:21.052615",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6399999999999999,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:11:13.333157"
+        }
+      },
+      {
+        "code": "module freq_divbyfrac (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nreg [2:0] counter;\nwire div_flag_1, div_flag_2;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        counter <= 3'b000;\n        div_flag_1 <= 1'b0;\n        div_flag_2 <= 1'b0;\n        clk_div <= 1'b0;\n    end else begin\n        case (counter)\n            3'b000: begin\n                div_flag_1 <= 1'b1;\n                div_flag_2 <= 1'b0;\n                clk_div <= 1'b1;\n            end\n            3'b001: begin\n                div_flag_1 <= 1'b0;\n                div_flag_2 <= 1'b0;\n                clk_div <= 1'b0;\n            end\n            3'b010: begin\n                div_flag_1 <= 1'b0;\n                div_flag_2 <= 1'b1;\n                clk_div <= 1'b1;\n            end\n            3'b011: begin\n                div_flag_1 <= 1'b1;\n                div_flag_2 <= 1'b1;\n                clk_div <= 1'b0;\n            end\n            default: begin\n                counter <= 3'b000;\n            end\n        endcase\n        if (counter == 3'b011) begin\n            counter <= 3'b000;\n        end else begin\n            counter <= counter + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T17:11:21.052616",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6399999999999999,
+            0.6
+          ],
+          "generation_time": "2026-02-03T17:11:21.052598"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module freq_divbyfrac (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nlocalparam MUL2_DIV_CLK = 7;\nreg [1:0] counter;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        counter <= 2'b00;\n        clk_div <= 1'b0;\n    end else begin\n        case (counter)\n            2'b00: begin\n                clk_div <= 1'b1;\n            end\n            2'b01: begin\n                clk_div <= 1'b0;\n            end\n            default: begin\n                counter <= 2'b00;\n            end\n        endcase\n        if (counter == MUL2_DIV_CLK - 1) begin\n            counter <= 2'b00;\n        end else begin\n            counter <= counter + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:11:40.044486",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.6399999999999999,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T17:11:26.131828"
+        }
+      },
+      {
+        "code": "module freq_divbyfrac (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nlocalparam MUL2_DIV_CLK = 7;\nreg [2:0] counter;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        counter <= 3'b000;\n        clk_div <= 1'b0;\n    end else begin\n        case (counter)\n            3'b000: begin\n                clk_div <= 1'b1;\n            end\n            3'b001: begin\n                clk_div <= 1'b0;\n            end\n            3'b010: begin\n                clk_div <= 1'b1;\n            end\n            3'b011: begin\n                clk_div <= 1'b0;\n            end\n            3'b100: begin\n                clk_div <= 1'b1;\n            end\n            3'b101: begin\n                clk_div <= 1'b0;\n            end\n            3'b110: begin\n                clk_div <= 1'b1;\n            end\n            default: begin\n                counter <= 3'b000;\n            end\n        endcase\n        if (counter == MUL2_DIV_CLK - 1) begin\n            counter <= 3'b000;\n        end else begin\n            counter <= counter + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:11:40.044488",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.6399999999999999,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T17:11:33.059682"
+        }
+      },
+      {
+        "code": "module freq_divbyfrac (\n    input wire clk,\n    input wire rst_n,\n    output reg clk_div\n);\n\nlocalparam MUL2_DIV_CLK = 7;\nreg [2:0] counter;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        counter <= 3'b000;\n        clk_div <= 1'b0;\n    end else begin\n        case (counter)\n            3'b000: begin\n                clk_div <= 1'b1;\n            end\n            3'b001: begin\n                clk_div <= 1'b0;\n            end\n            3'b010: begin\n                clk_div <= 1'b1;\n            end\n            3'b011: begin\n                clk_div <= 1'b0;\n            end\n            3'b100: begin\n                clk_div <= 1'b1;\n            end\n            3'b101: begin\n                clk_div <= 1'b0;\n            end\n            3'b110: begin\n                clk_div <= 1'b1;\n            end\n            default: begin\n                counter <= 3'b000;\n            end\n        endcase\n        if (counter == MUL2_DIV_CLK - 1) begin\n            counter <= 3'b000;\n        end else begin\n            counter <= counter + 1;\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T17:11:40.044490",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.6399999999999999,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T17:11:40.044471"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T17:11:40.044496",
+    "total_hdl_codes": 9
+  }
+}

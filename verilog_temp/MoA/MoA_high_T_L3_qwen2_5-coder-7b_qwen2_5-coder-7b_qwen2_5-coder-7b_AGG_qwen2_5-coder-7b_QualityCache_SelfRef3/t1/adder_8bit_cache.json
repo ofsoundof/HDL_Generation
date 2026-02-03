@@ -1,0 +1,156 @@
+{
+  "design_name": "adder_8bit",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:49:20.275412",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module adder_8bit (\n    input [7:0] a,\n    input [7:0] b,\n    input cin,\n    output reg [7:0] sum,\n    output reg cout\n);\n\nreg [7:0] carry;\n\nfull_adder bit_adder (\n    .a(a[0]),\n    .b(b[0]),\n    .cin(cin),\n    .sum(sum[0]),\n    .cout(carry[0])\n);\n\nassign {carry[1], sum[1]} = a[1] + b[1] + carry[0];\nassign {carry[2], sum[2]} = a[2] + b[2] + carry[1];\nassign {carry[3], sum[3]} = a[3] + b[3] + carry[2];\nassign {carry[4], sum[4]} = a[4] + b[4] + carry[3];\nassign {carry[5], sum[5]} = a[5] + b[5] + carry[4];\nassign {carry[6], sum[6]} = a[6] + b[6] + carry[5];\nassign {carry[7], sum[7]} = a[7] + b[7] + carry[6];\n\nassign cout = carry[7];\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:49:29.837954",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:49:27.940766"
+        }
+      },
+      {
+        "code": "module adder_8bit (\n    input [7:0] a,\n    input [7:0] b,\n    input cin,\n    output reg [7:0] sum,\n    output reg cout\n);\nassign {cout, sum} = a + b + cin;\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:49:29.837956",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:49:28.364384"
+        }
+      },
+      {
+        "code": "module adder_8bit(\n    input [7:0] a,\n    input [7:0] b,\n    input cin,\n    output reg [7:0] sum,\n    output reg cout\n);\n\nwire [8:0] carry;\n\nassign carry[0] = cin;\ngenerate\nfor (genvar i = 0; i < 8; i++) begin : full_adder_loop\n    assign {carry[i+1], sum[i]} = a[i] + b[i] + carry[i];\nend\nendgenerate\n\nassign cout = carry[8];\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:49:29.837958",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:49:29.837939"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module adder_8bit (\n    input [7:0] a,\n    input [7:0] b,\n    input cin,\n    output reg [7:0] sum,\n    output reg cout\n);\n\nwire [8:0] carry;\n\nassign carry[0] = cin;\ngenerate\nfor (genvar i = 0; i < 8; i++) begin : full_adder_loop\n    assign {carry[i+1], sum[i]} = a[i] + b[i] + carry[i];\nend\nendgenerate\n\nassign cout = carry[8];\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:49:32.061385",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:49:30.644373"
+        }
+      },
+      {
+        "code": "module adder_8bit (\n    input [7:0] a,\n    input [7:0] b,\n    input cin,\n    output reg [7:0] sum,\n    output reg cout\n);\n\nwire [8:0] carry;\n\nassign carry[0] = cin;\ngenerate\nfor (genvar i = 0; i < 8; i++) begin : full_adder_loop\n    assign {carry[i+1], sum[i]} = a[i] + b[i] + carry[i];\nend\nendgenerate\n\nassign cout = carry[8];\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:49:32.061388",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:49:31.339282"
+        }
+      },
+      {
+        "code": "module adder_8bit (\n    input [7:0] a,\n    input [7:0] b,\n    input cin,\n    output reg [7:0] sum,\n    output reg cout\n);\n\nwire [8:0] carry;\n\nassign carry[0] = cin;\ngenerate\nfor (genvar i = 0; i < 8; i++) begin : full_adder_loop\n    assign {carry[i+1], sum[i]} = a[i] + b[i] + carry[i];\nend\nendgenerate\n\nassign cout = carry[8];\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:49:32.061389",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:49:32.061375"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module adder_8bit (\n    input [7:0] a,\n    input [7:0] b,\n    input cin,\n    output reg [7:0] sum,\n    output reg cout\n);\n\nwire [8:0] carry;\n\nassign carry[0] = cin;\ngenerate\nfor (genvar i = 0; i < 8; i++) begin : full_adder_loop\n    assign {carry[i+1], sum[i]} = a[i] + b[i] + carry[i];\nend\nendgenerate\n\nassign cout = carry[8];\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:49:34.206422",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:49:32.810289"
+        }
+      },
+      {
+        "code": "module adder_8bit (\n    input [7:0] a,\n    input [7:0] b,\n    input cin,\n    output reg [7:0] sum,\n    output reg cout\n);\n\nwire [8:0] carry;\n\nassign carry[0] = cin;\ngenerate\nfor (genvar i = 0; i < 8; i++) begin : full_adder_loop\n    assign {carry[i+1], sum[i]} = a[i] + b[i] + carry[i];\nend\nendgenerate\n\nassign cout = carry[8];\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:49:34.206425",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:49:33.508389"
+        }
+      },
+      {
+        "code": "module adder_8bit (\n    input [7:0] a,\n    input [7:0] b,\n    input cin,\n    output reg [7:0] sum,\n    output reg cout\n);\n\nwire [8:0] carry;\n\nassign carry[0] = cin;\ngenerate\nfor (genvar i = 0; i < 8; i++) begin : full_adder_loop\n    assign {carry[i+1], sum[i]} = a[i] + b[i] + carry[i];\nend\nendgenerate\n\nassign cout = carry[8];\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:49:34.206426",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:49:34.206411"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:49:34.206432",
+    "total_hdl_codes": 9
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "design_name": "div_16bit",
+  "trial_num": 5,
+  "created_at": "2026-02-03T16:08:14.912176",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(*) begin\n    a_reg <= A;\n    b_reg <= B;\nend\n\nalways @(*) begin\n    if (b_reg == 0) begin\n        result = 16'b0;\n        odd = A;\n    end else begin\n        reg [15:0] quotient;\n        reg [15:0] remainder;\n        reg [31:0] dividend;\n\n        dividend = {8'b0, a_reg};\n        quotient = 16'b0;\n        remainder = 8'b0;\n\n        for (int i = 15; i >= 0; i--) begin\n            remainder <<= 1;\n            remainder[0] = dividend[i];\n            if (remainder >= b_reg) begin\n                remainder -= b_reg;\n                quotient[i] = 1;\n            end\n        end\n\n        result = quotient;\n        odd = remainder;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:08:25.739026",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:08:16.325576"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0]  B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(*) begin\n    a_reg = A;\n    b_reg = B;\n    result = 0;\n    odd = 0;\nend\n\nalways @(*) begin\n    if (b_reg == 0) begin\n        result = 16'bXXXXXXXX;\n        odd = 16'bXXXXXXXX;\n    end else begin\n        for (int i = 15; i >= 8; i--) begin\n            odd = {odd[7:0], a_reg[i]};\n            if (odd[15] == 1) begin\n                odd = odd - b_reg;\n                result[i-8] = 1;\n            end\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:08:25.739029",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:08:21.140689"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\nreg [15:0] a_reg;\nreg [7:0] b_reg;\nreg [15:0] quotient;\nreg [15:0] remainder;\n\nalways @(*) begin\n    a_reg <= A;\n    b_reg <= B;\n    quotient = 0;\n    remainder = 0;\n    for (int i = 0; i < 16; i = i + 1) begin\n        if (remainder[7:0] >= b_reg) begin\n            remainder = remainder - b_reg;\n            quotient[i] = 1;\n        end\n        remainder = (remainder << 1) | ((a_reg >> (15 - i)) & 1);\n    end\n    result = quotient;\n    odd = remainder;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:08:25.739030",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:08:25.739011"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\nreg [15:0] a_reg;\nreg [7:0] b_reg;\nreg [15:0] quotient;\nreg [15:0] remainder;\n\nalways @(*) begin\n    a_reg <= A;\n    b_reg <= B;\n    quotient = 0;\n    remainder = {8'b0, a_reg};\n    for (int i = 15; i >= 0; i--) begin\n        remainder <<= 1;\n        remainder[0] = a_reg[i];\n        if (remainder >= b_reg) begin\n            remainder -= b_reg;\n            quotient[i] = 1;\n        end\n    end\n    result = quotient;\n    odd = remainder[15:8];\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:08:41.144493",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:08:30.569532"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0]  B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(*) begin\n    a_reg <= A;\n    b_reg <= B;\nend\n\nalways @(*) begin\n    if (b_reg == 0) begin\n        result = 16'b0;\n        odd = A;\n    end else begin\n        reg [15:0] quotient;\n        reg [15:0] remainder;\n\n        quotient = 16'b0;\n        remainder = {8'b0, a_reg};\n\n        for (int i = 15; i >= 0; i--) begin\n            remainder <<= 1;\n            remainder[0] = a_reg[i];\n            if (remainder >= b_reg) begin\n                remainder -= b_reg;\n                quotient[i] = 1;\n            end\n        end\n\n        result = quotient;\n        odd = remainder;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:08:41.144496",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:08:35.783240"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [15:0] a_reg;\nreg [7:0] b_reg;\nreg [15:0] quotient;\nreg [15:0] remainder;\n\nalways @(*) begin\n    a_reg <= A;\n    b_reg <= B;\n    quotient = 0;\n    remainder = 0;\n    if (b_reg == 0) begin\n        result = 16'bXXXXXXXX;\n        odd = 16'bXXXXXXXX;\n    end else begin\n        for (int i = 0; i < 16; i = i + 1) begin\n            remainder = (remainder << 1) | ((a_reg >> (15 - i)) & 1);\n            if (remainder[7:0] >= b_reg) begin\n                remainder = remainder - b_reg;\n                quotient[i] = 1;\n            end\n        end\n        result = quotient;\n        odd = remainder;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:08:41.144497",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:08:41.144480"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(*) begin\n    a_reg <= A;\n    b_reg <= B;\nend\n\nalways @(*) begin\n    if (b_reg == 0) begin\n        result = 16'b0;\n        odd = A;\n    end else begin\n        reg [15:0] quotient;\n        reg [15:0] remainder;\n\n        quotient = 16'b0;\n        remainder = {8'b0, a_reg};\n\n        for (int i = 15; i >= 0; i--) begin\n            remainder <<= 1;\n            remainder[0] = remainder[i];\n            if (remainder >= b_reg) begin\n                remainder -= b_reg;\n                quotient[i] = 1;\n            end\n        end\n\n        result = quotient;\n        odd = remainder[15:8];\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:08:52.959432",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:08:46.246174"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [15:0] a_reg;\nreg [7:0] b_reg;\n\nalways @(*) begin\n    a_reg <= A;\n    b_reg <= B;\nend\n\nalways @(*) begin\n    if (b_reg == 0) begin\n        result = 16'b0;\n        odd = A;\n    end else begin\n        reg [15:0] quotient;\n        reg [15:0] remainder;\n        reg [31:0] dividend;\n\n        dividend = {8'b0, a_reg};\n        quotient = 16'b0;\n        remainder = 8'b0;\n\n        for (int i = 15; i >= 0; i--) begin\n            remainder <<= 1;\n            remainder[0] = dividend[i];\n            if (remainder >= b_reg) begin\n                remainder -= b_reg;\n                quotient[i] = 1;\n            end\n        end\n\n        result = quotient;\n        odd = remainder;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:08:52.959435",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:08:47.743094"
+        }
+      },
+      {
+        "code": "module div_16bit (\n    input [15:0] A,\n    input [7:0] B,\n    output reg [15:0] result,\n    output reg [15:0] odd\n);\n\nreg [15:0] a_reg;\nreg [7:0] b_reg;\nreg [15:0] quotient;\nreg [15:0] remainder;\n\nalways @(*) begin\n    a_reg <= A;\n    b_reg <= B;\n    if (b_reg == 0) begin\n        result = 16'bXXXXXXXX;\n        odd = 16'bXXXXXXXX;\n    end else begin\n        quotient = 0;\n        remainder = a_reg << 8;\n        for (int i = 7; i >= 0; i--) begin\n            if (remainder[15] == 1) begin\n                remainder = (remainder << 1) - b_reg;\n            end else begin\n                remainder = (remainder << 1);\n            end\n            quotient[i] = (remainder[15]);\n        end\n        result = quotient;\n        odd = remainder >> 8;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.85,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:08:52.959436",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.85,
+            0.85
+          ],
+          "generation_time": "2026-02-03T16:08:52.959419"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:08:52.959441",
+    "total_hdl_codes": 9
+  }
+}

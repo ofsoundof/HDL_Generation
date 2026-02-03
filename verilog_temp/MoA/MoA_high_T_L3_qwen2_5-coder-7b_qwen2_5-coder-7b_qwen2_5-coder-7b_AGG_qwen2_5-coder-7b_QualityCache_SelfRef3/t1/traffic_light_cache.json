@@ -1,0 +1,156 @@
+{
+  "design_name": "traffic_light",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:54:25.459375",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module traffic_light (\n    input rst_n,\n    input clk,\n    input pass_request,\n    output reg [7:0] clock,\n    output reg red,\n    output reg yellow,\n    output reg green\n);\n\nparameter idle = 2'b00, s1_red = 2'b01, s2_yellow = 2'b10, s3_green = 2'b11;\nreg [7:0] cnt;\nreg [1:0] state;\nreg p_red, p_yellow, p_green;\n\nalways @(*) begin\n    case (state)\n        idle: begin\n            red = 0;\n            yellow = 0;\n            green = 0;\n            if (!rst_n) next_state = s1_red;\n            else next_state = s1_red;\n        end\n        s1_red: begin\n            red = 1;\n            yellow = 0;\n            green = 0;\n            if (cnt == 5'd3) next_state = s3_green;\n            else next_state = s1_red;\n        end\n        s2_yellow: begin\n            red = 0;\n            yellow = 1;\n            green = 0;\n            if (cnt == 5'd3) next_state = s1_red;\n            else next_state = s2_yellow;\n        end\n        s3_green: begin\n            red = 0;\n            yellow = 0;\n            green = 1;\n            if (cnt == 5'd3) next_state = s2_yellow;\n            else next_state = s3_green;\n        end\n    endcase\nend\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= idle;\n        cnt <= 8'd10;\n    end else begin\n        state <= next_state;\n        if (pass_request && green) cnt <= 8'd10;\n        else if (!green && p_green) cnt <= 8'd60;\n        else if (!yellow && p_yellow) cnt <= 8'd5;\n        else if (!red && p_red) cnt <= 8'd10;\n        else cnt <= cnt - 1;\n    end\nend\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        p_red <= red;\n        p_yellow <= yellow;\n        p_green <= green;\n    end else begin\n        p_red <= red;\n        p_yellow <= yellow;\n        p_green <= green;\n    end\nend\n\nassign clock = cnt;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:55:00.566968",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:54:36.716124"
+        }
+      },
+      {
+        "code": "module traffic_light (\n    input wire rst_n,\n    input wire clk,\n    input wire pass_request,\n    output reg [7:0] clock,\n    output reg red,\n    output reg yellow,\n    output reg green\n);\n\nlocalparam idle = 2'b00, s1_red = 2'b01, s2_yellow = 2'b10, s3_green = 2'b11;\n\nreg [7:0] cnt;\nreg [1:0] state;\nreg p_red, p_yellow, p_green;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= idle;\n        cnt <= 8'd59;\n        red <= 0;\n        yellow <= 0;\n        green <= 0;\n    end else begin\n        case (state)\n            idle: begin\n                state <= s1_red;\n                cnt <= 60;\n            end\n            s1_red: begin\n                if (cnt == 8'd0) begin\n                    p_state <= s3_green;\n                    cnt <= 5;\n                end else begin\n                    cnt <= cnt - 1;\n                end\n            end\n            s2_yellow: begin\n                if (cnt == 8'd0) begin\n                    p_state <= s1_red;\n                    cnt <= 10;\n                end else begin\n                    cnt <= cnt - 1;\n                end\n            end\n            s3_green: begin\n                if (cnt == 8'd0) begin\n                    p_state <= s2_yellow;\n                    cnt <= 60;\n                end else begin\n                    cnt <= cnt - 1;\n                end\n            end\n        endcase\n\n        if (pass_request && green)\n            cnt <= 10;\n\n        if (cnt == 8'd0) begin\n            state <= p_state;\n        end\n    end\nend\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        red <= 0;\n        yellow <= 0;\n        green <= 0;\n    end else begin\n        {red, yellow, green} <= {p_red, p_yellow, p_green};\n    end\nend\n\nassign clock = cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        p_red <= 0;\n        p_yellow <= 0;\n        p_green <= 0;\n    end else begin\n        {p_red, p_yellow, p_green} <= {red, yellow, green};\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:55:00.566970",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:54:48.394500"
+        }
+      },
+      {
+        "code": "module traffic_light (\n    input wire rst_n,\n    input wire clk,\n    input wire pass_request,\n    output reg [7:0] clock,\n    output reg red,\n    output reg yellow,\n    output reg green\n);\n\nparameter idle = 2'b00, s1_red = 2'b01, s2_yellow = 2'b10, s3_green = 2'b11;\nreg [7:0] cnt;\nreg [1:0] state;\nreg p_red, p_yellow, p_green;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= idle;\n        red <= 0;\n        yellow <= 0;\n        green <= 0;\n        cnt <= 10;\n    end else begin\n        case (state)\n            idle: begin\n                state <= s1_red;\n                p_red <= 1;\n                p_yellow <= 0;\n                p_green <= 0;\n            end\n            s1_red: begin\n                if (cnt == 3) begin\n                    state <= s3_green;\n                    red <= 0;\n                    yellow <= 0;\n                    green <= 1;\n                end else begin\n                    cnt <= cnt - 1;\n                    p_red <= 1;\n                    p_yellow <= 0;\n                    p_green <= 0;\n                end\n            end\n            s2_yellow: begin\n                if (cnt == 3) begin\n                    state <= s1_red;\n                    red <= 1;\n                    yellow <= 0;\n                    green <= 0;\n                end else begin\n                    cnt <= cnt - 1;\n                    p_red <= 0;\n                    p_yellow <= 1;\n                    p_green <= 0;\n                end\n            end\n            s3_green: begin\n                if (cnt == 3) begin\n                    state <= s2_yellow;\n                    red <= 0;\n                    yellow <= 1;\n                    green <= 0;\n                end else begin\n                    cnt <= cnt - 1;\n                    p_red <= 0;\n                    p_yellow <= 0;\n                    p_green <= 1;\n                end\n            end\n        endcase\n    end\nend\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        cnt <= 10;\n    end else begin\n        if (pass_request && green) begin\n            if (cnt > 10) begin\n                cnt <= 10;\n            end else begin\n                cnt <= cnt;\n            end\n        end else if (!green && p_green) begin\n            cnt <= 60;\n        end else if (!yellow && p_yellow) begin\n            cnt <= 5;\n        end else if (!red && p_red) begin\n            cnt <= 10;\n        end else begin\n            cnt <= cnt - 1;\n        end\n    end\nend\n\nassign clock = cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        red <= 0;\n        yellow <= 0;\n        green <= 0;\n    end else begin\n        red <= p_red;\n        yellow <= p_yellow;\n        green <= p_green;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.45,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:55:00.566971",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:55:00.566954"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module traffic_light (\n    input rst_n,\n    input clk,\n    input pass_request,\n    output reg [7:0] clock,\n    output reg red,\n    output reg yellow,\n    output reg green\n);\n\nparameter idle = 2'b00, s1_red = 2'b01, s2_yellow = 2'b10, s3_green = 2'b11;\nreg [7:0] cnt;\nreg [1:0] state;\nreg p_red, p_yellow, p_green;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= idle;\n        cnt <= 8'd10;\n        red <= 0;\n        yellow <= 0;\n        green <= 0;\n        p_red <= 0;\n        p_yellow <= 0;\n        p_green <= 0;\n    end else begin\n        case (state)\n            idle: begin\n                state <= s1_red;\n                red <= 0;\n                yellow <= 0;\n                green <= 0;\n                cnt <= 60;\n                p_red <= 0;\n                p_yellow <= 0;\n                p_green <= 0;\n            end\n            s1_red: begin\n                if (cnt == 8'd5) begin\n                    state <= s3_green;\n                    red <= 0;\n                    yellow <= 0;\n                    green <= 1;\n                    cnt <= 60;\n                end else begin\n                    cnt <= cnt - 1;\n                    p_red <= 1;\n                    p_yellow <= 0;\n                    p_green <= 0;\n                end\n            end\n            s2_yellow: begin\n                if (cnt == 8'd5) begin\n                    state <= s1_red;\n                    red <= 1;\n                    yellow <= 0;\n                    green <= 0;\n                    cnt <= 10;\n                end else begin\n                    cnt <= cnt - 1;\n                    p_red <= 0;\n                    p_yellow <= 1;\n                    p_green <= 0;\n                end\n            end\n            s3_green: begin\n                if (cnt == 8'd5) begin\n                    state <= s2_yellow;\n                    red <= 0;\n                    yellow <= 1;\n                    green <= 0;\n                    cnt <= 5;\n                end else begin\n                    cnt <= cnt - 1;\n                    p_red <= 0;\n                    p_yellow <= 0;\n                    p_green <= 1;\n                end\n            end\n        endcase\n\n        if (pass_request && green) begin\n            if (cnt > 10) begin\n                cnt <= 10;\n            end else begin\n                cnt <= cnt;\n            end\n        end else if (!green && p_green) begin\n            cnt <= 60;\n        end else if (!yellow && p_yellow) begin\n            cnt <= 5;\n        end else if (!red && p_red) begin\n            cnt <= 10;\n        end else begin\n            cnt <= cnt - 1;\n        end\n\n        {red, yellow, green} <= {p_red, p_yellow, p_green};\n    end\nend\n\nassign clock = cnt;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.5399999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:55:34.405009",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.45
+          ],
+          "generation_time": "2026-02-03T16:55:11.628252"
+        }
+      },
+      {
+        "code": "module traffic_light (\n    input wire rst_n,\n    input wire clk,\n    input wire pass_request,\n    output reg [7:0] clock,\n    output reg red,\n    output reg yellow,\n    output reg green\n);\n\nparameter idle = 2'b00, s1_red = 2'b01, s2_yellow = 2'b10, s3_green = 2'b11;\nreg [7:0] cnt;\nreg [1:0] state;\nreg p_red, p_yellow, p_green;\n\nalways @(*) begin\n    case (state)\n        idle: begin\n            red = 0;\n            yellow = 0;\n            green = 0;\n            if (!rst_n) next_state = s1_red;\n            else next_state = s1_red;\n        end\n        s1_red: begin\n            red = 1;\n            yellow = 0;\n            green = 0;\n            if (cnt == 5'd3) next_state = s3_green;\n            else next_state = s1_red;\n        end\n        s2_yellow: begin\n            red = 0;\n            yellow = 1;\n            green = 0;\n            if (cnt == 5'd3) next_state = s1_red;\n            else next_state = s2_yellow;\n        end\n        s3_green: begin\n            red = 0;\n            yellow = 0;\n            green = 1;\n            if (cnt == 5'd3) next_state = s2_yellow;\n            else next_state = s3_green;\n        end\n    endcase\nend\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= idle;\n        cnt <= 8'd10;\n        red <= 0;\n        yellow <= 0;\n        green <= 0;\n    end else begin\n        state <= next_state;\n        if (pass_request && green)\n            if (cnt > 10)\n                cnt <= 10;\n            else\n                cnt <= cnt;\n        else if (!green && p_green)\n            cnt <= 60;\n        else if (!yellow && p_yellow)\n            cnt <= 5;\n        else if (!red && p_red)\n            cnt <= 10;\n        else\n            cnt <= cnt - 1;\n\n        {red, yellow, green} <= {p_red, p_yellow, p_green};\n        p_red <= red;\n        p_yellow <= yellow;\n        p_green <= green;\n    end\nend\n\nassign clock = cnt;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:55:34.405012",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.45
+          ],
+          "generation_time": "2026-02-03T16:55:22.148359"
+        }
+      },
+      {
+        "code": "module traffic_light (\n    input wire rst_n,\n    input wire clk,\n    input wire pass_request,\n    output reg [7:0] clock,\n    output reg red,\n    output reg yellow,\n    output reg green\n);\n\nparameter idle = 2'b00, s1_red = 2'b01, s2_yellow = 2'b10, s3_green = 2'b11;\nreg [7:0] cnt;\nreg [1:0] state, next_state;\nreg p_red, p_yellow, p_green;\n\nalways @(*) begin\n    case (state)\n        idle: begin\n            red = 0;\n            yellow = 0;\n            green = 0;\n            next_state = s1_red;\n        end\n        s1_red: begin\n            red = 1;\n            yellow = 0;\n            green = 0;\n            if (cnt == 5'd3) next_state = s2_yellow;\n            else next_state = s1_red;\n        end\n        s2_yellow: begin\n            red = 0;\n            yellow = 1;\n            green = 0;\n            if (cnt == 5'd3) next_state = s3_green;\n            else next_state = s2_yellow;\n        end\n        s3_green: begin\n            red = 0;\n            yellow = 0;\n            green = 1;\n            if (cnt == 5'd3) next_state = s1_red;\n            else next_state = s3_green;\n        end\n    endcase\nend\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= idle;\n        cnt <= 8'd60;\n        p_red <= 0;\n        p_yellow <= 0;\n        p_green <= 1;\n    end else begin\n        state <= next_state;\n        if (pass_request && green && cnt > 5'd10) begin\n            cnt <= 8'd10;\n        end else if (!green && p_green) cnt <= 8'd60;\n        else if (!yellow && p_yellow) cnt <= 8'd5;\n        else if (!red && p_red) cnt <= 8'd10;\n        else cnt <= cnt - 1;\n        p_red <= red;\n        p_yellow <= yellow;\n        p_green <= green;\n    end\nend\n\nassign clock = cnt;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.5399999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:55:34.405013",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.45
+          ],
+          "generation_time": "2026-02-03T16:55:34.404995"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module traffic_light (\n    input wire rst_n,\n    input wire clk,\n    input wire pass_request,\n    output reg [7:0] clock,\n    output reg red,\n    output reg yellow,\n    output reg green\n);\n\nparameter idle = 2'b00, s1_red = 2'b01, s2_yellow = 2'b10, s3_green = 2'b11;\nreg [7:0] cnt;\nreg [1:0] state;\nreg p_red, p_yellow, p_green;\n\nalways @(*) begin\n    case (state)\n        idle: begin\n            red = 0;\n            yellow = 0;\n            green = 0;\n            if (!rst_n) next_state = s1_red;\n            else next_state = s1_red;\n        end\n        s1_red: begin\n            red = 1;\n            yellow = 0;\n            green = 0;\n            if (cnt == 5'd3) next_state = s2_yellow;\n            else next_state = s1_red;\n        end\n        s2_yellow: begin\n            red = 0;\n            yellow = 1;\n            green = 0;\n            if (cnt == 5'd3) next_state = s3_green;\n            else next_state = s2_yellow;\n        end\n        s3_green: begin\n            red = 0;\n            yellow = 0;\n            green = 1;\n            if (cnt == 5'd3) next_state = s1_red;\n            else next_state = s3_green;\n        end\n    endcase\nend\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= idle;\n        cnt <= 8'd60;\n        p_red <= 0;\n        p_yellow <= 0;\n        p_green <= 1;\n    end else begin\n        case (state)\n            s3_green: begin\n                if (pass_request && green && cnt > 10) begin\n                    cnt <= 10;\n                    state <= s2_yellow;\n                end\n            end\n        endcase\n        red <= p_red;\n        yellow <= p_yellow;\n        green <= p_green;\n        if (state == s3_green && !pass_request && cnt != 8'd10) begin\n            cnt <= cnt - 1;\n        end else if (state == s3_green && pass_request && cnt != 8'd10 && cnt > 10) begin\n            cnt <= 10;\n        end\n    end\nend\n\nassign clock = cnt;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:56:09.911732",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:55:45.961110"
+        }
+      },
+      {
+        "code": "module traffic_light (\n    input wire rst_n,\n    input wire clk,\n    input wire pass_request,\n    output reg [7:0] clock,\n    output reg red,\n    output reg yellow,\n    output reg green\n);\n\nparameter idle = 2'b00, s1_red = 2'b01, s2_yellow = 2'b10, s3_green = 2'b11;\nreg [7:0] cnt;\nreg [1:0] state;\nreg p_red, p_yellow, p_green;\n\nalways @(*) begin\n    case (state)\n        idle: begin\n            red = 0;\n            yellow = 0;\n            green = 0;\n            if (!rst_n) next_state = s1_red;\n            else next_state = s1_red;\n        end\n        s1_red: begin\n            red = 1;\n            yellow = 0;\n            green = 0;\n            if (cnt == 5'd3) next_state = s3_green;\n            else next_state = s1_red;\n        end\n        s2_yellow: begin\n            red = 0;\n            yellow = 1;\n            green = 0;\n            if (cnt == 5'd3) next_state = s1_red;\n            else next_state = s2_yellow;\n        end\n        s3_green: begin\n            red = 0;\n            yellow = 0;\n            green = 1;\n            if (cnt == 5'd3) next_state = s2_yellow;\n            else next_state = s3_green;\n        end\n    endcase\nend\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= idle;\n        cnt <= 8'd10;\n    end else begin\n        state <= next_state;\n        if (pass_request && green)\n            if (cnt > 10)\n                cnt <= 10;\n            else\n                cnt <= cnt;\n        else if (!green && p_green)\n            cnt <= 60;\n        else if (!yellow && p_yellow)\n            cnt <= 5;\n        else if (!red && p_red)\n            cnt <= 10;\n        else\n            cnt <= cnt - 1;\n\n        {red, yellow, green} <= {p_red, p_yellow, p_green};\n    end\nend\n\nassign clock = cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        p_red <= 0;\n        p_yellow <= 0;\n        p_green <= 0;\n    end else begin\n        {p_red, p_yellow, p_green} <= {red, yellow, green};\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:56:09.911735",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:55:57.628970"
+        }
+      },
+      {
+        "code": "module traffic_light (\n    input wire rst_n,\n    input wire clk,\n    input wire pass_request,\n    output reg [7:0] clock,\n    output reg red,\n    output reg yellow,\n    output reg green\n);\n\nparameter idle = 2'b00, s1_red = 2'b01, s2_yellow = 2'b10, s3_green = 2'b11;\nreg [7:0] cnt;\nreg [1:0] state;\nreg next_state;\n\nalways @(*) begin\n    case (state)\n        idle: begin\n            red = 0;\n            yellow = 0;\n            green = 0;\n            if (!rst_n) next_state = s1_red;\n            else next_state = s1_red;\n        end\n        s1_red: begin\n            red = 1;\n            yellow = 0;\n            green = 0;\n            if (cnt == 5'd29) next_state = s3_green; // Corrected to 60 - 5\n            else next_state = s1_red;\n        end\n        s2_yellow: begin\n            red = 0;\n            yellow = 1;\n            green = 0;\n            if (cnt == 5'd4) next_state = s1_red; // Corrected to 5\n            else next_state = s2_yellow;\n        end\n        s3_green: begin\n            red = 0;\n            yellow = 0;\n            green = 1;\n            if (cnt == 5'd59) next_state = s2_yellow; // Corrected to 60 - 10\n            else next_state = s3_green;\n        end\n    endcase\nend\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= idle;\n        cnt <= 8'd10;\n        red <= 0;\n        yellow <= 0;\n        green <= 0;\n    end else begin\n        state <= next_state;\n        if (pass_request && green)\n            if (cnt > 60 - 10)\n                cnt <= 60 - 10; // Corrected to 60 - 10\n            else\n                cnt <= cnt;\n        else if (!green && p_green)\n            cnt <= 60;\n        else if (!yellow && p_yellow)\n            cnt <= 5;\n        else if (!red && p_red)\n            cnt <= 10;\n        else\n            cnt <= cnt - 1;\n\n        {red, yellow, green} <= {p_red, p_yellow, p_green};\n        p_red <= red;\n        p_yellow <= yellow;\n        p_green <= green;\n    end\nend\n\nassign clock = cnt;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:56:09.911736",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "generation_time": "2026-02-03T16:56:09.911717"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:56:09.911742",
+    "total_hdl_codes": 9
+  }
+}

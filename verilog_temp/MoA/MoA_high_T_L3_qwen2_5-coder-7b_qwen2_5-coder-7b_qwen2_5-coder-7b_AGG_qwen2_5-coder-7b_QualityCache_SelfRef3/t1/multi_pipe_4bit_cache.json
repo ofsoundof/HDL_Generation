@@ -1,0 +1,156 @@
+{
+  "design_name": "multi_pipe_4bit",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:40:50.833313",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module multi_pipe_4bit (\n    input wire clk,\n    input wire rst_n,\n    input wire [3:0] mul_a,\n    input wire [3:0] mul_b,\n    output reg [7:0] mul_out\n);\n\nreg [3:0] partial_products [0:3];\nreg [7:0] sum;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        sum <= 8'd0;\n        foreach (partial_products[i])\n            partial_products[i] <= 4'd0;\n    end else begin\n        for (integer i = 0; i < 4; i = i + 1) begin\n            if (mul_b[i]) begin\n                partial_products[i] <= mul_a << i;\n            end else begin\n                partial_products[i] <= 4'd0;\n            end\n        end\n        sum <= partial_products[3] + partial_products[2] + partial_products[1] + partial_products[0];\n    end\nend\n\nassign mul_out = sum;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:41:08.161199",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:40:55.785100"
+        }
+      },
+      {
+        "code": "module multi_pipe_4bit (\n    input wire clk,\n    input wire rst_n,\n    input wire [3:0] mul_a,\n    input wire [3:0] mul_b,\n    output reg [7:0] mul_out\n);\n    parameter size = 4;\n    reg [7:0] partial_products[size-1:0];\n    reg [7:0] sum;\n\n    // Extend inputs with zeros\n    assign partial_products[0] = mul_a << 3;\n    generate\n        for (genvar i = 1; i < size; i++) begin : gen_partial_products\n            assign partial_products[i] = (mul_b[i] == 1'b1) ? mul_a << (4 - i) : 8'd0;\n        end\n    endgenerate\n\n    // Register to store the sum of partial products\n    always @(posedge clk or negedge rst_n) begin\n        if (!rst_n)\n            sum <= 8'd0;\n        else\n            sum <= sum + partial_products[0] + partial_products[1];\n    end\n\n    // Final product calculation\n    always @(posedge clk or negedge rst_n) begin\n        if (!rst_n)\n            mul_out <= 8'd0;\n        else\n            mul_out <= sum;\n    end\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:41:08.161202",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:41:02.114904"
+        }
+      },
+      {
+        "code": "module multi_pipe_4bit (\n    input wire clk,\n    input wire rst_n,\n    input wire [3:0] mul_a,\n    input wire [3:0] mul_b,\n    output reg [7:0] mul_out\n);\n\nparameter size = 4;\n\nreg [7:0] partial_products [0:size-1];\nreg [7:0] sum;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_out <= 8'b0;\n        for (integer i = 0; i < size; i = i + 1) begin\n            partial_products[i] <= 8'b0;\n        end\n        sum <= 8'b0;\n    end else begin\n        for (integer i = 0; i < size; i = i + 1) begin\n            if (mul_b[i]) begin\n                partial_products[i] <= mul_a << i;\n            end else begin\n                partial_products[i] <= 8'b0;\n            end\n        end\n        sum <= 8'b0;\n        for (integer i = 0; i < size; i = i + 1) begin\n            sum <= sum + partial_products[i];\n        end\n        mul_out <= sum;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:41:08.161203",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:41:08.161184"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module multi_pipe_4bit (\n    input wire clk,\n    input wire rst_n,\n    input wire [3:0] mul_a,\n    input wire [3:0] mul_b,\n    output reg [7:0] mul_out\n);\n\nparameter size = 4;\n\nreg [7:0] partial_products [0:size-1];\nreg [7:0] sum;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        sum <= 8'b0;\n        for (integer i = 0; i < size; i = i + 1) begin\n            partial_products[i] <= 8'b0;\n        end\n    end else begin\n        for (integer i = 0; i < size; i = i + 1) begin\n            if (mul_b[i]) begin\n                partial_products[i] <= mul_a << i;\n            end else begin\n                partial_products[i] <= 8'b0;\n            end\n        end\n        sum <= 8'b0;\n        for (integer i = 0; i < size; i = i + 1) begin\n            sum <= sum + partial_products[i];\n        end\n    end\nend\n\nassign mul_out = sum;\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:41:21.769327",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T16:41:14.220688"
+        }
+      },
+      {
+        "code": "module multi_pipe_4bit (\n    input wire clk,\n    input wire rst_n,\n    input wire [3:0] mul_a,\n    input wire [3:0] mul_b,\n    output reg [7:0] mul_out\n);\n\nparameter size = 4;\nreg [7:0] partial_products[size-1:0];\nreg [7:0] sum;\n\n// Calculate partial products\ngenerate\n    for (genvar i = 0; i < size; i++) begin : gen_partial_products\n        assign partial_products[i] = (mul_b[i] == 1'b1) ? mul_a << i : 8'd0;\n    end\nendgenerate\n\n// Register to store the sum of partial products\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        sum <= 8'd0;\n    else begin\n        sum <= partial_products[3] + partial_products[2] + partial_products[1] + partial_products[0];\n    end\nend\n\n// Final product calculation\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        mul_out <= 8'd0;\n    else\n        mul_out <= sum;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:41:21.769330",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T16:41:15.735397"
+        }
+      },
+      {
+        "code": "module multi_pipe_4bit (\n    input wire clk,\n    input wire rst_n,\n    input wire [3:0] mul_a,\n    input wire [3:0] mul_b,\n    output reg [7:0] mul_out\n);\n\nparameter size = 4;\n\nreg [7:0] partial_products[size-1:0];\nreg [7:0] sum;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_out <= 8'd0;\n        for (integer i = 0; i < size; i = i + 1) begin\n            partial_products[i] <= 8'b0;\n        end\n        sum <= 8'b0;\n    end else begin\n        for (integer i = 0; i < size; i = i + 1) begin\n            if (mul_b[i]) begin\n                partial_products[i] <= mul_a << i;\n            end else begin\n                partial_products[i] <= 8'b0;\n            end\n        end\n        sum <= 8'b0;\n        for (integer i = 0; i < size; i = i + 1) begin\n            sum <= sum + partial_products[i];\n        end\n        mul_out <= sum;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:41:21.769331",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.75,
+            0.75,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T16:41:21.769313"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module multi_pipe_4bit (\n    input wire clk,\n    input wire rst_n,\n    input wire [3:0] mul_a,\n    input wire [3:0] mul_b,\n    output reg [7:0] mul_out\n);\n\nparameter size = 4;\n\nreg [7:0] partial_products[size-1:0];\nreg [7:0] sum;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_out <= 8'b0;\n        for (integer i = 0; i < size; i = i + 1) begin\n            partial_products[i] <= 8'b0;\n        end\n        sum <= 8'b0;\n    end else begin\n        for (integer i = 0; i < size; i = i + 1) begin\n            if (mul_b[i]) begin\n                partial_products[i] <= mul_a << i;\n            end else begin\n                partial_products[i] <= 8'b0;\n            end\n        end\n        sum <= 8'b0;\n        for (integer i = 0; i < size; i = i + 1) begin\n            sum <= sum + partial_products[i];\n        end\n        mul_out <= sum;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:41:35.397892",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T16:41:27.856915"
+        }
+      },
+      {
+        "code": "module multi_pipe_4bit (\n    input wire clk,\n    input wire rst_n,\n    input wire [3:0] mul_a,\n    input wire [3:0] mul_b,\n    output reg [7:0] mul_out\n);\n\nparameter size = 4;\nreg [7:0] partial_products[size-1:0];\nreg [7:0] sum;\n\n// Calculate partial products\ngenerate\n    for (genvar i = 0; i < size; i++) begin : gen_partial_products\n        assign partial_products[i] = (mul_b[i] == 1'b1) ? mul_a << i : 8'd0;\n    end\nendgenerate\n\n// Register to store the sum of partial products\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        sum <= 8'd0;\n    else begin\n        sum <= partial_products[3] + partial_products[2] + partial_products[1] + partial_products[0];\n    end\nend\n\n// Final product calculation\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        mul_out <= 8'd0;\n    else\n        mul_out <= sum;\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:41:35.397895",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T16:41:29.375070"
+        }
+      },
+      {
+        "code": "module multi_pipe_4bit (\n    input wire clk,\n    input wire rst_n,\n    input wire [3:0] mul_a,\n    input wire [3:0] mul_b,\n    output reg [7:0] mul_out\n);\n\nparameter size = 4;\nreg [7:0] partial_products[size-1:0];\nreg [7:0] sum;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        mul_out <= 8'b0;\n        for (integer i = 0; i < size; i = i + 1) begin\n            partial_products[i] <= 8'b0;\n        end\n        sum <= 8'b0;\n    end else begin\n        for (integer i = 0; i < size; i = i + 1) begin\n            if (mul_b[i]) begin\n                partial_products[i] <= mul_a << i;\n            end else begin\n                partial_products[i] <= 8'b0;\n            end\n        end\n        sum <= 8'b0;\n        for (integer i = 0; i < size; i = i + 1) begin\n            sum <= sum + partial_products[i];\n        end\n        mul_out <= sum;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.75,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:41:35.397896",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            0.75,
+            0.75
+          ],
+          "generation_time": "2026-02-03T16:41:35.397879"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:41:35.397901",
+    "total_hdl_codes": 9
+  }
+}

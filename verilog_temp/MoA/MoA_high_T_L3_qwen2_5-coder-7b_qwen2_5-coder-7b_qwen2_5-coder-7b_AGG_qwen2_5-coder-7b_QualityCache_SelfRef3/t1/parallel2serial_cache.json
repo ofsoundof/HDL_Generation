@@ -1,0 +1,156 @@
+{
+  "design_name": "parallel2serial",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:56:36.894349",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module parallel2serial (\n    input wire clk,\n    input wire rst_n,\n    input wire [3:0] d,\n    output reg valid_out,\n    output reg dout\n);\n\nreg [3:0] data;\nreg [1:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        data <= 4'b0000;\n        cnt <= 2'b00;\n        valid_out <= 1'b0;\n        dout <= 1'b0;\n    end else begin\n        case (cnt)\n            2'b00: begin\n                dout <= d[3];\n                cnt <= 2'b01;\n            end\n            2'b01: begin\n                dout <= d[2];\n                cnt <= 2'b10;\n            end\n            2'b10: begin\n                dout <= d[1];\n                cnt <= 2'b11;\n            end\n            2'b11: begin\n                dout <= d[0];\n                valid_out <= 1'b1;\n                cnt <= 2'b00;\n            end\n            default: begin\n                dout <= 1'b0;\n                valid_out <= 1'b0;\n                cnt <= 2'b00;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.5399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:57:23.776794",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:56:43.220833"
+        }
+      },
+      {
+        "code": "module parallel2serial(\n    input wire clk,\n    input wire rst_n,\n    input wire [3:0] d,\n    output reg valid_out,\n    output reg dout\n);\n\nreg [3:0] data;\nreg [1:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        valid_out <= 0;\n        dout <= 0;\n        data <= 4'b0000;\n        cnt <= 2'b00;\n    end else begin\n        if (cnt == 2'b11) begin\n            data <= d;\n            cnt <= 2'b00;\n            valid_out <= 1;\n        end else begin\n            cnt <= cnt + 1;\n            valid_out <= 0;\n            dout <= data[3];\n            data <= {data[2:0], data[3]};\n        end\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.5399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:57:23.776797",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:56:47.700488"
+        }
+      },
+      {
+        "code": "module parallel2serial (\n    input clk,\n    input rst_n,\n    input [3:0] d,\n    output reg valid_out,\n    output reg dout\n);\n\nreg [3:0] data;\nreg [1:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        data <= 4'b0000;\n        cnt <= 2'b00;\n        valid_out <= 1'b0;\n    end else begin\n        case (cnt)\n            2'b00: begin\n                dout <= d[3];\n                valid_out <= 1'b1;\n            end\n            2'b01: begin\n                dout <= d[2];\n                valid_out <= 1'b1;\n            end\n            2'b10: begin\n                dout <= d[1];\n                valid_out <= 1'b1;\n            end\n            2'b11: begin\n                dout <= d[0];\n                valid_out <= 1'b1;\n                cnt <= 2'b00;\n                valid_out <= 1'b0; // Reset valid_out after outputting the last bit\n            end\n            default: begin\n                dout <= data[3];\n                valid_out <= 1'b0;\n                cnt <= cnt + 1;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:57:23.776798",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:57:23.776777"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module parallel2serial (\n    input wire clk,\n    input wire rst_n,\n    input wire [3:0] d,\n    output reg valid_out,\n    output reg dout\n);\n\nreg [3:0] data;\nreg [1:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        data <= 4'b0000;\n        cnt <= 2'b00;\n        valid_out <= 1'b0;\n    end else begin\n        case (cnt)\n            2'b00: begin\n                dout <= d[3];\n                cnt <= 2'b01;\n            end\n            2'b01: begin\n                dout <= d[2];\n                cnt <= 2'b10;\n            end\n            2'b10: begin\n                dout <= d[1];\n                cnt <= 2'b11;\n            end\n            2'b11: begin\n                dout <= d[0];\n                valid_out <= 1'b1;\n                cnt <= 2'b00;\n                valid_out <= 1'b0; // Reset valid_out after outputting the last bit\n            end\n            default: begin\n                dout <= data[3];\n                valid_out <= 1'b0;\n                cnt <= cnt + 1;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:58:12.431779",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.5399999999999999,
+            0.5399999999999999
+          ],
+          "generation_time": "2026-02-03T16:57:59.866341"
+        }
+      },
+      {
+        "code": "module parallel2serial (\n    input wire clk,\n    input wire rst_n,\n    input wire [3:0] d,\n    output reg valid_out,\n    output reg dout\n);\n\nreg [3:0] data;\nreg [1:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        data <= 4'b0000;\n        cnt <= 2'b00;\n        valid_out <= 1'b0;\n        dout <= 1'b0;\n    end else begin\n        case (cnt)\n            2'b00: begin\n                dout <= d[3];\n                cnt <= 2'b01;\n            end\n            2'b01: begin\n                dout <= d[2];\n                cnt <= 2'b10;\n            end\n            2'b10: begin\n                dout <= d[1];\n                cnt <= 2'b11;\n            end\n            2'b11: begin\n                dout <= d[0];\n                valid_out <= 1'b1;\n                cnt <= 2'b00;\n            end\n            default: begin\n                dout <= 1'b0;\n                valid_out <= 1'b0;\n                cnt <= 2'b00;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.5399999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:58:12.431782",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.5399999999999999,
+            0.5399999999999999
+          ],
+          "generation_time": "2026-02-03T16:58:06.550625"
+        }
+      },
+      {
+        "code": "module parallel2serial (\n    input clk,\n    input rst_n,\n    input [3:0] d,\n    output reg valid_out,\n    output reg dout\n);\n\nreg [3:0] data;\nreg [1:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        data <= 4'b0000;\n        cnt <= 2'b00;\n        valid_out <= 1'b0;\n    end else begin\n        case (cnt)\n            2'b00: begin\n                dout <= d[3];\n                cnt <= 2'b01;\n            end\n            2'b01: begin\n                dout <= d[2];\n                cnt <= 2'b10;\n            end\n            2'b10: begin\n                dout <= d[1];\n                cnt <= 2'b11;\n            end\n            2'b11: begin\n                dout <= d[0];\n                valid_out <= 1'b1;\n                cnt <= 2'b00;\n            end\n            default: begin\n                dout <= data[3];\n                valid_out <= 1'b0;\n                cnt <= cnt + 1;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:58:12.431783",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.5399999999999999,
+            0.5399999999999999
+          ],
+          "generation_time": "2026-02-03T16:58:12.431765"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module parallel2serial (\n    input clk,\n    input rst_n,\n    input [3:0] d,\n    output reg valid_out,\n    output reg dout\n);\n\nreg [3:0] data;\nreg [1:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        data <= 4'b0000;\n        cnt <= 2'b00;\n        valid_out <= 1'b0;\n    end else begin\n        case (cnt)\n            2'b00: begin\n                dout <= d[3];\n                cnt <= 2'b01;\n            end\n            2'b01: begin\n                dout <= d[2];\n                cnt <= 2'b10;\n            end\n            2'b10: begin\n                dout <= d[1];\n                cnt <= 2'b11;\n            end\n            2'b11: begin\n                dout <= d[0];\n                valid_out <= 1'b1;\n                cnt <= 2'b00;\n            end\n            default: begin\n                dout <= data[3];\n                valid_out <= 1'b0;\n                cnt <= cnt + 1;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:58:31.230516",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6399999999999999,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T16:58:18.519114"
+        }
+      },
+      {
+        "code": "module parallel2serial (\n    input clk,\n    input rst_n,\n    input [3:0] d,\n    output reg valid_out,\n    output reg dout\n);\n\nreg [3:0] data;\nreg [1:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        data <= 4'b0000;\n        cnt <= 2'b00;\n        valid_out <= 1'b0;\n    end else begin\n        case (cnt)\n            2'b00: begin\n                dout <= d[3];\n                cnt <= 2'b01;\n            end\n            2'b01: begin\n                dout <= d[2];\n                cnt <= 2'b10;\n            end\n            2'b10: begin\n                dout <= d[1];\n                cnt <= 2'b11;\n            end\n            2'b11: begin\n                dout <= d[0];\n                valid_out <= 1'b1;\n                cnt <= 2'b00;\n            end\n            default: begin\n                dout <= data[3];\n                valid_out <= 1'b0;\n                cnt <= cnt + 1;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:58:31.230519",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6399999999999999,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T16:58:25.297464"
+        }
+      },
+      {
+        "code": "module parallel2serial (\n    input clk,\n    input rst_n,\n    input [3:0] d,\n    output reg valid_out,\n    output reg dout\n);\n\nreg [3:0] data;\nreg [1:0] cnt;\n\nalways @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        data <= 4'b0000;\n        cnt <= 2'b00;\n        valid_out <= 1'b0;\n    end else begin\n        case (cnt)\n            2'b00: begin\n                dout <= d[3];\n                cnt <= 2'b01;\n            end\n            2'b01: begin\n                dout <= d[2];\n                cnt <= 2'b10;\n            end\n            2'b10: begin\n                dout <= d[1];\n                cnt <= 2'b11;\n            end\n            2'b11: begin\n                dout <= d[0];\n                valid_out <= 1'b1;\n                cnt <= 2'b00;\n            end\n            default: begin\n                dout <= data[3];\n                valid_out <= 1'b0;\n                cnt <= cnt + 1;\n            end\n        endcase\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6399999999999999,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:58:31.230520",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6399999999999999,
+            0.6399999999999999,
+            0.6399999999999999
+          ],
+          "generation_time": "2026-02-03T16:58:31.230502"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:58:31.230526",
+    "total_hdl_codes": 9
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "design_name": "comparator_3bit",
+  "trial_num": 1,
+  "created_at": "2026-02-03T16:35:13.503352",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module comparator_3bit (\n    input [2:0] A,\n    input [2:0] B,\n    output reg A_greater,\n    output reg A_equal,\n    output reg A_less\n);\n\nalways @(*) begin\n    if (A > B) begin\n        A_greater = 1;\n        A_equal = 0;\n        A_less = 0;\n    end else if (A < B) begin\n        A_greater = 0;\n        A_equal = 0;\n        A_less = 1;\n    end else begin\n        A_greater = 0;\n        A_equal = 1;\n        A_less = 0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:35:15.566261",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:35:14.331253"
+        }
+      },
+      {
+        "code": "module comparator_3bit (\n    input [2:0] A,\n    input [2:0] B,\n    output reg A_greater,\n    output reg A_equal,\n    output reg A_less\n);\n\nassign A_greater = (A > B);\nassign A_equal = (A == B);\nassign A_less = (A < B);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:35:15.566264",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:35:14.784893"
+        }
+      },
+      {
+        "code": "module comparator_3bit (\n    input [2:0] A,\n    input [2:0] B,\n    output reg A_greater,\n    output reg A_equal,\n    output reg A_less\n);\n\nalways @(*) begin\n    if (A > B) begin\n        A_greater = 1;\n        A_equal = 0;\n        A_less = 0;\n    end else if (A < B) begin\n        A_greater = 0;\n        A_equal = 0;\n        A_less = 1;\n    end else begin\n        A_greater = 0;\n        A_equal = 1;\n        A_less = 0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:35:15.566265",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:35:15.566249"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module comparator_3bit (\n    input [2:0] A,\n    input [2:0] B,\n    output reg A_greater,\n    output reg A_equal,\n    output reg A_less\n);\n\nalways @(*) begin\n    if (A > B) begin\n        A_greater = 1;\n        A_equal = 0;\n        A_less = 0;\n    end else if (A < B) begin\n        A_greater = 0;\n        A_equal = 0;\n        A_less = 1;\n    end else begin\n        A_greater = 0;\n        A_equal = 1;\n        A_less = 0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:35:17.758671",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:16.463894"
+        }
+      },
+      {
+        "code": "module comparator_3bit (\n    input [2:0] A,\n    input [2:0] B,\n    output reg A_greater,\n    output reg A_equal,\n    output reg A_less\n);\n\nalways @(*) begin\n    if (A > B) begin\n        A_greater = 1;\n        A_equal = 0;\n        A_less = 0;\n    end else if (A < B) begin\n        A_greater = 0;\n        A_equal = 0;\n        A_less = 1;\n    end else begin\n        A_greater = 0;\n        A_equal = 1;\n        A_less = 0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:35:17.758674",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:17.276203"
+        }
+      },
+      {
+        "code": "module comparator_3bit (\n    input [2:0] A,\n    input [2:0] B,\n    output reg A_greater,\n    output reg A_equal,\n    output reg A_less\n);\n\nassign A_greater = (A > B);\nassign A_equal = (A == B);\nassign A_less = (A < B);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:35:17.758675",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:17.758659"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module comparator_3bit (\n    input [2:0] A,\n    input [2:0] B,\n    output reg A_greater,\n    output reg A_equal,\n    output reg A_less\n);\n\nalways @(*) begin\n    if (A > B) begin\n        A_greater = 1;\n        A_equal = 0;\n        A_less = 0;\n    end else if (A < B) begin\n        A_greater = 0;\n        A_equal = 0;\n        A_less = 1;\n    end else begin\n        A_greater = 0;\n        A_equal = 1;\n        A_less = 0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:35:19.808153",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:18.569323"
+        }
+      },
+      {
+        "code": "module comparator_3bit (\n    input [2:0] A,\n    input [2:0] B,\n    output reg A_greater,\n    output reg A_equal,\n    output reg A_less\n);\n\nassign A_greater = (A > B);\nassign A_equal = (A == B);\nassign A_less = (A < B);\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:35:19.808156",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:19.024916"
+        }
+      },
+      {
+        "code": "module comparator_3bit (\n    input [2:0] A,\n    input [2:0] B,\n    output reg A_greater,\n    output reg A_equal,\n    output reg A_less\n);\n\nalways @(*) begin\n    if (A > B) begin\n        A_greater = 1;\n        A_equal = 0;\n        A_less = 0;\n    end else if (A < B) begin\n        A_greater = 0;\n        A_equal = 0;\n        A_less = 1;\n    end else begin\n        A_greater = 0;\n        A_equal = 1;\n        A_less = 0;\n    end\nend\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 1.0,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:35:19.808157",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "generation_time": "2026-02-03T16:35:19.808131"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:35:19.808163",
+    "total_hdl_codes": 9
+  }
+}

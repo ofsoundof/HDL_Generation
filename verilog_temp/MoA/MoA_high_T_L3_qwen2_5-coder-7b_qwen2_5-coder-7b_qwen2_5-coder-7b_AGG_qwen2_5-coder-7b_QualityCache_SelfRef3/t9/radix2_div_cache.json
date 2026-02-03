@@ -1,0 +1,156 @@
+{
+  "design_name": "radix2_div",
+  "trial_num": 9,
+  "created_at": "2026-02-03T16:26:25.231795",
+  "total_layers": 3,
+  "layer_outputs": {
+    "0": [
+      {
+        "code": "module radix2_div (\n    input clk,\n    input rst,\n    input sign,\n    input [7:0] dividend,\n    input [7:0] divisor,\n    input opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n    reg [7:0] SR;\n    reg [7:0] NEG_DIVISOR;\n    reg [2:0] cnt;\n    reg start_cnt;\n\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            res_valid <= 0;\n            result <= 0;\n            SR <= 0;\n            NEG_DIVISOR <= 0;\n            cnt <= 0;\n            start_cnt <= 0;\n        end else if (opn_valid && !res_valid) begin\n            res_valid <= 1;\n            SR <= {dividend, 1'b0};\n            NEG_DIVISOR <= sign ? ~divisor : -divisor;\n            cnt <= 3'd1;\n            start_cnt <= 1;\n        end else if (start_cnt) begin\n            if (cnt == 3'd8) begin\n                SR[7:0] <= {SR[15:8], res_valid};\n                SR[15:8] <= {SR[7:0]};\n                cnt <= 3'd0;\n                start_cnt <= 0;\n            end else begin\n                SR <= {carry_out, SR[15:1]};\n                cnt <= cnt + 1;\n            end\n        end\n    end\n\n    assign carry_out = (sign == 1'b1) ? (SR[7] ^ NEG_DIVISOR[7]) & ~SR[6:0] | SR[7] : SR[7] ^ NEG_DIVISOR[7];\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.59,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:26:52.523828",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:26:33.291590"
+        }
+      },
+      {
+        "code": "module radix2_div (\n    input wire clk,\n    input wire rst,\n    input wire sign,\n    input wire [7:0] dividend,\n    input wire [7:0] divisor,\n    input wire opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n\n    reg [8:0] SR;\n    reg [7:0] ABS_DIVISOR;\n    reg [3:0] cnt;\n    reg start_cnt;\n    reg NEG_DIVISOR;\n    reg [7:0] temp_sub;\n    reg carry_out;\n\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            SR <= 9'b0;\n            ABS_DIVISOR <= 8'b0;\n            cnt <= 4'b0;\n            start_cnt <= 1'b0;\n            NEG_DIVISOR <= 1'b0;\n            temp_sub <= 8'b0;\n            carry_out <= 1'b0;\n            res_valid <= 1'b0;\n        end else begin\n            if (opn_valid && !res_valid) begin\n                SR[8:1] <= sign ? {~dividend[7], dividend} : {dividend, 1'b0};\n                ABS_DIVISOR <= sign ? {~divisor[7], divisor} : divisor;\n                cnt <= 4'b1;\n                start_cnt <= 1'b1;\n                NEG_DIVISOR <= sign ? 1'b1 : 1'b0;\n            end else if (start_cnt) begin\n                if (cnt == 8'd7) begin\n                    SR[8:1] <= temp_sub;\n                    res_valid <= 1'b1;\n                    start_cnt <= 1'b0;\n                end else begin\n                    cnt <= cnt + 1;\n                    SR <= {carry_out, SR[8:1]};\n                    temp_sub <= SR - ABS_DIVISOR;\n                    carry_out <= temp_sub[8];\n                end\n            end\n        end\n    end\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.48999999999999994,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:26:52.523830",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:26:42.343824"
+        }
+      },
+      {
+        "code": "module radix2_div (\n    input wire clk,\n    input wire rst,\n    input wire sign,\n    input wire [7:0] dividend,\n    input wire [7:0] divisor,\n    input wire opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n\n    reg [7:0] abs_dividend;\n    reg [7:0] abs_divisor;\n    reg [8:0] SR;\n    reg [3:0] cnt;\n    reg start_cnt;\n    reg [7:0] NEG_DIVISOR;\n\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            res_valid <= 1'b0;\n            result <= 16'b0;\n            SR <= 9'b0;\n            cnt <= 4'b0;\n            start_cnt <= 1'b0;\n            abs_dividend <= 8'b0;\n            abs_divisor <= 8'b0;\n            NEG_DIVISOR <= 8'b0;\n        end else begin\n            if (opn_valid && !res_valid) begin\n                abs_dividend <= sign ? ~dividend + 1 : dividend;\n                abs_divisor <= sign ? ~divisor + 1 : divisor;\n                SR <= {abs_dividend, 1'b0};\n                cnt <= 4'b1;\n                start_cnt <= 1'b1;\n            end else if (start_cnt) begin\n                if (cnt == 8'b1000) begin\n                    start_cnt <= 1'b0;\n                    cnt <= 4'b0;\n                    result[7:0] <= SR[7:0];\n                    result[15:8] <= SR[16:9];\n                end else begin\n                    cnt <= cnt + 1;\n                    SR[8] <= ~(SR[7:0] >= NEG_DIVISOR);\n                    if (SR[7:0] >= NEG_DIVISOR) SR[7:0] <= SR[7:0] - NEG_DIVISOR;\n                    SR[8:1] <= {SR[7:0], 1'b0};\n                end\n            end\n        end\n    end\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.45,
+        "layer_idx": 0,
+        "cached_at": "2026-02-03T16:26:52.523831",
+        "generation_info": {
+          "layer_idx": 0,
+          "prompt_type": "initial",
+          "generation_time": "2026-02-03T16:26:52.523814"
+        }
+      }
+    ],
+    "1": [
+      {
+        "code": "module radix2_div (\n    input wire clk,\n    input wire rst,\n    input wire sign,\n    input wire [7:0] dividend,\n    input wire [7:0] divisor,\n    input wire opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n    reg [7:0] SR;\n    reg [7:0] NEG_DIVISOR;\n    reg [3:0] cnt;\n    reg start_cnt;\n\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            res_valid <= 1'b0;\n            result <= 16'b0;\n            SR <= 9'b0;\n            NEG_DIVISOR <= 9'b0;\n            cnt <= 4'b0;\n            start_cnt <= 1'b0;\n        end else if (opn_valid && !res_valid) begin\n            res_valid <= 1'b0;\n            SR <= {dividend, 1'b0};\n            NEG_DIVISOR <= sign ? ~{divisor[7:0], 1'b0} + 1 : -{divisor[7:0], 1'b0};\n            cnt <= 4'b1;\n            start_cnt <= 1'b1;\n        end else if (start_cnt) begin\n            if (cnt == 8'b1000) begin\n                SR[8] <= ~(SR[7:0] >= NEG_DIVISOR);\n                if (SR[7:0] >= NEG_DIVISOR) SR[7:0] <= SR[7:0] - NEG_DIVISOR;\n                SR[16:9] <= {SR[7:0], 1'b0};\n                cnt <= 4'b0;\n                start_cnt <= 1'b0;\n                res_valid <= 1'b1;\n            end else begin\n                cnt <= cnt + 1;\n                SR[8] <= ~(SR[7:0] >= NEG_DIVISOR);\n                if (SR[7:0] >= NEG_DIVISOR) SR[7:0] <= SR[7:0] - NEG_DIVISOR;\n                SR[16:9] <= {SR[7:0], 1'b0};\n            end\n        end\n    end\n\n    assign result = {SR[15:8], SR[7:0]};\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.6,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:27:20.705569",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.59,
+            0.48999999999999994,
+            0.45
+          ],
+          "generation_time": "2026-02-03T16:27:02.391793"
+        }
+      },
+      {
+        "code": "module radix2_div (\n    input wire clk,\n    input wire rst,\n    input wire sign,\n    input wire [7:0] dividend,\n    input wire [7:0] divisor,\n    input wire opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n\n    reg [8:0] SR;\n    reg [7:0] ABS_DIVISOR;\n    reg [3:0] cnt;\n    reg start_cnt;\n    reg NEG_DIVISOR;\n    reg [7:0] temp_sub;\n    reg carry_out;\n\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            SR <= 9'b0;\n            ABS_DIVISOR <= 8'b0;\n            cnt <= 4'b0;\n            start_cnt <= 1'b0;\n            NEG_DIVISOR <= 1'b0;\n            temp_sub <= 8'b0;\n            carry_out <= 1'b0;\n            res_valid <= 1'b0;\n        end else begin\n            if (opn_valid && !res_valid) begin\n                SR[8:1] <= sign ? {~dividend, dividend} : {dividend, 1'b0};\n                ABS_DIVISOR <= sign ? {~divisor, divisor} : divisor;\n                cnt <= 4'b1;\n                start_cnt <= 1'b1;\n                NEG_DIVISOR <= sign ? 1'b1 : 1'b0;\n            end else if (start_cnt) begin\n                if (cnt == 8'd7) begin\n                    SR[8:1] <= temp_sub;\n                    res_valid <= 1'b1;\n                    start_cnt <= 1'b0;\n                end else begin\n                    cnt <= cnt + 1;\n                    SR <= {carry_out, SR[8:1]};\n                    temp_sub <= SR - ABS_DIVISOR;\n                    carry_out <= temp_sub[8];\n                end\n            end\n        end\n    end\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.48999999999999994,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:27:20.705572",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.59,
+            0.48999999999999994,
+            0.45
+          ],
+          "generation_time": "2026-02-03T16:27:11.448427"
+        }
+      },
+      {
+        "code": "module radix2_div (\n    input wire clk,\n    input wire rst,\n    input wire sign,\n    input wire [7:0] dividend,\n    input wire [7:0] divisor,\n    input wire opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n\n    reg [8:0] SR;\n    reg [7:0] ABS_DIVISOR;\n    reg [3:0] cnt;\n    reg start_cnt;\n    reg NEG_DIVISOR;\n    reg [7:0] temp_sub;\n    reg carry_out;\n\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            SR <= 9'b0;\n            ABS_DIVISOR <= 8'b0;\n            cnt <= 4'b0;\n            start_cnt <= 1'b0;\n            NEG_DIVISOR <= 1'b0;\n            temp_sub <= 8'b0;\n            carry_out <= 1'b0;\n            res_valid <= 1'b0;\n        end else if (opn_valid && !res_valid) begin\n            SR[8:1] <= sign ? {~dividend[7], dividend} : {dividend, 1'b0};\n            ABS_DIVISOR <= sign ? {~divisor[7], divisor} : divisor;\n            cnt <= 4'b1;\n            start_cnt <= 1'b1;\n            NEG_DIVISOR <= sign ? 1'b1 : 1'b0;\n        end else if (start_cnt) begin\n            if (cnt == 8'd7) begin\n                SR[8:1] <= temp_sub;\n                res_valid <= 1'b1;\n                start_cnt <= 1'b0;\n            end else begin\n                cnt <= cnt + 1;\n                SR <= {carry_out, SR[8:1]};\n                temp_sub <= SR - ABS_DIVISOR;\n                carry_out <= temp_sub[8];\n            end\n        end\n    end\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.48999999999999994,
+        "layer_idx": 1,
+        "cached_at": "2026-02-03T16:27:20.705573",
+        "generation_info": {
+          "layer_idx": 1,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.59,
+            0.48999999999999994,
+            0.45
+          ],
+          "generation_time": "2026-02-03T16:27:20.705555"
+        }
+      }
+    ],
+    "2": [
+      {
+        "code": "module radix2_div (\n    input wire clk,\n    input wire rst,\n    input wire sign,\n    input wire [7:0] dividend,\n    input wire [7:0] divisor,\n    input wire opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n\n    reg [8:0] SR;\n    reg [7:0] ABS_DIVISOR;\n    reg [3:0] cnt;\n    reg start_cnt;\n    reg NEG_DIVISOR;\n    reg [7:0] temp_sub;\n    reg carry_out;\n\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            SR <= 9'b0;\n            ABS_DIVISOR <= 8'b0;\n            cnt <= 4'b0;\n            start_cnt <= 1'b0;\n            NEG_DIVISOR <= 1'b0;\n            temp_sub <= 8'b0;\n            carry_out <= 1'b0;\n            res_valid <= 1'b0;\n        end else if (opn_valid && !res_valid) begin\n            SR[8:1] <= sign ? {~dividend[7], dividend} : {dividend, 1'b0};\n            ABS_DIVISOR <= sign ? {~divisor[7], divisor} : divisor;\n            NEG_DIVISOR <= sign ? ~{ABS_DIVISOR, 1'b0} + 1 : -{ABS_DIVISOR, 1'b0};\n            cnt <= 4'b1;\n            start_cnt <= 1'b1;\n        end else if (start_cnt) begin\n            if (cnt == 8'd7) begin\n                SR[8:1] <= temp_sub;\n                result <= {SR[8:1], carry_out};\n                res_valid <= 1'b1;\n                start_cnt <= 1'b0;\n            end else begin\n                cnt <= cnt + 1;\n                SR <= {carry_out, SR[8:1]};\n                temp_sub <= SR - ABS_DIVISOR;\n                carry_out <= temp_sub[9];\n            end\n        end\n    end\n\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.48999999999999994,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:27:49.431369",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.59,
+            0.48999999999999994
+          ],
+          "generation_time": "2026-02-03T16:27:30.416675"
+        }
+      },
+      {
+        "code": "module radix2_div (\n    input wire clk,\n    input wire rst,\n    input wire sign,\n    input wire [7:0] dividend,\n    input wire [7:0] divisor,\n    input wire opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n    reg [8:0] SR;\n    reg [7:0] ABS_DIVISOR;\n    reg [3:0] cnt;\n    reg start_cnt;\n    reg [7:0] NEG_DIVISOR;\n    reg temp_sub;\n    reg carry_out;\n\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            SR <= 9'b0;\n            ABS_DIVISOR <= 8'b0;\n            cnt <= 4'b0;\n            start_cnt <= 1'b0;\n            NEG_DIVISOR <= 1'b0;\n            temp_sub <= 1'b0;\n            carry_out <= 1'b0;\n            res_valid <= 1'b0;\n        end else begin\n            if (opn_valid && !res_valid) begin\n                SR[8:1] <= sign ? {~dividend[7], dividend} : {dividend, 1'b0};\n                ABS_DIVISOR <= sign ? {~divisor[7], divisor} : divisor;\n                cnt <= 4'b1;\n                start_cnt <= 1'b1;\n                NEG_DIVISOR <= ~ABS_DIVISOR + 1;\n            end else if (start_cnt) begin\n                if (cnt == 8'd7) begin\n                    SR[8:1] <= temp_sub;\n                    res_valid <= 1'b1;\n                    start_cnt <= 1'b0;\n                end else begin\n                    cnt <= cnt + 1;\n                    SR <= {carry_out, SR[8:1]};\n                    temp_sub <= SR - ABS_DIVISOR;\n                    carry_out <= (SR >= ABS_DIVISOR);\n                end\n            end\n        end\n    end\n\n    assign result = {SR[15:8], SR[7:0]};\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.45,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:27:49.431372",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.59,
+            0.48999999999999994
+          ],
+          "generation_time": "2026-02-03T16:27:40.063008"
+        }
+      },
+      {
+        "code": "module radix2_div (\n    input wire clk,\n    input wire rst,\n    input wire sign,\n    input wire [7:0] dividend,\n    input wire [7:0] divisor,\n    input wire opn_valid,\n    output reg res_valid,\n    output reg [15:0] result\n);\n    reg [8:0] SR;\n    reg [7:0] ABS_DIVISOR;\n    reg [3:0] cnt;\n    reg start_cnt;\n    reg NEG_DIVISOR;\n    reg [7:0] temp_sub;\n    reg carry_out;\n\n    always @(posedge clk or posedge rst) begin\n        if (rst) begin\n            SR <= 9'b0;\n            ABS_DIVISOR <= 8'b0;\n            cnt <= 4'b0;\n            start_cnt <= 1'b0;\n            NEG_DIVISOR <= 1'b0;\n            temp_sub <= 8'b0;\n            carry_out <= 1'b0;\n            res_valid <= 1'b0;\n        end else if (opn_valid && !res_valid) begin\n            SR[8:1] <= sign ? {~dividend[7], dividend} : {dividend, 1'b0};\n            ABS_DIVISOR <= sign ? {~divisor[7], divisor} : divisor;\n            cnt <= 4'b1;\n            start_cnt <= 1'b1;\n            NEG_DIVISOR <= sign ? 1'b1 : 1'b0;\n        end else if (start_cnt) begin\n            if (cnt == 8'd7) begin\n                SR[8:1] <= temp_sub;\n                res_valid <= 1'b1;\n                start_cnt <= 1'b0;\n            end else begin\n                cnt <= cnt + 1;\n                SR <= {carry_out, SR[8:1]};\n                temp_sub <= SR - ABS_DIVISOR;\n                carry_out <= temp_sub[8];\n            end\n        end\n    end\n\n    assign result = {SR[15:8], SR[7:0]};\nendmodule",
+        "model": "qwen2.5-coder:7b",
+        "quality_score": 0.48999999999999994,
+        "layer_idx": 2,
+        "cached_at": "2026-02-03T16:27:49.431373",
+        "generation_info": {
+          "layer_idx": 2,
+          "prompt_type": "aggregation",
+          "input_codes_quality": [
+            0.6,
+            0.59,
+            0.48999999999999994
+          ],
+          "generation_time": "2026-02-03T16:27:49.431354"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "last_updated": "2026-02-03T16:27:49.431379",
+    "total_hdl_codes": 9
+  }
+}

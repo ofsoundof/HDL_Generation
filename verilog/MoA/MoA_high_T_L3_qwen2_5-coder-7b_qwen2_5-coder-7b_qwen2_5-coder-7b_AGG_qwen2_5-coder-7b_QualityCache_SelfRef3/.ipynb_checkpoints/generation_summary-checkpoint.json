@@ -1,0 +1,678 @@
+{
+  "method": "Enhanced_MoA",
+  "dataset": "rtllm",
+  "language": "Verilog",
+  "temp_mode": "high_T",
+  "num_layers": 3,
+  "layer_models": [
+    "qwen2.5-coder:7b",
+    "qwen2.5-coder:7b",
+    "qwen2.5-coder:7b"
+  ],
+  "aggregator_model": "qwen2.5-coder:7b",
+  "quality_based_caching": true,
+  "early_stopping_enabled": false,
+  "self_refinement_enabled": true,
+  "max_self_refinement_iterations": 3,
+  "n_select_per_layer": 3,
+  "cache_directory": "verilog_temp/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3",
+  "timestamp": "2026-02-03T17:20:19.374206",
+  "total_designs": 50,
+  "total_trials": 50,
+  "successful_trials": 50,
+  "extraction_failures": 0,
+  "success_rate": "100.0%",
+  "extraction_failure_rate": "0.0%",
+  "details": [
+    {
+      "design": "accu",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/accu.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "div_16bit",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/div_16bit.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "radix2_div",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/radix2_div.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "comparator_3bit",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/comparator_3bit.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "comparator_4bit",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/comparator_4bit.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "sub_64bit",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/sub_64bit.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "float_multi",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/float_multi.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "fixed_point_substractor",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/fixed_point_substractor.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "fixed_point_adder",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/fixed_point_adder.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "multi_8bit",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/multi_8bit.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "multi_booth_8bit",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/multi_booth_8bit.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "multi_pipe_4bit",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/multi_pipe_4bit.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "multi_16bit",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/multi_16bit.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "multi_pipe_8bit",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/multi_pipe_8bit.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "adder_16bit",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/adder_16bit.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "adder_bcd",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/adder_bcd.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "adder_32bit",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/adder_32bit.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "adder_pipe_64bit",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/adder_pipe_64bit.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "adder_8bit",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/adder_8bit.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "fsm",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/fsm.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "sequence_detector",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/sequence_detector.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "ring_counter",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/ring_counter.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "up_down_counter",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/up_down_counter.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "counter_12",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/counter_12.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "JC_counter",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/JC_counter.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "edge_detect",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/edge_detect.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "calendar",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/calendar.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "traffic_light",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/traffic_light.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "width_8to16",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/width_8to16.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "parallel2serial",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/parallel2serial.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "serial2parallel",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/serial2parallel.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "synchronizer",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/synchronizer.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "pulse_detect",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/pulse_detect.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "pe",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/pe.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "alu",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/alu.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "RAM",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/RAM.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "clkgenerator",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/clkgenerator.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "instr_reg",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/instr_reg.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "ROM",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/ROM.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "freq_divbyfrac",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/freq_divbyfrac.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "freq_divbyodd",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/freq_divbyodd.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "freq_div",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/freq_div.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "freq_divbyeven",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/freq_divbyeven.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "signal_generator",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/signal_generator.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "square_wave",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/square_wave.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "barrel_shifter",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/barrel_shifter.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "right_shifter",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/right_shifter.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "LFSR",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/LFSR.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "asyn_fifo",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/asyn_fifo.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    },
+    {
+      "design": "LIFObuffer",
+      "trials": [
+        {
+          "trial": 1,
+          "file": "verilog/MoA/MoA_high_T_L3_qwen2_5-coder-7b_qwen2_5-coder-7b_qwen2_5-coder-7b_AGG_qwen2_5-coder-7b_QualityCache_SelfRef3/t1/LIFObuffer.v",
+          "success": true
+        }
+      ],
+      "successful_count": 1,
+      "extraction_failures": 0,
+      "total_trials": 1
+    }
+  ]
+}
